@@ -1,4 +1,4 @@
-package com.example.ejy77.testex5;
+package kr.ac.ajou.paran;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

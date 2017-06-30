@@ -1,4 +1,4 @@
-package com.example.ejy77.testex5;
+package kr.ac.ajou.paran;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

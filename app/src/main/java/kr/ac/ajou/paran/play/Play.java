@@ -1,10 +1,10 @@
-package com.example.ejy77.testex5.play;
+package kr.ac.ajou.paran.play;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.ejy77.testex5.MainActivity;
+import kr.ac.ajou.paran.MainActivity;
 
 /**
  * Created by dream on 2017-06-30.

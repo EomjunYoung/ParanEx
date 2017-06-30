@@ -1,4 +1,4 @@
-package com.example.ejy77.testex5;
+package kr.ac.ajou.paran;
 
 import org.junit.Test;
 
