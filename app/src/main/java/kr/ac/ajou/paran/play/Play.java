@@ -17,7 +17,7 @@ public class Play extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         startActivity(new Intent(this, Logo.class));
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }

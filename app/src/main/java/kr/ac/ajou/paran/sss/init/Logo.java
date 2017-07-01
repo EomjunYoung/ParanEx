@@ -19,18 +19,23 @@ public class Logo extends AppCompatActivity {
         initThread = new InitThread();
         initThread.start();
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
 
     public void change(){
         startActivity(new Intent(this, Developer.class));
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     class InitThread extends Thread{
 
         public void run(){
             try {
-                Thread.sleep(2000); //wait two second
+                Thread.sleep(1000); //wait one second
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
