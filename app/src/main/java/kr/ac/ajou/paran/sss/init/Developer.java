@@ -35,7 +35,7 @@ public class Developer extends AppCompatActivity {
 
         public void run(){
             try {
-                Thread.sleep(1000); //wait one second
+                Thread.sleep(1500); //wait 1.5 second
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

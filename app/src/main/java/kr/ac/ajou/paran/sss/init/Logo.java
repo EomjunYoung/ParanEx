@@ -1,14 +1,21 @@
 package kr.ac.ajou.paran.sss.init;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import kr.ac.ajou.paran.R;
 
 public class Logo extends AppCompatActivity {
 
     private InitThread initThread;
+    private AnimationDrawable animationDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +39,24 @@ public class Logo extends AppCompatActivity {
 
     class InitThread extends Thread{
 
-        public void run(){
+        private Message msg;
+
+        final Handler handler = new Handler() {
+
+            public void handleMessage(Message msg) {
+                ((ImageView)findViewById(R.id.imageLogo2)).setVisibility(View.VISIBLE);
+            }
+        };
+
+        public void run() {
             try {
-                Thread.sleep(1000); //wait one second
+                sleep(500);     //wait two second
+                animationDrawable =(AnimationDrawable)((ImageView)findViewById(R.id.imageLogo)).getBackground();
+                animationDrawable.start();
+                sleep(1500);
+                msg = handler.obtainMessage();
+                handler.sendMessage(msg);
+                sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
