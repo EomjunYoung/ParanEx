@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import kr.ac.ajou.paran.MainActivity;
 import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.sss.login.Login;
 

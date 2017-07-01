@@ -17,9 +17,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="kr.ac.ajou.paran.MainActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="kr.ac.ajou.paran.sss.init.Logo"
             android:screenOrientation="portrait" />
         <activity
