@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradation_developer"
+    android:background="@color/init_color"
     tools:context="kr.ac.ajou.paran.sss.init.Logo">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/init_logo"
+        android:src="@drawable/init_developer"
         android:layout_centerVertical="true"/>
 
 </RelativeLayout>

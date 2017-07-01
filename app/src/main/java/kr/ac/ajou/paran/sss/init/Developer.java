@@ -7,21 +7,21 @@ import android.support.v7.app.AppCompatActivity;
 import kr.ac.ajou.paran.MainActivity;
 import kr.ac.ajou.paran.R;
 
-public class Logo extends AppCompatActivity {
+public class Developer extends AppCompatActivity {
 
     private InitThread initThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_logo);
+        setContentView(R.layout.activity_developer);
 
         initThread = new InitThread();
         initThread.start();
     }
 
     public void change(){
-        startActivity(new Intent(this, Developer.class));
+        startActivity(new Intent(this, MainActivity.class));
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
     }
