@@ -30,7 +30,7 @@ public class Logo extends AppCompatActivity {
 
         public void run(){
             try {
-                Thread.sleep(1000); //wait one second
+                Thread.sleep(2000); //wait two second
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

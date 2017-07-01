@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradation_developer"
+    android:background="@drawable/gradation_logo"
     tools:context="kr.ac.ajou.paran.sss.init.Logo">
 
     <ImageView
