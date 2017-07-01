@@ -25,6 +25,9 @@
         <activity
             android:name="kr.ac.ajou.paran.sss.init.Developer"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="kr.ac.ajou.paran.sss.login.Login"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

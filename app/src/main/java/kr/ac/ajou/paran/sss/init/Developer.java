@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import kr.ac.ajou.paran.MainActivity;
 import kr.ac.ajou.paran.R;
+import kr.ac.ajou.paran.sss.login.Login;
 
 public class Developer extends AppCompatActivity {
 
@@ -26,7 +27,7 @@ public class Developer extends AppCompatActivity {
     }
 
     public void change(){
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, Login.class));
         finish();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
