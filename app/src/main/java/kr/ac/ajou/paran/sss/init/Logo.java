@@ -53,7 +53,7 @@ public class Logo extends AppCompatActivity {
                 sleep(500);     //wait two second
                 animationDrawable =(AnimationDrawable)((ImageView)findViewById(R.id.imageLogo)).getBackground();
                 animationDrawable.start();
-                sleep(1500);
+                sleep(500);
                 msg = handler.obtainMessage();
                 handler.sendMessage(msg);
                 sleep(1000);
