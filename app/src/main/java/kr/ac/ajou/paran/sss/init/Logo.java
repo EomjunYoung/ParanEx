@@ -15,7 +15,7 @@ import kr.ac.ajou.paran.R;
 public class Logo extends AppCompatActivity {
 
     private InitThread initThread;
-    private AnimationDrawable animationDrawable;
+    private AnimationDrawable animationDrawable, animationDrawable2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,8 @@ public class Logo extends AppCompatActivity {
 
             public void handleMessage(Message msg) {
                 ((ImageView)findViewById(R.id.imageLogo2)).setVisibility(View.VISIBLE);
+                animationDrawable2 =(AnimationDrawable)((ImageView)findViewById(R.id.imageLogo2)).getBackground();
+                animationDrawable2.start();
             }
         };
 
@@ -53,7 +55,7 @@ public class Logo extends AppCompatActivity {
                 sleep(500);     //wait two second
                 animationDrawable =(AnimationDrawable)((ImageView)findViewById(R.id.imageLogo)).getBackground();
                 animationDrawable.start();
-                sleep(500);
+                sleep(1200);
                 msg = handler.obtainMessage();
                 handler.sendMessage(msg);
                 sleep(1000);
