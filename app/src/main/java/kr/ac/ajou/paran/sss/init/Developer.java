@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 
 import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.sss.login.Login;
@@ -43,5 +44,14 @@ public class Developer extends AppCompatActivity {
             }
             change();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Drawable drawable = ((ImageView)findViewById(R.id.imageDeveloper)).getDrawable();
+        if(drawable instanceof BitmapDrawable)
+            ((BitmapDrawable) drawable).getBitmap().recycle();
+        System.gc();
     }
 }
