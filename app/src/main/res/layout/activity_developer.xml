@@ -8,6 +8,7 @@
     tools:context="kr.ac.ajou.paran.sss.init.Logo">
 
     <ImageView
+        android:id="@+id/imageDeveloper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/init_developer"

@@ -4,7 +4,4 @@
     <item android:drawable="@drawable/text1" android:duration="75"/>
     <item android:drawable="@drawable/text2" android:duration="75"/>
     <item android:drawable="@drawable/text3" android:duration="75"/>
-    <item android:drawable="@drawable/text4" android:duration="75"/>
-    <item android:drawable="@drawable/text5" android:duration="75"/>
-    <item android:drawable="@drawable/text6" android:duration="75"/>
 </animation-list>

@@ -2,6 +2,8 @@ package kr.ac.ajou.paran.sss.init;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -56,6 +58,13 @@ public class Logo extends AppCompatActivity {
                 animationDrawable =(AnimationDrawable)((ImageView)findViewById(R.id.imageLogo)).getBackground();
                 animationDrawable.start();
                 sleep(1200);
+                for(int i=0;i<animationDrawable.getNumberOfFrames()-1;i++){
+                    Drawable frame = animationDrawable.getFrame(i);
+                    if(frame instanceof BitmapDrawable)
+                        ((BitmapDrawable)frame).getBitmap().recycle();
+
+                    frame.setCallback(null);
+                }
                 msg = handler.obtainMessage();
                 handler.sendMessage(msg);
                 sleep(1000);
@@ -64,5 +73,29 @@ public class Logo extends AppCompatActivity {
             }
             change();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        animationDrawable.stop();
+        animationDrawable2.stop();
+        Drawable frame = animationDrawable.getFrame(animationDrawable.getNumberOfFrames()-1);
+        if(frame instanceof BitmapDrawable)
+            ((BitmapDrawable)frame).getBitmap().recycle();
+
+        frame.setCallback(null);
+        animationDrawable.setCallback(null);
+        for(int i=0;i<animationDrawable2.getNumberOfFrames();i++){
+            frame = animationDrawable2.getFrame(i);
+            if(frame instanceof BitmapDrawable)
+                ((BitmapDrawable)frame).getBitmap().recycle();
+
+            frame.setCallback(null);
+        }
+        animationDrawable2.setCallback(null);
+        animationDrawable = null;
+        animationDrawable2 = null;
+        System.gc();
     }
 }
