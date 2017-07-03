@@ -131,7 +131,7 @@
                         android:textColor="@color/login_white"
                         android:textStyle="bold"
                         android:layout_toLeftOf="@id/textSearchPwd"
-                        android:text=" high "/>
+                        android:text=" | "/>
 
                 <TextView
                     android:layout_width="wrap_content"
