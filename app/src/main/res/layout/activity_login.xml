@@ -70,7 +70,7 @@
                         android:layout_marginTop="1dp"
                         android:background="@color/login_input_back"
                         android:lines="1"
-                        android:text="User ID"
+                        android:hint="User ID"
                         android:textColor="@color/login_input" />
                 </LinearLayout>
 
@@ -91,7 +91,7 @@
                         android:layout_marginTop="1dp"
                         android:background="@color/login_input_back"
                         android:lines="1"
-                        android:text="Password"
+                        android:hint="Password"
                         android:textColor="@color/login_input" />
                 </LinearLayout>
 
