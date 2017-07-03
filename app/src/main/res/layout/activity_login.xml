@@ -146,26 +146,19 @@
             </LinearLayout>
 
         </LinearLayout>
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:weightSum="100"
             android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="14"></LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="72">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/login_login_copyright"/>
-            </LinearLayout>
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/login_white"
+                    android:text="Powered by 하이엄(하이염~) Team"
+                    android:layout_marginBottom="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"/>
+            </RelativeLayout>
     </LinearLayout>
-
 </LinearLayout>
