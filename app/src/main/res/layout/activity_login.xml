@@ -71,6 +71,7 @@
                         android:background="@color/login_input_back"
                         android:lines="1"
                         android:hint="User ID"
+                        android:textColorHint="@color/login_input"
                         android:textColor="@color/login_input" />
                 </LinearLayout>
 
@@ -92,6 +93,7 @@
                         android:background="@color/login_input_back"
                         android:lines="1"
                         android:hint="Password"
+                        android:textColorHint="@color/login_input"
                         android:textColor="@color/login_input" />
                 </LinearLayout>
 
