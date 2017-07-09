@@ -22,7 +22,7 @@ public class Play extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        startActivity(new Intent(this, Main.class));
+        startActivity(new Intent(this, Logo.class));
         finish();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
