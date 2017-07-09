@@ -12,6 +12,6 @@
     <item android:drawable="@drawable/logo9" android:duration="75"/>
     <item android:drawable="@drawable/logo10" android:duration="75"/>
     <item android:drawable="@drawable/logo11" android:duration="75"/>
-    <item android:drawable="@drawable/logo12" android:duration="75"/>
-    <item android:drawable="@drawable/logo13" android:duration="150"/>
+    <item android:drawable="@drawable/logo12" android:duration="100"/>
+    <item android:drawable="@drawable/logo13" android:duration="100"/>
 </animation-list>

@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import kr.ac.ajou.paran.R;
-import kr.ac.ajou.paran.play.activity_login2;
+import kr.ac.ajou.paran.sss.main.Main;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
@@ -38,8 +38,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.loginButton:
-                Toast.makeText(getApplicationContext(), "login", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, activity_login2.class));
+                Toast.makeText(getApplicationContext(), "Success in login", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, Main.class));
         }
     }
 }

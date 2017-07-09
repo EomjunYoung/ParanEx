@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.sss.init.Logo;
+import kr.ac.ajou.paran.sss.main.Main;
 
 /**
  * Created by dream on 2017-06-30.
@@ -21,7 +22,7 @@ public class Play extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        startActivity(new Intent(this, Logo.class));
+        startActivity(new Intent(this, Main.class));
         finish();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
