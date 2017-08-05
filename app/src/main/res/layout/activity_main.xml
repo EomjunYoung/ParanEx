@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/main_main_background"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -61,14 +57,36 @@
                     android:src="@drawable/main_main_record"/>
             </LinearLayout>
         </LinearLayout>
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="40"></LinearLayout>
+            android:layout_weight="30">
+            <ImageView
+                android:id="@+id/imagePicture"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:scaleType="fitStart"/>
+            <TextView
+                android:id="@+id/textInfo"
+                android:layout_toRightOf="@id/imagePicture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="이름\n학번\n학년\n전공"
+                android:layout_margin="5dp"/>
+            <TextView
+                android:id="@+id/textUser"
+                android:layout_toRightOf="@id/textInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_margin="5dp"/>
+
+        </RelativeLayout>
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="52"
+            android:layout_weight="62"
             android:background="@drawable/gradation">
             <TableLayout
                 android:layout_width="match_parent"
@@ -258,4 +276,4 @@
             </TableLayout>
         </FrameLayout>
     </LinearLayout>
-</FrameLayout>
+</LinearLayout>
