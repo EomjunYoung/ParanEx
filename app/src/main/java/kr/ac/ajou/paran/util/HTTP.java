@@ -121,9 +121,9 @@ public class HTTP {
                         rate = line.substring(line.indexOf("<td>") + 4, line.indexOf("</td>"));
                         if (rate.equals("C+") || rate.equals("C0") || rate.equals("D+") || rate.equals("D0")
                                 || rate.equals("F"))
-                            list+="\tR\t\t"+type+"\t\t"+subject;
+                            list+="\tO\t\t"+type+"\t\t"+subject;
                         else
-                            list+="\tN\t\t"+type+"\t\t"+subject;
+                            list+="\tX\t\t"+type+"\t\t"+subject;
                         while ((line = rd.readLine()).indexOf("<div") < 0)
                             ;
                         if (line.indexOf("collapsible") < 0)

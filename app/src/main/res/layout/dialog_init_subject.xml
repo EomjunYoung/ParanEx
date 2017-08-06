@@ -10,7 +10,7 @@
         android:layout_height="0dp"
         android:layout_weight="3"
         android:padding="5dp"
-        android:text="수강 과목 리스트(재수강 가능 : R)"
+        android:text="수강 과목 리스트(재수강 가능 : O)"
         android:textColor="@color/white"
         android:background="@drawable/gradation_blue"/>
     <ScrollView
