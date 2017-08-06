@@ -58,10 +58,7 @@ public class HTTP {
             parameter += "&" + URLEncoder.encode("passwd", "UTF-8") + "=" + URLEncoder.encode(pwd, "UTF-8");
             parameter += "&" + URLEncoder.encode("rememberMe", "UTF-8") + "=" + URLEncoder.encode("N", "UTF-8");
             parameter += "&" + URLEncoder.encode("platformType", "UTF-8") + "=" + URLEncoder.encode("A", "UTF-8");
-            parameter += "&" + URLEncoder.encode("deviceToken", "UTF-8") + "="
-                    + URLEncoder.encode(
-                    "APA91bHLPmSyNjpcYoWFGEdHIJiNYIConV_kcx6DdXpuzH7o3OimWFLDZ_J60nK9EQRdmyMFHJbJsoLC2y-tKceiYJTmAl_0L7ZtkkZF8fgKR0VMwMkJy4o",
-                    "UTF-8");
+            parameter += "&" + URLEncoder.encode("deviceToken", "UTF-8") + "=";
             return parameter;
         } catch (UnsupportedEncodingException e) {
             // TODO Auto-generated catch block
