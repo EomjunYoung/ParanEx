@@ -67,6 +67,82 @@ public class HTTP {
         }
     }
 
+    public static String printSubject(String cookie) {
+        String list = "";
+        try {
+            String line = null;
+            BufferedReader rd = getSimple(new URL(MOBILE + GET_TOTAL), cookie);
+            while ((line = rd.readLine()) != null) {
+                if (line.indexOf("listview") > -1) {
+                    do {
+                        while ((line = rd.readLine()).indexOf("href") < 0)
+                            ;
+                        if (line.indexOf("M02_020_010.es") < 0)
+                            break;
+                        line = line.substring(line.indexOf("\"") + 1, line.indexOf("\">"));
+                        list += inspectSubject(line, cookie);
+                    } while (true);
+                    break;
+                }
+            }
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        if(!list.isEmpty())
+            list= list.substring(0,list.length()-1);
+        return list;
+    }
+
+    private static String inspectSubject(String url, String cookie) {
+        String list = "";
+        try {
+            String line = null;
+            String subject;
+            String type;
+            String rate;
+            BufferedReader rd = getSimple(new URL(MOBILE + url), cookie);
+            while ((line = rd.readLine()) != null) {
+                if (line.indexOf("학기") > -1) {
+                    do {
+                        while ((line = rd.readLine()).indexOf("<h3>") < 0)
+                            ;
+                        subject=line.substring(line.indexOf("<h3>") + 4, line.indexOf("</h3>"))+"\n";
+                        while ((line = rd.readLine()).indexOf("구분") < 0)
+                            ;
+                        line = rd.readLine();
+                        type = line.substring(line.indexOf("<td>") + 4, line.indexOf("</td>"));
+                        while ((line = rd.readLine()).indexOf("등급") < 0)
+                            ;
+                        line = rd.readLine();
+                        rate = line.substring(line.indexOf("<td>") + 4, line.indexOf("</td>"));
+                        if (rate.equals("C+") || rate.equals("C0") || rate.equals("D+") || rate.equals("D0")
+                                || rate.equals("F"))
+                            list+="\tR\t\t"+type+"\t\t"+subject;
+                        else
+                            list+="\tN\t\t"+type+"\t\t"+subject;
+                        while ((line = rd.readLine()).indexOf("<div") < 0)
+                            ;
+                        if (line.indexOf("collapsible") < 0)
+                            break;
+                    } while (true);
+                    break;
+                }
+            }
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (java.lang.NullPointerException e) {
+        }
+        return list;
+    }
+
     private static String postLogin(URL url, String id, String pwd) {
         try {
             HttpURLConnection con = makeConnection(url);
