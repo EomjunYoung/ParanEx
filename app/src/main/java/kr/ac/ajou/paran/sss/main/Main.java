@@ -49,8 +49,8 @@ public class Main extends AppCompatActivity {
             imagePicture.setImageBitmap(HTTP.printPicture(user.getNumber(), (int) (height * 0.3)));
         textUser.setText(user.getName()+"\n"+user.getNumber()+"\n"+user.getGrade()+"학년"+"\n"+user.getMajor());
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.main_main_logo);
-        imageLogo.setImageBitmap(Bitmap.createScaledBitmap(bitmap, (int)(width*0.45),(int)(height*0.05), true));
-        imageLogo.setY(height*0.225f);
+        imageLogo.setImageBitmap(Bitmap.createScaledBitmap(bitmap, (int)(width*0.45),(int)(height*0.075), true));
+        imageLogo.setY(height*0.2f);
 
     }
 }

@@ -107,11 +107,13 @@
                         <Button
                             android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
+                            android:layout_height="match_parent"
+                            android:text="시간표"/>
                         <Button
                             android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
+                            android:layout_height="match_parent"
+                            android:text="강의시간표"/>
                 </TableRow>
                 <TableRow
                     android:layout_weight="1"
@@ -119,11 +121,13 @@
                         <Button
                             android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
+                            android:layout_height="match_parent"
+                            android:text="게시판"/>
                         <Button
                             android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
+                            android:layout_height="match_parent"
+                            android:text="미정"/>
                 </TableRow>
             </TableLayout>
         </FrameLayout>
