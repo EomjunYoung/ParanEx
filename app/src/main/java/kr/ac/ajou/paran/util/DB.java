@@ -32,5 +32,7 @@ public class DB {
         }catch(Exception e) {
             e.printStackTrace();
         }
+
+        db.close();
     }
 }
