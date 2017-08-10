@@ -1,7 +1,5 @@
 package kr.ac.ajou.paran.sss.main;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -11,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import kr.ac.ajou.paran.R;
+import kr.ac.ajou.paran.sss.main.dialog.AlertTrans;
+import kr.ac.ajou.paran.sss.main.dialog.InitSubject;
 import kr.ac.ajou.paran.util.DB;
 import kr.ac.ajou.paran.util.HTTP;
 import kr.ac.ajou.paran.util.User;
@@ -32,6 +32,8 @@ public class Main extends AppCompatActivity {
     private ImageView imageLogo;
     private TextView textUser;
 
+    private DB db;
+
     @Override
     protected void onCreate(Bundle savedlnstanceState) {
         super.onCreate(savedlnstanceState);
@@ -45,15 +47,22 @@ public class Main extends AppCompatActivity {
         imageLogo = (ImageView)findViewById(R.id.imageLogo);
         textUser = (TextView)findViewById(R.id.textUser);
 
+        /*DB 생성*/
+        db = new DB(this);
+        /*DB 생성*/
+
         /*유저 정보 받아옴*/
         user = HTTP.printUser(cookie);
         /*유저 정보 받아옴*/
 
-        /*DB에 기록 저장되있으면 불러올필요 없음 if문 처리할 것*/
-        /*수강 정보 받아옴*/
-        new InitSubject(this,cookie).showDialog();
-        /*수강 정보 받아옴*/
-        /*DB에 기록 저장되있으면 불러올필요 없음 if문 처리할 것*/
+        /*처음 로그인시 - 수강 정보 받아옴*/
+        String subjectList;
+        if((subjectList = db.createSubject(cookie,user.getNumber())) != null) {
+            new InitSubject(this, subjectList).showDialog();
+            if(user.isNewORtrans() == false)
+                new AlertTrans(this).showDialog();
+        }
+        /*처음 로그인시 - 수강 정보 받아옴*/
 
         /*원격 접속한 것 로그아웃*/
         HTTP.logOut(cookie);
@@ -74,7 +83,7 @@ public class Main extends AppCompatActivity {
         /*뷰에 정보 셋팅*/
 
         /*DB에 정보 저장*/
-        new DB().createUserTable(this, user);
+        db.createUserTable(user);
         /*DB에 정보 저장*/
 
         /*로고 출력*/
@@ -82,6 +91,8 @@ public class Main extends AppCompatActivity {
         imageLogo.setImageBitmap(Bitmap.createScaledBitmap(bitmap, (int)(width*0.45),(int)(height*0.075), true));
         imageLogo.setY(height*0.2f);
         /*로고 출력*/
+
+        db.close();
     }
 
 /*

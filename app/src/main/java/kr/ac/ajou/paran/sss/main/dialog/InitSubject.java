@@ -1,4 +1,4 @@
-package kr.ac.ajou.paran.sss.main;
+package kr.ac.ajou.paran.sss.main.dialog;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,13 +19,13 @@ public class InitSubject extends DialogType {
     private TextView textSubject;
     private Button buttonCancel;
 
-    public InitSubject(Context context, String cookie) {
+    public InitSubject(Context context, String subjectList) {
         super(context, R.layout.dialog_init_subject);
 
         textSubject = (TextView)findViewById(R.id.textSubject);
         buttonCancel = (Button)findViewById(R.id.buttonCancel);
 
-        textSubject.setText(HTTP.printSubject(cookie));
+        textSubject.setText(subjectList);
 
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
