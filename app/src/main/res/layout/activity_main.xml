@@ -106,29 +106,33 @@
                     android:layout_weight="1"
                     android:weightSum="2">
                         <Button
+                            android:id="@+id/buttonTimeTable"
                             android:layout_weight="1"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:text="시간표"/>
                         <Button
+                            android:id="@+id/buttonSubject"
                             android:layout_weight="1"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:text="강의시간표"/>
+                            android:text="과목관리"/>
                 </TableRow>
                 <TableRow
                     android:layout_weight="1"
                     android:weightSum="2">
                         <Button
+                            android:id="@+id/buttonLecture"
                             android:layout_weight="1"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="강의시간표조사"/>
+                        <Button
+                            android:id="@+id/buttonBulletinBoard"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:text="게시판"/>
-                        <Button
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="미정"/>
                 </TableRow>
             </TableLayout>
         </FrameLayout>

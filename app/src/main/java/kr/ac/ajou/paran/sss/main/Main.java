@@ -1,16 +1,23 @@
 package kr.ac.ajou.paran.sss.main;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.sss.main.dialog.AlertTrans;
 import kr.ac.ajou.paran.sss.main.dialog.InitSubject;
+import kr.ac.ajou.paran.sss.main.function.BulltinBoard;
+import kr.ac.ajou.paran.sss.main.function.Lecture;
+import kr.ac.ajou.paran.sss.main.function.Subject;
+import kr.ac.ajou.paran.sss.main.function.TimeTable;
 import kr.ac.ajou.paran.util.DB;
 import kr.ac.ajou.paran.util.HTTP;
 import kr.ac.ajou.paran.util.User;
@@ -20,9 +27,10 @@ import kr.ac.ajou.paran.util.User;
  * Created by user on 2017-07-08.
  */
 
-public class Main extends AppCompatActivity {
+public class Main extends AppCompatActivity implements View.OnClickListener{
 
     private User user;
+    private DB db;
 
     private String cookie;
     private int width;
@@ -31,8 +39,7 @@ public class Main extends AppCompatActivity {
     private ImageView imagePicture;
     private ImageView imageLogo;
     private TextView textUser;
-
-    private DB db;
+    private Button buttonTimeTable, buttonLecture, buttonBulletinBoard, buttonSubject;
 
     @Override
     protected void onCreate(Bundle savedlnstanceState) {
@@ -46,6 +53,14 @@ public class Main extends AppCompatActivity {
         imagePicture = (ImageView)findViewById(R.id.imagePicture);
         imageLogo = (ImageView)findViewById(R.id.imageLogo);
         textUser = (TextView)findViewById(R.id.textUser);
+        buttonBulletinBoard =(Button)findViewById(R.id.buttonBulletinBoard);
+        buttonSubject =(Button)findViewById(R.id.buttonSubject);
+        buttonLecture =(Button)findViewById(R.id.buttonLecture);
+        buttonTimeTable =(Button)findViewById(R.id.buttonTimeTable);
+        buttonBulletinBoard.setOnClickListener(this);
+        buttonSubject.setOnClickListener(this);
+        buttonLecture.setOnClickListener(this);
+        buttonTimeTable.setOnClickListener(this);
 
         /*DB 생성*/
         db = new DB(this);
@@ -61,11 +76,15 @@ public class Main extends AppCompatActivity {
             new InitSubject(this, subjectList).showDialog();
             if(user.isNewORtrans() == false)
                 new AlertTrans(this).showDialog();
+
+            /*공학인증 여부 조사*/
+            user.setAbeek(HTTP.checkAbeek(cookie,user.getNumber()));
+            /*공학인증 여부 조사*/
         }
         /*처음 로그인시 - 수강 정보 받아옴*/
 
         /*원격 접속한 것 로그아웃*/
-        HTTP.logOut(cookie);
+     ///   HTTP.logOut(cookie);
         /*원격 접속한 것 로그아웃*/
 
         /*이미지 출력을 위해 핸드폰 스크린 크기 계산*/
@@ -93,6 +112,28 @@ public class Main extends AppCompatActivity {
         /*로고 출력*/
 
         db.close();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.buttonTimeTable:
+                startActivity(new Intent(this, TimeTable.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                break;
+            case R.id.buttonLecture:
+                startActivity(new Intent(this, Lecture.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                break;
+            case R.id.buttonSubject:
+                startActivity(new Intent(this, Subject.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                break;
+            case R.id.buttonBulletinBoard:
+                startActivity(new Intent(this, BulltinBoard.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                break;
+        }
     }
 
 /*

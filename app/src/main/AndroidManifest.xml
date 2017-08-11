@@ -32,6 +32,22 @@
         <activity
             android:name="kr.ac.ajou.paran.sss.main.Main"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name="kr.ac.ajou.paran.sss.main.function.TimeTable"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="kr.ac.ajou.paran.sss.main.function.Subject"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="kr.ac.ajou.paran.sss.main.function.Lecture"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="kr.ac.ajou.paran.sss.main.function.BulltinBoard"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

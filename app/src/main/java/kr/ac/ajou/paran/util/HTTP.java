@@ -27,6 +27,7 @@ public class HTTP {
 
     private final static String MOBILE = "https://mb.ajou.ac.kr";
     private final static String LIBAPP = "http://libapp.ajou.ac.kr";
+    private final static String HAKSA = "http://haksa.ajou.ac.kr";
 
     private final static String GET_PROFILE = "/mobile/M03/M03_010_010.es";
     private final static String GET_TOTAL = "/mobile/M02/M02_020.es";
@@ -34,6 +35,7 @@ public class HTTP {
     private final static String GET_A_GRADUATION = "/mobile/M01/M01_020.es";
     private final static String REQUEST_PICTURE = "/QrCodeService/GetPhotoImg.svc/GetUserPhotoAJOU?Loc=AJOU&Idno=";
     private final static String GET_PICTURE = "/KCPPhoto//PHO_";
+    private final static String GET_ABEEK = "/uni/uni/abee/cmmn/findAccept.action?strStdNo=";
 
     private final static String LOGOUT = "/mobile/logout/logout.es";
 
@@ -65,6 +67,28 @@ public class HTTP {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static boolean checkAbeek(String cookie,int number) {
+        try {
+            String line = null;
+            BufferedReader rd = getSimple(new URL(HAKSA + GET_ABEEK+number), cookie);
+            while ((line = rd.readLine()) != null) {
+                if(line.indexOf("<accept>")>-1){
+                    if(line.indexOf("Y")>-1)
+                        return true;
+                    else
+                        return false;
+                }
+            }
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static String printSubject(String cookie) {

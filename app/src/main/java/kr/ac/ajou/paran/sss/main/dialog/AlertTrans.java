@@ -25,7 +25,7 @@ public class AlertTrans extends DialogType {
         buttonCancel = (Button)findViewById(R.id.buttonCancel);
 
         textTitle.setText("과목 관련 안내");
-        textContent.setText("편입생의 경우\n\n전적대에서 이수 받은 과목을 따로 등록해야합니다\n\n시간표>과목관리");
+        textContent.setText("편입생의 경우\n\n전적대에서 이수 받은 과목을 따로 등록해야합니다\n\n메인>과목관리");
 
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override

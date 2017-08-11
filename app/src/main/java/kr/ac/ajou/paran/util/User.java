@@ -12,6 +12,7 @@ public class User {
     private String department; // 부서
     private String major; // 전공
     private boolean newORtrans; // 신/편입
+    private boolean abeek;
 
     public String getName() {
         return name;
@@ -59,6 +60,14 @@ public class User {
 
     public void setNewORtrans(boolean newORtrans) {
         this.newORtrans = newORtrans;
+    }
+
+    public boolean isAbeek() {
+        return abeek;
+    }
+
+    public void setAbeek(boolean abeek) {
+        this.abeek = abeek;
     }
 
     public void setNumber(int number){
