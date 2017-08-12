@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import kr.ac.ajou.paran.R;
 
@@ -14,10 +15,13 @@ import kr.ac.ajou.paran.R;
 public class FunctionType extends AppCompatActivity {
 
     private int layout;
+    private String title;
 
     private Button buttonBack;
+    private TextView textTitle;
 
-    public FunctionType(int layout){
+    public FunctionType(String title, int layout){
+        this.title = title;
         this.layout = layout;
     }
     @Override
@@ -25,6 +29,8 @@ public class FunctionType extends AppCompatActivity {
         super.onCreate(savedlnstanceState);
         setContentView(layout);
 
+        textTitle = (TextView)findViewById(R.id.textTitle);
+        textTitle.setText(title);
         buttonBack = (Button)findViewById(R.id.buttonBack);
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override

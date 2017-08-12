@@ -11,6 +11,6 @@ import kr.ac.ajou.paran.util.FunctionType;
 public class Lecture extends FunctionType {
 
     public Lecture(){
-        super(R.layout.activity_lecture);
+        super("강의시간표",R.layout.activity_lecture);
     }
 }

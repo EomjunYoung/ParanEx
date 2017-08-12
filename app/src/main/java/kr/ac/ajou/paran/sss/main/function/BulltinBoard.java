@@ -10,6 +10,6 @@ import kr.ac.ajou.paran.util.FunctionType;
 public class BulltinBoard extends FunctionType {
 
     public BulltinBoard(){
-        super(R.layout.activity_bulletinboard);
+        super("게시판",R.layout.activity_bulletinboard);
     }
 }

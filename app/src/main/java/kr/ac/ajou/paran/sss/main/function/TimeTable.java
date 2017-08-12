@@ -11,6 +11,6 @@ import kr.ac.ajou.paran.util.FunctionType;
 public class TimeTable extends FunctionType {
 
     public TimeTable(){
-        super(R.layout.activity_timetable);
+        super("시간표",R.layout.activity_timetable);
     }
 }

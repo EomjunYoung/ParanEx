@@ -126,7 +126,7 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:text="강의시간표조사"/>
+                            android:text="강의시간표"/>
                         <Button
                             android:id="@+id/buttonBulletinBoard"
                             android:layout_weight="1"

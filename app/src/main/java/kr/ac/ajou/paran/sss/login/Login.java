@@ -55,7 +55,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.loginButton:
                 if ((cookie = HTTP.loginAjou(editID.getText().toString(), editPWD.getText().toString())) != null) {
-                    Toast.makeText(getApplicationContext(), "Success in login", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(this, Main.class).putExtra("Cookie",cookie));
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     finish();
