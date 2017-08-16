@@ -69,7 +69,7 @@
                         android:layout_marginBottom="1dp"
                         android:layout_marginTop="1dp"
                         android:background="@color/login_input_back"
-                        android:lines="1"
+                        android:singleLine="true"
                         android:hint="User ID"
                         android:textColorHint="@color/login_input"
                         android:textColor="@color/login_input" />
@@ -91,7 +91,7 @@
                         android:layout_marginBottom="1dp"
                         android:layout_marginTop="1dp"
                         android:background="@color/login_input_back"
-                        android:lines="1"
+                        android:singleLine="true"
                         android:hint="Password"
                         android:inputType="textPassword"
                         android:textColorHint="@color/login_input"

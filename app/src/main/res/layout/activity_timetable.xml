@@ -9,4 +9,9 @@
     android:weightSum="10"
     android:orientation="vertical">
     <include layout="@layout/common_function_upper" />
+    <org.opencv.android.JavaCameraView
+        android:id="@+id/cameraView"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="9"/>
 </LinearLayout>

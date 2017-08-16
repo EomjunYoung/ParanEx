@@ -26,8 +26,8 @@ public class DB extends SQLiteOpenHelper {
         super(context, DB_NAME, null, 1);
         db = getReadableDatabase();
         sb = new StringBuilder();
-   //     db.execSQL("drop table userInfo;");
-    //    db.execSQL("drop table subject;");
+        db.execSQL("drop table userInfo;");
+        db.execSQL("drop table subject;");
     }
 
     public void initStringBuilder(){

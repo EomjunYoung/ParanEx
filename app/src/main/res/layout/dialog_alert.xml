@@ -9,6 +9,7 @@
         android:layout_alignParentTop="true"
         android:orientation="vertical">
         <TextView
+            android:layout_gravity="top"
             android:id="@+id/textTitle"
             android:layout_width="match_parent"
             android:layout_height="33dp"
