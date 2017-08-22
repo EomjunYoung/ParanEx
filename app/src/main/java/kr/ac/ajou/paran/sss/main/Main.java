@@ -74,6 +74,7 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
         String subjectList;
         if((subjectList = db.createSubject(cookie,user.getNumber())) != null) {
             new InitSubject(this, subjectList).showDialog();
+
             if(user.isNewORtrans() == false)
                 new AlertTrans(this).showDialog();
 

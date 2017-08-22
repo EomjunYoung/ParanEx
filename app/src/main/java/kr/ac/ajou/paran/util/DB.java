@@ -26,8 +26,6 @@ public class DB extends SQLiteOpenHelper {
         super(context, DB_NAME, null, 1);
         db = getReadableDatabase();
         sb = new StringBuilder();
-        db.execSQL("drop table userInfo;");
-        db.execSQL("drop table subject;");
     }
 
     public void initStringBuilder(){
@@ -53,6 +51,11 @@ public class DB extends SQLiteOpenHelper {
     }
 
     public String createSubject(String cookie, int number) {
+        /* 지울 예정 */
+        db.execSQL("drop table userInfo;");
+        db.execSQL("drop table subject;");
+        /* 지울 예정 */
+
         Cursor cursor = db.rawQuery("select count(*) from sqlite_master where name='synchronization'", null);
         cursor.moveToFirst();
         if (cursor.getInt(0) == 0) {
