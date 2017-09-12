@@ -52,6 +52,7 @@ public class DB extends SQLiteOpenHelper {
 
     public String createSubject(String cookie, int number) {
         /* 지울 예정 */
+
         db.execSQL("drop table userInfo;");
         db.execSQL("drop table subject;");
         /* 지울 예정 */

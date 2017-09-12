@@ -73,6 +73,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"/>
+
+
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -112,19 +114,19 @@
                 android:gravity="center_vertical"
                 android:background="@drawable/gradation_blue"
                 android:layout_weight="2"/>
-            <EditText
-                android:id="@+id/name"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="6"/>
+            <Button
+                android:id="@+id/testbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"/>
-        </ScrollView>
+
+
+        <Spinner
+
+            android:id="@+id/sptest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></Spinner>
+
+
     </LinearLayout>
 </LinearLayout>
