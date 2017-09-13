@@ -115,7 +115,8 @@ public class NetworkAsync extends AsyncTask {
 
                     String name = temp.split(">")[1].split("</")[0];
                     response.append(name);
-                    response.append("\n");
+                    response.append(" ");
+
 
                 }
 

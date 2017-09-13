@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
@@ -24,6 +25,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.util.FunctionType;
@@ -88,13 +90,17 @@ public class Lecture extends FunctionType implements Callback {
     {
 
 
+        String string = o.toString();
+        StringTokenizer s = new StringTokenizer(string);
+        ArrayList arrayList = new ArrayList();
 
-        List<Object> arrayList = Arrays.asList(o);
+        while(s.hasMoreTokens())
+        {
 
-
+            arrayList.add(s.nextToken());
+        }
 
         ArrayAdapter arrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, arrayList);
-
         sptest.setAdapter(arrayAdapter);
 
 
