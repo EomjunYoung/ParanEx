@@ -49,13 +49,17 @@ public class Lecture extends FunctionType implements Callback {
     private String type;
     private String major;
     private static LinkedHashMap<String, String> majorMap;
+    private static LinkedHashMap<String, String> semesterMap;
+    private static LinkedHashMap<String, String> typeMap;
+
+
 
 
 
 
     String[] yearStrings = {"2016", "2017"};
     String[] semesterStrings = {"1학기", "여름학기", "2학기", "겨울학기"};
-    String[] typeStrings = {"전공과목", "교양과목", "기초과목", "공학기초"};
+    String[] typeStrings = {"전공과목", "교양과목", "기초과목", "공학기초", "영역별교양", "학점교류", "공학인증교양"};
     String[] majorStrings = {"기계공학전공", "기계공학전공(과)", "산업정보시스템공학전공", "산업공학전공(과)", "산업정보시스템공학전공(과)" +
     "화학공학전공", "환경공학전공(과)", "신소재공학전공", "신소재공학전공(과),", "응용화학전공", "생명공학전공", "응용화학생명공학전공" +
    "응용화학생명공학전공(과)", "환경공학전공", "환경안전공학전공(과)", "건설시스템공학전공", "건설시스템공학전공(과)" +
@@ -85,101 +89,153 @@ public class Lecture extends FunctionType implements Callback {
     protected void onCreate(Bundle savedlnstanceState) {
         super.onCreate(savedlnstanceState);
 
+        exThread exthread = new exThread();
+
 
         mCallback = this;
-        initspinner();
+        exthread.initspinner();
         init();
 
 
     }
 
-    public void initspinner() {
+    private class exThread extends Thread {
 
-        spyear = (Spinner) findViewById(R.id.year);
-        spsemester = (Spinner) findViewById(R.id.semester);
-        sptype = (Spinner) findViewById(R.id.type);
-        spmajor = (Spinner) findViewById(R.id.major);
-        majorMap = setHashMap(majorMap);
+        public exThread() {
+
+        }
+
+        public void initspinner() {
+
+            spyear = (Spinner) findViewById(R.id.year);
+            spsemester = (Spinner) findViewById(R.id.semester);
+            sptype = (Spinner) findViewById(R.id.type);
+            spmajor = (Spinner) findViewById(R.id.major);
+            majorMap = setHashMap(majorMap);
+            semesterMap = setHashMap2(semesterMap);
+            typeMap = setHashMap3(typeMap);
+
+
+            ArrayAdapter arrayAdapter1 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, yearStrings);
+            ArrayAdapter arrayAdapter2 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, semesterStrings);
+            ArrayAdapter arrayAdapter3 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, typeStrings);
+            ArrayAdapter arrayAdapter4 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, majorStrings);
+
+            spyear.setAdapter(arrayAdapter1);
+            spsemester.setAdapter(arrayAdapter2);
+            sptype.setAdapter(arrayAdapter3);
+            spmajor.setAdapter(arrayAdapter4);
+
+
+            spyear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    if (spyear.getSelectedItem().toString() == "2017")
+                        year = "2017";
+
+                    else if (spyear.getSelectedItem().toString() == "2016")
+                        year = "2016";
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+
+            spsemester.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    Set<String> set = semesterMap.keySet();
+                    Iterator<String> itr = set.iterator();
+
+
+                    while(itr.hasNext())
+                    {
+                        String str = itr.next();
+
+                        if(spsemester.getSelectedItem().toString() == str)
+                        {
+                            semester = semesterMap.get(str);
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+
+            sptype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                    Set<String> set = typeMap.keySet();
+                    Iterator<String> itr = set.iterator();
+
+                    while(itr.hasNext())
+                    {
+                        String str = itr.next();
+                        if(sptype.getSelectedItem().toString() == str)
+                        {
+                            type = typeMap.get(str);
+                        }
+                    }
+
+
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+
+
+
+            spmajor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
+
+
+
+    @Override
+    public void onItemSelected (AdapterView < ? > adapterView, View view,int i, long l){
 
         Set<String> set = majorMap.keySet();
-        final Iterator<String> itr = set.iterator();
+        Iterator<String> itr = set.iterator();
+
+        while (itr.hasNext()) {
+
+            String str = itr.next();
 
 
-        ArrayAdapter arrayAdapter1 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, yearStrings);
-        ArrayAdapter arrayAdapter2 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, semesterStrings);
-        ArrayAdapter arrayAdapter3 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, typeStrings);
-        ArrayAdapter arrayAdapter4 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, majorStrings);
 
-        spyear.setAdapter(arrayAdapter1);
-        spsemester.setAdapter(arrayAdapter2);
-        sptype.setAdapter(arrayAdapter3);
-        spmajor.setAdapter(arrayAdapter4);
+            if (spmajor.getSelectedItem().toString() == str) {
 
-
-        spyear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                if (spyear.getSelectedItem().toString() == "2017")
-                    year = "2017";
-
-                else if (spyear.getSelectedItem().toString() == "2016")
-                    year = "2016";
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+                major = majorMap.get(str);
 
             }
-        });
-
-        spsemester.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                if (spsemester.getSelectedItem().toString() == "2학기")
-                    semester = "U0002003";
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        sptype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                if (sptype.getSelectedItem().toString() == "전공과목")
-                    type = "U0209001";
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+        }
+    }
 
 
-        spmajor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                while (itr.hasNext()) {
-                    if (spmajor.getSelectedItem().toString() == itr.next())
-                    {
 
-                        major = majorMap.get(itr.next());
 
-                    }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
                 }
-            }
+            });
+        }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
     }
 
     public void init() {
@@ -329,6 +385,41 @@ public class Lecture extends FunctionType implements Callback {
 
         return majorMap;
     }
+
+
+
+
+    public static LinkedHashMap<String, String> setHashMap2(LinkedHashMap<String, String> semesterMap)
+    {
+        semesterMap = new LinkedHashMap<>();
+
+        semesterMap.put("1학기", "U0002001");
+        semesterMap.put("여름학기","U0002002");
+        semesterMap.put("2학기", "U0002003");
+        semesterMap.put("겨울학기", "U0002004");
+
+
+        return semesterMap;
+    }
+
+
+    public static LinkedHashMap<String, String> setHashMap3(LinkedHashMap<String, String> typeMap)
+    {
+        typeMap = new LinkedHashMap<>();
+
+        typeMap.put("전공과목", "U0209001");
+        typeMap.put("교양과목", "U0209002");
+        typeMap.put("기초과목", "U0209003");
+        typeMap.put("공학기초", "U0209004");
+        typeMap.put("영역별교양","U0209005");
+        typeMap.put("학점교류", "U0209006");
+        typeMap.put("공학인증교양", "U0209007");
+
+        return typeMap;
+    }
+
+
+
 
 }
 
