@@ -52,11 +52,6 @@ public class Lecture extends FunctionType implements Callback {
     private static LinkedHashMap<String, String> semesterMap;
     private static LinkedHashMap<String, String> typeMap;
 
-
-
-
-
-
     String[] yearStrings = {"2016", "2017"};
     String[] semesterStrings = {"1학기", "여름학기", "2학기", "겨울학기"};
     String[] typeStrings = {"전공과목", "교양과목", "기초과목", "공학기초", "영역별교양", "학점교류", "공학인증교양"};
@@ -224,12 +219,7 @@ public class Lecture extends FunctionType implements Callback {
             }
         }
     }
-
-
-
-
-
-                @Override
+              @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
 
                 }
