@@ -15,6 +15,8 @@
 | <img src="https://avatars0.githubusercontent.com/u/29747023?v=4&s=100"> | **Song A Lee** | <img src="http://ghchart.rshah.org/LeeSongA" alt="LeeSongA's Github chart" /> |
 ---
 # Refer
+- rotate image
+>https://github.com/jsford/SightReader
 - recognize table
 >http://answers.opencv.org/question/63847/how-to-extract-tables-from-an-image/
 - Base64 encoding
