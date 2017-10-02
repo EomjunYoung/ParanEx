@@ -3,6 +3,8 @@ key.h
 *.tlog
 *.suo
 *.obj
+*.sln
+*.db
 *.idb
 *.pdb
 *.ilk
