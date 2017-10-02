@@ -1,0 +1,11 @@
+key.h
+*.log
+*.tlog
+*.suo
+*.obj
+*.idb
+*.pdb
+*.ilk
+*.opendb
+*.vcxproj*
+

@@ -2,6 +2,7 @@
 #define __VISION_H__
 
 #include "common.h"
+#include "key.h"
 
 #include <openssl/ssl.h>
 #include <openssl/err.h>

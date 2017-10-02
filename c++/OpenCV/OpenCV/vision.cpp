@@ -63,7 +63,9 @@ char *useOCR(char *name) {
 	SSL* ssl;
 	SSL_CTX* ctx;
 	FILE *fp = NULL;
-	char post[] = "POST /v1/images:annotate?key=AIzaSyDl0trokyUz3QVyGwBEIi03PAWcBO1voCM HTTP/1.1\r\n";
+	char post[] = "POST /v1/images:annotate?key=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX HTTP/1.1\r\n";
+	char *pc = strstr(post, "XX");
+	for (int i = 0, length = strlen(VISION_KEY); i < length; *(pc + i) = VISION_KEY[i], i++);
 	char host[] = "Host: vision.googleapis.com\r\n";
 	char *buffer;
 	SSL_library_init();
