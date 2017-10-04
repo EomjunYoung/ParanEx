@@ -46,6 +46,8 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
         super.onCreate(savedlnstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         /* 쿠키를 가져옴 */
         cookie = getIntent().getStringExtra("Cookie");
         /* 쿠키를 가져옴 */
@@ -61,6 +63,8 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
         buttonSubject.setOnClickListener(this);
         buttonLecture.setOnClickListener(this);
         buttonTimeTable.setOnClickListener(this);
+
+
 
         /*DB 생성*/
         db = new DB(this);

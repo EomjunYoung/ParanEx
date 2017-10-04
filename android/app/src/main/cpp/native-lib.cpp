@@ -1,24 +1,28 @@
 #include <jni.h>
 #include <iostream>
-#include <opencv2/core/core.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/opencv.hpp>
 
 using namespace cv;
 using namespace std;
 
 extern "C" {
-JNIEXPORT void JNICALL
-Java_kr_ac_ajou_paran_util_Camera_recognizer(JNIEnv *env, jobject instance,
+JNIEXPORT int JNICALL
+Java_kr_ac_ajou_paran_util_Recognizer_recognizer(JNIEnv *env, jobject instance,
                                                                 jlong matAddrInput,
                                                                 jlong matAddrResult) {
 
-   Mat &matInput = *(Mat *) matAddrInput;
+    Mat &matInput = *(Mat *) matAddrInput;
     Mat &matResult = *(Mat *) matAddrResult;
 
-    cvtColor(matInput, matResult, CV_RGBA2GRAY);
+    Point2f src_center(matInput.cols/2.0F, matInput.rows/2.0F);
+    Mat rot_mat = getRotationMatrix2D(src_center, -90, 1.0);
+    warpAffine(matInput, matInput, rot_mat, matInput.size());
+
+    Mat gray;
+    cvtColor(matInput, gray, CV_RGBA2GRAY);
 
     Mat bw;
-    adaptiveThreshold(~matResult, bw, 255, CV_ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 15, -2);
+    adaptiveThreshold(~gray, bw, 255, CV_ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 15, -2);
 
     matResult = bw;
     Mat horizontal = bw.clone();
@@ -91,6 +95,8 @@ Java_kr_ac_ajou_paran_util_Camera_recognizer(JNIEnv *env, jobject instance,
     }
 
     matResult = matInput;
+
+    return rois.size();
 // TODO
 }
 }

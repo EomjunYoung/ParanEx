@@ -14,8 +14,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.WindowManager;
+import android.hardware.Camera;
+import android.widget.Toast;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -25,16 +29,18 @@ import org.opencv.core.Mat;
 
 import kr.ac.ajou.paran.R;
 
-public class Camera extends AppCompatActivity
-        implements CameraBridgeViewBase.CvCameraViewListener2 {
+public class Recognizer extends AppCompatActivity
+        implements CameraBridgeViewBase.CvCameraViewListener2, View.OnTouchListener {
+
 
     private static final String TAG = "opencv";
     private CameraBridgeViewBase mOpenCvCameraView;
     private Mat matInput;
     private Mat matResult;
+    Recognizer recorder;
 
-    public native void recognizer(long matAddrInput, long matAddrResult);
-    
+    public native int recognizer(long matAddrInput, long matAddrResult);
+
     static {
         System.loadLibrary("opencv_java3");
         System.loadLibrary("native-lib");
@@ -47,7 +53,7 @@ public class Camera extends AppCompatActivity
                 case LoaderCallbackInterface.SUCCESS:
                 {
                     mOpenCvCameraView.enableView();
-                    mOpenCvCameraView.setMaxFrameSize(480, 640);
+                    mOpenCvCameraView.setMaxFrameSize(640, 480);
                 } break;
                 default:
                 {
@@ -67,7 +73,7 @@ public class Camera extends AppCompatActivity
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_camera);
 
-
+        recorder = this;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //퍼미션 상태 확인
             if (!hasPermissions(PERMISSIONS)) {
@@ -82,6 +88,15 @@ public class Camera extends AppCompatActivity
         mOpenCvCameraView.setCvCameraViewListener(this);
         mOpenCvCameraView.setCameraIndex(0); // front-camera(1),  back-camera(0)
         mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+
+        mOpenCvCameraView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                return false;
+            }
+        });
+
     }
 
     @Override
@@ -131,7 +146,10 @@ public class Camera extends AppCompatActivity
         if ( matResult != null ) matResult.release();
         matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
 
-        recognizer(matInput.getNativeObjAddr(), matResult.getNativeObjAddr());
+        if(recognizer(matInput.getNativeObjAddr(), matResult.getNativeObjAddr()) == 1){
+            Log.d("test","fasddfas");
+            //Toast.makeText(recorder,"사진 찍으세요",Toast.LENGTH_SHORT).show();
+        } 
 
         return matResult;
     }
@@ -186,7 +204,7 @@ public class Camera extends AppCompatActivity
     @TargetApi(Build.VERSION_CODES.M)
     private void showDialogForPermission(String msg) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder( Camera.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder( Recognizer.this);
         builder.setTitle("알림");
         builder.setMessage(msg);
         builder.setCancelable(false);
@@ -201,5 +219,10 @@ public class Camera extends AppCompatActivity
             }
         });
         builder.create().show();
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        return false;
     }
 }

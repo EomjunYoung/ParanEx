@@ -5,8 +5,8 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
-set(pathOPENCV D:/OpenCV-android-sdk)
-set(pathPROJECT D:/GitHub/ParanEx/android)
+set(pathOPENCV D:/OpenCV-3.1.0-android-sdk/OpenCV-android-sdk)
+set(pathPROJECT C:/Users/ejy77/Documents/GitHub/ParanEx/android)
 set(pathLIBOPENCV_JAVA ${pathPROJECT}/app/src/main/JniLibs/${ANDROID_ABI}/libopencv_java3.so)
 
 set(CMAKE_VERBOSE_MAKEFILE on)
