@@ -36,10 +36,12 @@ public class Recognizer extends AppCompatActivity
     private static final String TAG = "opencv";
     private CameraBridgeViewBase mOpenCvCameraView;
     private Mat matInput;
+    private Mat matPass;
     private Mat matResult;
-    Recognizer recorder;
+    private Recognizer recognizer;
 
-    public native int recognizer(long matAddrInput, long matAddrResult);
+    public native int rectangle(long matAddrInput, long matAddrResult);
+    public native int getVerticalCoord(long matAddrInput);
 
     static {
         System.loadLibrary("opencv_java3");
@@ -73,7 +75,7 @@ public class Recognizer extends AppCompatActivity
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_camera);
 
-        recorder = this;
+        recognizer = this;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //퍼미션 상태 확인
             if (!hasPermissions(PERMISSIONS)) {
@@ -92,7 +94,14 @@ public class Recognizer extends AppCompatActivity
         mOpenCvCameraView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-
+                try {
+                    if (matPass != null) {
+                        Toast.makeText(recognizer, "touched" + getVerticalCoord(matPass.getNativeObjAddr()), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(recognizer, "touched", Toast.LENGTH_SHORT).show();
+                    }
+                }catch (Exception e){
+                    Toast.makeText(recognizer, e.toString(), Toast.LENGTH_SHORT).show();
+                    }
                 return false;
             }
         });
@@ -146,9 +155,8 @@ public class Recognizer extends AppCompatActivity
         if ( matResult != null ) matResult.release();
         matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
 
-        if(recognizer(matInput.getNativeObjAddr(), matResult.getNativeObjAddr()) == 1){
-            Log.d("test","fasddfas");
-            //Toast.makeText(recorder,"사진 찍으세요",Toast.LENGTH_SHORT).show();
+        if(rectangle(matInput.getNativeObjAddr(), matResult.getNativeObjAddr()) == 1){
+            matPass = matInput; //정확히 사각형 하나 나올 때 인식할 것 정해 줌
         } 
 
         return matResult;

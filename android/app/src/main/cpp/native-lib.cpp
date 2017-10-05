@@ -7,17 +7,17 @@ using namespace std;
 
 extern "C" {
 JNIEXPORT int JNICALL
-Java_kr_ac_ajou_paran_util_Recognizer_recognizer(JNIEnv *env, jobject instance,
+Java_kr_ac_ajou_paran_util_Recognizer_rectangle(JNIEnv *env, jobject instance,
                                                                 jlong matAddrInput,
                                                                 jlong matAddrResult) {
 
     Mat &matInput = *(Mat *) matAddrInput;
     Mat &matResult = *(Mat *) matAddrResult;
-
+/*
     Point2f src_center(matInput.cols/2.0F, matInput.rows/2.0F);
     Mat rot_mat = getRotationMatrix2D(src_center, -90, 1.0);
     warpAffine(matInput, matInput, rot_mat, matInput.size());
-
+*/
     Mat gray;
     cvtColor(matInput, gray, CV_RGBA2GRAY);
 
@@ -98,5 +98,41 @@ Java_kr_ac_ajou_paran_util_Recognizer_recognizer(JNIEnv *env, jobject instance,
 
     return rois.size();
 // TODO
+}
+}
+
+extern "C" {
+JNIEXPORT int JNICALL
+Java_kr_ac_ajou_paran_util_Recognizer_getVerticalCoord(JNIEnv *env, jobject instance, jlong matAddrInput) {
+
+    Mat &table = *(Mat *) matAddrInput;
+    Mat vertical;
+    int width = table.cols, height = table.rows;
+    int delta = width*0.02f;
+    vector<short> lines;
+
+    cvtColor(table, vertical, CV_RGBA2GRAY);
+    adaptiveThreshold(~vertical, vertical, 255, CV_ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 15, -2);
+
+    int size = vertical.rows / 15;
+    Mat verticalStructure = getStructuringElement(MORPH_RECT, Size(1, size));
+
+    erode(vertical, vertical, verticalStructure, Point(-1, -1));
+    dilate(vertical, vertical, verticalStructure, Point(-1, -1));
+
+    for (int i = delta; i < height && lines.size() == 0; i++) {
+        for (int j = delta; j < width; j++) {
+            if (vertical.at<uchar>(i, j) != 0) {
+                lines.push_back(j);
+                j += delta;
+            }
+        }
+    }
+ /*   if (lines.size() < 5) {
+        printf("error), There are few colums!\n");
+        waitKey();
+        exit(1);
+    }*/
+    return lines.size();
 }
 }
