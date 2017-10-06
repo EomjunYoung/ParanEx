@@ -64,7 +64,7 @@
             android:screenOrientation="portrait" />
 
         <activity android:name=".util.Recognizer"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation"/>
     </application>
 

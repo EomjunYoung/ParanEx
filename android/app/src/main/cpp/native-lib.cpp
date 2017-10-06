@@ -6,18 +6,13 @@ using namespace cv;
 using namespace std;
 
 extern "C" {
-JNIEXPORT int JNICALL
-Java_kr_ac_ajou_paran_util_Recognizer_rectangle(JNIEnv *env, jobject instance,
-                                                                jlong matAddrInput,
-                                                                jlong matAddrResult) {
+JNIEXPORT void JNICALL
+Java_kr_ac_ajou_paran_util_Recognizer_rectangle(JNIEnv *env, jobject instance, jlong matAddrInput, jlong matAddrPass, jlong matAddrResult) {
 
     Mat &matInput = *(Mat *) matAddrInput;
+    Mat &matPass = *(Mat *) matAddrPass;
     Mat &matResult = *(Mat *) matAddrResult;
-/*
-    Point2f src_center(matInput.cols/2.0F, matInput.rows/2.0F);
-    Mat rot_mat = getRotationMatrix2D(src_center, -90, 1.0);
-    warpAffine(matInput, matInput, rot_mat, matInput.size());
-*/
+    
     Mat gray;
     cvtColor(matInput, gray, CV_RGBA2GRAY);
 
@@ -89,15 +84,14 @@ Java_kr_ac_ajou_paran_util_Recognizer_rectangle(JNIEnv *env, jobject instance,
             continue;
 
         rois.push_back(matInput(boundRect[i]).clone());
-
-        //        drawContours( rsz, contours, i, Scalar(0, 0, 255), CV_FILLED, 8, vector<Vec4i>(), 0, Point() );
-        rectangle(matInput, boundRect[i].tl(), boundRect[i].br(), Scalar(0, 255, 0), 1, 8, 0);
+        rectangle(matInput, boundRect[i].tl(), boundRect[i].br(), Scalar(0, 255, 0), 3, 8, 0);
     }
 
     matResult = matInput;
 
-    return rois.size();
-// TODO
+    if (rois.size() == 1) {
+        matPass = rois[0];
+    }
 }
 }
 

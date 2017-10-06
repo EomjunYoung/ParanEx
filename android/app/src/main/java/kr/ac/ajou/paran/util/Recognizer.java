@@ -40,7 +40,7 @@ public class Recognizer extends AppCompatActivity
     private Mat matResult;
     private Recognizer recognizer;
 
-    public native int rectangle(long matAddrInput, long matAddrResult);
+    public native int rectangle(long matAddrInput, long matAddrPass, long matAddrResult);
     public native int getVerticalCoord(long matAddrInput);
 
     static {
@@ -76,6 +76,7 @@ public class Recognizer extends AppCompatActivity
         setContentView(R.layout.activity_camera);
 
         recognizer = this;
+        matPass = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //퍼미션 상태 확인
             if (!hasPermissions(PERMISSIONS)) {
@@ -154,10 +155,8 @@ public class Recognizer extends AppCompatActivity
 
         if ( matResult != null ) matResult.release();
         matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
-
-        if(rectangle(matInput.getNativeObjAddr(), matResult.getNativeObjAddr()) == 1){
-            matPass = matInput; //정확히 사각형 하나 나올 때 인식할 것 정해 줌
-        } 
+        matPass = new Mat(matInput.rows(),matInput.cols(),matInput.type());
+        rectangle(matInput.getNativeObjAddr(), matPass.getNativeObjAddr(),matResult.getNativeObjAddr());
 
         return matResult;
     }
