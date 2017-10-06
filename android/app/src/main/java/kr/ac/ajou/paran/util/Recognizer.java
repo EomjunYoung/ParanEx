@@ -18,7 +18,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
-import android.hardware.Camera;
 import android.widget.Toast;
 
 import org.opencv.android.BaseLoaderCallback;
@@ -77,6 +76,7 @@ public class Recognizer extends AppCompatActivity
 
         recognizer = this;
         matPass = null;
+        matResult = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //퍼미션 상태 확인
             if (!hasPermissions(PERMISSIONS)) {
@@ -95,14 +95,14 @@ public class Recognizer extends AppCompatActivity
         mOpenCvCameraView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                try {
-                    if (matPass != null) {
-                        Toast.makeText(recognizer, "touched" + getVerticalCoord(matPass.getNativeObjAddr()), Toast.LENGTH_SHORT).show();
-                        //Toast.makeText(recognizer, "touched", Toast.LENGTH_SHORT).show();
-                    }
-                }catch (Exception e){
-                    Toast.makeText(recognizer, e.toString(), Toast.LENGTH_SHORT).show();
-                    }
+                if (matPass != null) {
+                    int vert = getVerticalCoord(matPass.getNativeObjAddr());
+                    if(vert == 5)
+                        Toast.makeText(recognizer, "this is table", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(recognizer, "this is not table : "+vert+"lines", Toast.LENGTH_SHORT).show();
+                }
+
                 return false;
             }
         });
@@ -154,8 +154,10 @@ public class Recognizer extends AppCompatActivity
         matInput = inputFrame.rgba();
 
         if ( matResult != null ) matResult.release();
-        matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
-        matPass = new Mat(matInput.rows(),matInput.cols(),matInput.type());
+        if(matResult == null)
+            matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
+        if(matPass == null)
+            matPass = new Mat(matInput.rows(),matInput.cols(),matInput.type());
         rectangle(matInput.getNativeObjAddr(), matPass.getNativeObjAddr(),matResult.getNativeObjAddr());
 
         return matResult;

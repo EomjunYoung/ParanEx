@@ -196,6 +196,7 @@ vector<short> getVerticalCoord(Mat table, int scale) {
 		waitKey();
 		exit(1);
 	}
+	printf("%d\n", lines.size());
 	return lines;
 }
 
