@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        Bitmap Img= BitmapFactory.decodeResource(getResources(), R.drawable.test);
+     /*   Bitmap Img= BitmapFactory.decodeResource(getResources(), R.drawable.test);
         iv1 = (ImageView)findViewById(R.id.iv1);
         tv1 = (TextView)findViewById(R.id.tv1);
 
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             callCloudVision(Img);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 
