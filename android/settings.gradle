@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':guava-23.1'
 include ':openCVLibrary310'
