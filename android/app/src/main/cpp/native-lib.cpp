@@ -84,7 +84,7 @@ Java_kr_ac_ajou_paran_util_Recognizer_rectangle(JNIEnv *env, jobject instance, j
             continue;
 
         rois.push_back(matInput(boundRect[i]).clone());
-        rectangle(matInput, boundRect[i].tl(), boundRect[i].br(), Scalar(0, 255, 0), 3, 8, 0);
+        rectangle(matInput, boundRect[i].tl(), boundRect[i].br(), Scalar(0, 255, 0), 1, 8, 0);
     }
 
     matResult = matInput;
@@ -141,8 +141,9 @@ Java_kr_ac_ajou_paran_util_Recognizer_getVerticalCoord(JNIEnv *env, jobject inst
     dilate(vertical, vertical, verticalStructure, Point(-1, -1));
 
     for (int i = delta; i < height && lines.size() == 0; i++) {
-        for (int j = delta; j < width; j++) {
+        for (int j = 0; j < width; j++) {
             if (vertical.at<uchar>(i, j) != 0) {
+          //      line(table,Point(j,0),Point(j,360),Scalar(255, 0, 0), 1, 8, 0);
                 lines.push_back(j);
                 j += delta;
             }
@@ -174,8 +175,9 @@ Java_kr_ac_ajou_paran_util_Recognizer_getHorizontalCoord(JNIEnv *env, jobject in
 
 
     for (int i = delta; i < width && marks.size() == 0; i++) {
-        for (int j = delta; j < height; j++) {
+        for (int j = 0; j < height; j++) {
             if (horizontal.at<uchar>(j, i) != 0) {
+            //    line(table,Point(0,j),Point(640,j),Scalar(255, 0, 0), 1, 8, 0);
                 marks.push_back(j);
                 j += delta;
             }

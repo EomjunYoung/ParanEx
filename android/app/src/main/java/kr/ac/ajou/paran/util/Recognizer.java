@@ -55,7 +55,7 @@ public class Recognizer extends AppCompatActivity
                 case LoaderCallbackInterface.SUCCESS:
                 {
                     mOpenCvCameraView.enableView();
-                    mOpenCvCameraView.setMaxFrameSize(640, 480);
+                    mOpenCvCameraView.setMaxFrameSize(640, 360);
                 } break;
                 default:
                 {
