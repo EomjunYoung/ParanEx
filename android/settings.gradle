@@ -1,2 +1,2 @@
-include ':app', ':guava-23.1'
+include ':app', ':google-api-services-vision-v1-rev363-java-1.23'
 include ':openCVLibrary310'
