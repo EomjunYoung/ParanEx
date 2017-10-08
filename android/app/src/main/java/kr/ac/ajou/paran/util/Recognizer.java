@@ -41,6 +41,7 @@ public class Recognizer extends AppCompatActivity
 
     public native int rectangle(long matAddrInput, long matAddrPass, long matAddrResult);
     public native int getVerticalCoord(long matAddrInput);
+    public native int getHorizontalCoord(long matAddrInput);
 
     static {
         System.loadLibrary("opencv_java3");
@@ -97,10 +98,11 @@ public class Recognizer extends AppCompatActivity
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (matPass != null) {
                     int vert = getVerticalCoord(matPass.getNativeObjAddr());
+                    int hori = getHorizontalCoord(matPass.getNativeObjAddr());
                     if(vert == 5)
-                        Toast.makeText(recognizer, "this is table", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(recognizer, "this is table : "+(vert+1)+" X "+(hori+1), Toast.LENGTH_SHORT).show();
                     else
-                        Toast.makeText(recognizer, "this is not table : "+vert+"lines", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(recognizer, "this is not table : "+(vert+1)+" X "+(hori+1), Toast.LENGTH_SHORT).show();
                 }
 
                 return false;
