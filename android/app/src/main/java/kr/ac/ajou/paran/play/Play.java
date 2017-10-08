@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import kr.ac.ajou.paran.R;
+import kr.ac.ajou.paran.login.Login;
 import kr.ac.ajou.paran.util.Recognizer;
 
 /**
@@ -18,7 +19,7 @@ public class Play extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        startActivity(new Intent(this, Recognizer.class));
+        startActivity(new Intent(this, Login.class));
         finish();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }

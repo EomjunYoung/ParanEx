@@ -1,7 +1,6 @@
-package kr.ac.ajou.paran.sss.main.function;
+package kr.ac.ajou.paran.main.function;
 
 import android.os.AsyncTask;
-import android.widget.ScrollView;
 
 import java.io.BufferedReader;
 import java.io.IOException;

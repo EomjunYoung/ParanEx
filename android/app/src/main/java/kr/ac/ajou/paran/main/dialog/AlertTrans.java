@@ -1,4 +1,4 @@
-package kr.ac.ajou.paran.sss.main.dialog;
+package kr.ac.ajou.paran.main.dialog;
 
 import android.content.Context;
 import android.view.View;

@@ -1,14 +1,12 @@
-package kr.ac.ajou.paran.sss.main.dialog;
+package kr.ac.ajou.paran.main.dialog;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.util.DialogType;
-import kr.ac.ajou.paran.util.HTTP;
 
 /**
  * Created by dream on 2017-08-06.

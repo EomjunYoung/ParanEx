@@ -1,4 +1,4 @@
-package kr.ac.ajou.paran.sss.main;
+package kr.ac.ajou.paran.main;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,12 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import kr.ac.ajou.paran.R;
-import kr.ac.ajou.paran.sss.main.dialog.AlertTrans;
-import kr.ac.ajou.paran.sss.main.dialog.InitSubject;
-import kr.ac.ajou.paran.sss.main.function.BulltinBoard;
-import kr.ac.ajou.paran.sss.main.function.Lecture;
-import kr.ac.ajou.paran.sss.main.function.Subject;
-import kr.ac.ajou.paran.sss.main.function.TimeTable;
+import kr.ac.ajou.paran.main.dialog.AlertTrans;
+import kr.ac.ajou.paran.main.dialog.InitSubject;
+import kr.ac.ajou.paran.main.function.BulltinBoard;
+import kr.ac.ajou.paran.main.function.Lecture;
+import kr.ac.ajou.paran.main.function.Subject;
+import kr.ac.ajou.paran.main.function.TimeTable;
 import kr.ac.ajou.paran.util.DB;
 import kr.ac.ajou.paran.util.HTTP;
 import kr.ac.ajou.paran.util.User;

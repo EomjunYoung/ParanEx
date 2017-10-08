@@ -1,27 +1,17 @@
-package kr.ac.ajou.paran.sss.login;
+package kr.ac.ajou.paran.login;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-
 import kr.ac.ajou.paran.R;
-import kr.ac.ajou.paran.sss.main.Main;
+import kr.ac.ajou.paran.main.Main;
 import kr.ac.ajou.paran.util.HTTP;
-import kr.ac.ajou.paran.util.User;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
