@@ -8,11 +8,10 @@ using namespace std;
 int scale=15; // play with this variable in order to increase/decrease the amount of lines to be detected
 
 extern "C" {
-JNIEXPORT void JNICALL
-Java_kr_ac_ajou_paran_util_Recognizer_rectangle(JNIEnv *env, jobject instance, jlong matAddrInput, jlong matAddrPass, jlong matAddrResult) {
+JNIEXPORT int JNICALL
+Java_kr_ac_ajou_paran_util_Recognizer_rectangle(JNIEnv *env, jobject instance, jlong matAddrInput, jlong matAddrResult) {
 
     Mat &matInput = *(Mat *) matAddrInput;
-    Mat &matPass = *(Mat *) matAddrPass;
     Mat &matResult = *(Mat *) matAddrResult;
 
     Mat gray;
@@ -87,37 +86,11 @@ Java_kr_ac_ajou_paran_util_Recognizer_rectangle(JNIEnv *env, jobject instance, j
         rectangle(matInput, boundRect[i].tl(), boundRect[i].br(), Scalar(0, 255, 0), 1, 8, 0);
     }
 
-    matResult = matInput;
-
     if (rois.size() == 1) {
-        /* rois[0]을 table로 바꾸면 기존에 쓰던 함수 */
-        Mat vertical;
-        int width = rois[0].cols, height = rois[0].rows;
-        int delta = width*0.03f;
-        vector<short> lines;
-
-        cvtColor(rois[0], vertical, CV_RGBA2GRAY);
-        adaptiveThreshold(~vertical, vertical, 255, CV_ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, scale, -2);
-
-        int size = vertical.rows / scale;
-        Mat verticalStructure = getStructuringElement(MORPH_RECT, Size(1, size));
-
-        erode(vertical, vertical, verticalStructure, Point(-1, -1));
-        dilate(vertical, vertical, verticalStructure, Point(-1, -1));
-
-        for (int i = delta; i < height && lines.size() == 0; i++) {
-            for (int j = delta; j < width-delta; j++) {
-                if (vertical.at<uchar>(i, j) != 0) {
-                    lines.push_back(j);
-                    j += delta;
-                }
-            }
-        }
-        if(lines.size() == 5) {
-            matPass = rois[0];
-            imwrite("/storage/emulated/0/test.jpg",matPass);
-        }
+        matResult = rois[0];
+        imwrite("/storage/emulated/0/test.jpg",matResult);
     }
+    return rois.size();
 }
 }
 

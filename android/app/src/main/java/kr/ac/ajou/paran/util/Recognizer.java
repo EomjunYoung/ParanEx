@@ -35,11 +35,10 @@ public class Recognizer extends AppCompatActivity
     private static final String TAG = "opencv";
     private CameraBridgeViewBase mOpenCvCameraView;
     private Mat matInput;
-    private Mat matPass;
     private Mat matResult;
     private Recognizer recognizer;
 
-    public native int rectangle(long matAddrInput, long matAddrPass, long matAddrResult);
+    public native int rectangle(long matAddrInput, long matAddrResult);
     public native int getVerticalCoord(long matAddrInput);
     public native int getHorizontalCoord(long matAddrInput);
 
@@ -55,7 +54,7 @@ public class Recognizer extends AppCompatActivity
                 case LoaderCallbackInterface.SUCCESS:
                 {
                     mOpenCvCameraView.enableView();
-                    mOpenCvCameraView.setMaxFrameSize(640, 360);
+              //      mOpenCvCameraView.setMaxFrameSize(640, 360);
                 } break;
                 default:
                 {
@@ -76,7 +75,6 @@ public class Recognizer extends AppCompatActivity
         setContentView(R.layout.activity_camera);
 
         recognizer = this;
-        matPass = null;
         matResult = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //퍼미션 상태 확인
@@ -96,15 +94,17 @@ public class Recognizer extends AppCompatActivity
         mOpenCvCameraView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (matPass != null) {
-                    int vert = getVerticalCoord(matPass.getNativeObjAddr());
-                    int hori = getHorizontalCoord(matPass.getNativeObjAddr());
-                    if(vert == 5)
-                        Toast.makeText(recognizer, "this is table : "+(vert+1)+" X "+(hori+1), Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(recognizer, "this is not table : "+(vert+1)+" X "+(hori+1), Toast.LENGTH_SHORT).show();
-                }
+                if ( matResult != null ) matResult.release();//새로 만듦
+                if(matResult == null)
+                    matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
 
+                if(rectangle(matInput.getNativeObjAddr(), matResult.getNativeObjAddr()) == 1) {
+                    int vert = getVerticalCoord(matResult.getNativeObjAddr());
+                    int hori = getHorizontalCoord(matResult.getNativeObjAddr());
+                    Toast.makeText(recognizer, "this is table : " + (vert + 1) + " X " + (hori + 1), Toast.LENGTH_SHORT).show();
+                }
+                else
+                    Toast.makeText(recognizer, "can not recognize table", Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
@@ -152,17 +152,9 @@ public class Recognizer extends AppCompatActivity
 
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
-
         matInput = inputFrame.rgba();
 
-        if ( matResult != null ) matResult.release();
-        if(matResult == null)
-            matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
-        if(matPass == null)
-            matPass = new Mat(matInput.rows(),matInput.cols(),matInput.type());
-        rectangle(matInput.getNativeObjAddr(), matPass.getNativeObjAddr(),matResult.getNativeObjAddr());
-
-        return matResult;
+        return matInput;
     }
 
 
