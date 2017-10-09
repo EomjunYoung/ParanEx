@@ -39,8 +39,6 @@ public class Recognizer extends AppCompatActivity
     private Recognizer recognizer;
 
     public native int rectangle(long matAddrInput, long matAddrResult);
-    public native int getVerticalCoord(long matAddrInput);
-    public native int getHorizontalCoord(long matAddrInput);
 
     static {
         System.loadLibrary("opencv_java3");
@@ -99,9 +97,7 @@ public class Recognizer extends AppCompatActivity
                     matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
 
                 if(rectangle(matInput.getNativeObjAddr(), matResult.getNativeObjAddr()) == 1) {
-                    int vert = getVerticalCoord(matResult.getNativeObjAddr());
-                    int hori = getHorizontalCoord(matResult.getNativeObjAddr());
-                    Toast.makeText(recognizer, "this is table : " + (vert + 1) + " X " + (hori + 1), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(recognizer, "this is table", Toast.LENGTH_SHORT).show();
                 }
                 else
                     Toast.makeText(recognizer, "can not recognize table", Toast.LENGTH_SHORT).show();

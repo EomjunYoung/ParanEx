@@ -10,7 +10,7 @@ int main()
 
 	/* input	file  : name of image					*/
 	/*			scale : the bigger the more detailed	*/
-	table = fetchTable("untitled8.jpg", scale);
+	table = fetchTable("untitled7.jpg", scale);
 
 	imshow("roi", table);
 	cout << endl << "size : " << table.cols << "x" << table.rows << endl;
