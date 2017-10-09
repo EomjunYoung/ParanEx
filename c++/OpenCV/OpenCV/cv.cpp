@@ -8,11 +8,6 @@ Mat fetchTable(string file, int scale) {
 	src = inputFile(file);
 
 	Canny(src, edge, 50, 200, 3);
-	angle = findAngle(edge);
-	if (angle != 0) {
-		cout << "rotate : " << angle << endl;
-		src = rotateMatrix(src, angle);
-	}
 	width = src.cols;
 	height = src.rows;
 
@@ -92,57 +87,6 @@ Mat inputFile(string file) {
 	return src;
 }
 
-/* reference : https://github.com/jsford/SightReader */
-float median(vector<float> &v)
-{
-	size_t n = v.size() / 2;
-	nth_element(v.begin(), v.begin() + n, v.end());
-	return v[n];
-}
-/* reference : https://github.com/jsford/SightReader */
-
-/* reference : https://github.com/jsford/SightReader */
-double findAngle(Mat src) {
-	vector<Vec4i> lines;
-	vector<float> slopes;
-
-	HoughLinesP(src, lines, 1, CV_PI / 180, 100, 50, 10);
-
-	if (lines.size() == 0) {
-		printf("error), There are no lines!\n");
-		waitKey();
-		exit(1);
-	}
-
-	for (size_t i = 0; i < lines.size(); i++) {
-		Vec4i l = lines[i];
-		//line(c_src , Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0,0,255), 3, CV_AA);
-		slopes.push_back((abs(l[0] - l[2]) < 0.0000001) ? 1000000 : (l[1] - l[3]) / (float)(l[0] - l[2]));
-	}
-
-	double rotation = atan(median(slopes)) * 180.0 / CV_PI;
-
-	return rotation;
-}
-/* reference : https://github.com/jsford/SightReader */
-
-/* reference : https://github.com/jsford/SightReader */
-Mat rotateMatrix(Mat src, double angle) {
-
-	Mat rotatedMatrix;
-
-	Point2f pt(src.cols / 2.0, src.rows / 2.0);
-	Mat r = getRotationMatrix2D(pt, angle, 1.0);
-	Rect bbox = RotatedRect(pt, src.size(), angle).boundingRect();
-	r.at<double>(0, 2) += bbox.width / 2.0 - pt.x;
-	r.at<double>(1, 2) += bbox.height / 2.0 - pt.y;
-
-	warpAffine(src, rotatedMatrix, r, bbox.size(), cv::INTER_LANCZOS4, cv::BORDER_CONSTANT, Scalar(255, 255, 255));
-
-	return rotatedMatrix;
-}
-/* reference : https://github.com/jsford/SightReader */
-
 Mat changeGray(Mat src) {
 	Mat gray;
 	if (src.channels() == 3)
@@ -184,7 +128,7 @@ vector<short> getVerticalCoord(Mat table, int scale) {
 	vertical = workVertical(vertical, scale);
 
 	for (int i = delta; i < height && lines.size() == 0; i++) {
-		for (int j = delta; j < width; j++) {
+		for (int j = delta; j < width-delta; j++) {
 			if (vertical.at<uchar>(i, j) != 0) {
 				lines.push_back(j);
 				j += delta;
@@ -212,7 +156,7 @@ vector<short> getHorizontalCoord(Mat table, int scale) {
 
 
 	for (int i = delta; i < width && marks.size() == 0; i++) {
-		for (int j = delta; j < height; j++) {
+		for (int j = delta; j < height-delta; j++) {
 			if (horizontal.at<uchar>(j, i) != 0) {
 				marks.push_back(j);
 				j += delta;

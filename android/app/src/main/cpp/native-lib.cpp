@@ -93,7 +93,7 @@ Java_kr_ac_ajou_paran_util_Recognizer_rectangle(JNIEnv *env, jobject instance, j
         /* rois[0]을 table로 바꾸면 기존에 쓰던 함수 */
         Mat vertical;
         int width = rois[0].cols, height = rois[0].rows;
-        int delta = width*0.02f;
+        int delta = width*0.03f;
         vector<short> lines;
 
         cvtColor(rois[0], vertical, CV_RGBA2GRAY);
@@ -106,7 +106,7 @@ Java_kr_ac_ajou_paran_util_Recognizer_rectangle(JNIEnv *env, jobject instance, j
         dilate(vertical, vertical, verticalStructure, Point(-1, -1));
 
         for (int i = delta; i < height && lines.size() == 0; i++) {
-            for (int j = delta; j < width; j++) {
+            for (int j = delta; j < width-delta; j++) {
                 if (vertical.at<uchar>(i, j) != 0) {
                     lines.push_back(j);
                     j += delta;
@@ -128,7 +128,7 @@ Java_kr_ac_ajou_paran_util_Recognizer_getVerticalCoord(JNIEnv *env, jobject inst
     Mat &table = *(Mat *) matAddrInput;
     Mat vertical;
     int width = table.cols, height = table.rows;
-    int delta = width*0.02f;
+    int delta = width*0.03f;
     vector<short> lines;
 
     cvtColor(table, vertical, CV_RGBA2GRAY);
@@ -141,7 +141,7 @@ Java_kr_ac_ajou_paran_util_Recognizer_getVerticalCoord(JNIEnv *env, jobject inst
     dilate(vertical, vertical, verticalStructure, Point(-1, -1));
 
     for (int i = delta; i < height && lines.size() == 0; i++) {
-        for (int j = 0; j < width; j++) {
+        for (int j = delta; j < width-delta; j++) {
             if (vertical.at<uchar>(i, j) != 0) {
           //      line(table,Point(j,0),Point(j,360),Scalar(255, 0, 0), 1, 8, 0);
                 lines.push_back(j);
@@ -161,7 +161,7 @@ Java_kr_ac_ajou_paran_util_Recognizer_getHorizontalCoord(JNIEnv *env, jobject in
     Mat &table = *(Mat *) matAddrInput;
     Mat horizontal;
     int width = table.cols, height = table.rows;
-    int delta = width*0.02f;
+    int delta = width*0.03f;
     vector<short> marks;
 
     cvtColor(table, horizontal, CV_RGBA2GRAY);
@@ -175,7 +175,7 @@ Java_kr_ac_ajou_paran_util_Recognizer_getHorizontalCoord(JNIEnv *env, jobject in
 
 
     for (int i = delta; i < width && marks.size() == 0; i++) {
-        for (int j = 0; j < height; j++) {
+        for (int j = delta; j < height-delta; j++) {
             if (horizontal.at<uchar>(j, i) != 0) {
             //    line(table,Point(0,j),Point(640,j),Scalar(255, 0, 0), 1, 8, 0);
                 marks.push_back(j);
