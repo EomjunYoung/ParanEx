@@ -23,3 +23,5 @@
 >https://devenix.wordpress.com/2008/01/18/howto-base64-encode-and-decode-with-c-and-openssl-2/
 - Git chart
 >http://ghchart.rshah.org
+- Sudoku
+>http://aishack.in/tutorials/sudoku-grabber-opencv-detection/

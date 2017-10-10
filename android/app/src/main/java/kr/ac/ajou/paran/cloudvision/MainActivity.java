@@ -4,26 +4,14 @@ package kr.ac.ajou.paran.cloudvision;
  * Created by ejy77 on 2017-10-06.
  */
 
-import android.Manifest;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -65,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        Bitmap Img= BitmapFactory.decodeResource(getResources(), R.drawable.test);
+     /*   Bitmap Img= BitmapFactory.decodeResource(getResources(), R.drawable.test);
         iv1 = (ImageView)findViewById(R.id.iv1);
         tv1 = (TextView)findViewById(R.id.tv1);
 
@@ -73,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             callCloudVision(Img);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 

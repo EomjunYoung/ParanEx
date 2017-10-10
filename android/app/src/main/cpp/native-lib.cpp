@@ -5,25 +5,24 @@
 using namespace cv;
 using namespace std;
 
+int scale=15; // play with this variable in order to increase/decrease the amount of lines to be detected
+
 extern "C" {
-JNIEXPORT void JNICALL
-Java_kr_ac_ajou_paran_util_Recognizer_rectangle(JNIEnv *env, jobject instance, jlong matAddrInput, jlong matAddrPass, jlong matAddrResult) {
+JNIEXPORT int JNICALL
+Java_kr_ac_ajou_paran_util_Recognizer_rectangle(JNIEnv *env, jobject instance, jlong matAddrInput, jlong matAddrResult) {
 
     Mat &matInput = *(Mat *) matAddrInput;
-    Mat &matPass = *(Mat *) matAddrPass;
     Mat &matResult = *(Mat *) matAddrResult;
 
     Mat gray;
     cvtColor(matInput, gray, CV_RGBA2GRAY);
 
     Mat bw;
-    adaptiveThreshold(~gray, bw, 255, CV_ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 15, -2);
+    adaptiveThreshold(~gray, bw, 255, CV_ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, scale, -2);
 
     matResult = bw;
     Mat horizontal = bw.clone();
     Mat vertical = bw.clone();
-
-    int scale = 15; // play with this variable in order to increase/decrease the amount of lines to be detected
 
     // Specify size on horizontal axis
     int horizontalsize = horizontal.cols / scale;
@@ -84,106 +83,13 @@ Java_kr_ac_ajou_paran_util_Recognizer_rectangle(JNIEnv *env, jobject instance, j
             continue;
 
         rois.push_back(matInput(boundRect[i]).clone());
-        rectangle(matInput, boundRect[i].tl(), boundRect[i].br(), Scalar(0, 255, 0), 3, 8, 0);
+        rectangle(matInput, boundRect[i].tl(), boundRect[i].br(), Scalar(0, 255, 0), 1, 8, 0);
     }
-
-    matResult = matInput;
 
     if (rois.size() == 1) {
-        /* rois[0]을 table로 바꾸면 기존에 쓰던 함수 */
-        Mat vertical;
-        int width = rois[0].cols, height = rois[0].rows;
-        int delta = width*0.02f;
-        vector<short> lines;
-
-        cvtColor(rois[0], vertical, CV_RGBA2GRAY);
-        adaptiveThreshold(~vertical, vertical, 255, CV_ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 15, -2);
-
-        int size = vertical.rows / 15;
-        Mat verticalStructure = getStructuringElement(MORPH_RECT, Size(1, size));
-
-        erode(vertical, vertical, verticalStructure, Point(-1, -1));
-        dilate(vertical, vertical, verticalStructure, Point(-1, -1));
-
-        for (int i = delta; i < height && lines.size() == 0; i++) {
-            for (int j = delta; j < width; j++) {
-                if (vertical.at<uchar>(i, j) != 0) {
-                    lines.push_back(j);
-                    j += delta;
-                }
-            }
-        }
-        if(lines.size() == 5)
-            matPass = rois[0];
+        matResult = rois[0];
+        imwrite("/storage/emulated/0/test.jpg",matResult);
     }
+    return rois.size();
 }
 }
-
-extern "C" {
-JNIEXPORT int JNICALL
-Java_kr_ac_ajou_paran_util_Recognizer_getVerticalCoord(JNIEnv *env, jobject instance, jlong matAddrInput) {
-
-    Mat &table = *(Mat *) matAddrInput;
-    Mat vertical;
-    int width = table.cols, height = table.rows;
-    int delta = width*0.02f;
-    vector<short> lines;
-
-    cvtColor(table, vertical, CV_RGBA2GRAY);
-    adaptiveThreshold(~vertical, vertical, 255, CV_ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 15, -2);
-
-    int size = vertical.rows / 15;
-    Mat verticalStructure = getStructuringElement(MORPH_RECT, Size(1, size));
-
-    erode(vertical, vertical, verticalStructure, Point(-1, -1));
-    dilate(vertical, vertical, verticalStructure, Point(-1, -1));
-
-    for (int i = delta; i < height && lines.size() == 0; i++) {
-        for (int j = delta; j < width; j++) {
-            if (vertical.at<uchar>(i, j) != 0) {
-                lines.push_back(j);
-                j += delta;
-            }
-        }
-    }
-    return lines.size();
-}
-}
-
-/*
-extern "C" {
-JNIEXPORT int JNICALL
-Java_kr_ac_ajou_paran_util_Recognizer_getHorizontalCoord(JNIEnv *env, jobject instance, jlong matAddrInput) {
-
-    Mat &table = *(Mat *) matAddrInput;
-    Mat vertical;
-    int width = table.cols, height = table.rows;
-    int delta = width*0.02f;
-    vector<short> lines;
-
-    cvtColor(table, vertical, CV_RGBA2GRAY);
-    adaptiveThreshold(~vertical, vertical, 255, CV_ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 15, -2);
-
-    int size = vertical.rows / 15;
-    Mat verticalStructure = getStructuringElement(MORPH_RECT, Size(1, size));
-
-    erode(vertical, vertical, verticalStructure, Point(-1, -1));
-    dilate(vertical, vertical, verticalStructure, Point(-1, -1));
-
-    for (int i = delta; i < height && lines.size() == 0; i++) {
-        for (int j = delta; j < width; j++) {
-            if (vertical.at<uchar>(i, j) != 0) {
-                lines.push_back(j);
-                j += delta;
-            }
-        }
-    }
-    /*   if (lines.size() < 5) {
-           printf("error), There are few colums!\n");
-           waitKey();
-           exit(1);
-       }*/
-  /*  return lines.size();
-}
-}
-*/

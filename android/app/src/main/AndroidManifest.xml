@@ -3,10 +3,10 @@
     package="kr.ac.ajou.paran">
 
     <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.camera" android:required="false"/>
-    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
-    <uses-feature android:name="android.hardware.camera.front" android:required="false"/>
-    <uses-feature android:name="android.hardware.camera.front.autofocus"  android:required="false"/>
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-feature android:name="android.hardware.camera.front"/>
+    <uses-feature android:name="android.hardware.camera.front.autofocus"/>
 
     <supports-screens android:resizeable="true"
         android:smallScreens="true"
@@ -34,33 +34,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="kr.ac.ajou.paran.sss.init.Logo"
+            android:name=".init.Developer"
             android:screenOrientation="portrait" />
         <activity
-            android:name="kr.ac.ajou.paran.sss.init.Developer"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="kr.ac.ajou.paran.sss.login.Login"
+            android:name=".login.Login"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="kr.ac.ajou.paran.sss.main.Main"
+            android:name=".main.Main"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="kr.ac.ajou.paran.sss.main.function.TimeTable"
+            android:name=".main.function.TimeTable"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="kr.ac.ajou.paran.sss.main.function.Subject"
+            android:name=".main.function.Subject"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="kr.ac.ajou.paran.sss.main.function.Lecture"
+            android:name=".main.function.Lecture"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="kr.ac.ajou.paran.sss.main.function.BulltinBoard"
+            android:name=".main.function.BulltinBoard"
             android:screenOrientation="portrait" />
 
         <activity android:name=".util.Recognizer"
