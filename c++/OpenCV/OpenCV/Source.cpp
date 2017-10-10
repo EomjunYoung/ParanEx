@@ -5,7 +5,7 @@ using namespace std;
 int main() {
 	vector<short> lines, marks;
 	Mat src, edges, kernel;
-	src = imread("untitled12.jpg");
+	src = imread("untitled15.jpg");
 	if (src.empty()) {
 		printf("error) cannot open image\n");
 		waitKey();
@@ -118,6 +118,10 @@ int main() {
 	string name[] = { "0.jpg","1.jpg","2.jpg","3.jpg","4.jpg","5.jpg" };
 	for (int i = 0, height = marks.at(marks.size() - 1); i < 6; i++) {
 		colums[i] = src(Rect(lines.at(i), marks.at(1), lines.at(i + 1) - lines.at(i), height - marks.at(1)));
+	/*	cvtColor(colums[i], colums[i], CV_BGR2GRAY);
+		erode(colums[i], colums[i], Mat(), Point(-1, -1), 10); // should be improved
+		dilate(colums[i], colums[i], Mat(), Point(-1, -1), 5); // should be improved
+		threshold(colums[i], colums[i], 0, 255, THRESH_OTSU);	*/
 		imshow(name[i], colums[i]);
 		imwrite(name[i], colums[i]);
 	}
