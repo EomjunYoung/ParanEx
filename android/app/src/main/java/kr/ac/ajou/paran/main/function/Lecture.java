@@ -33,8 +33,11 @@ public class Lecture extends FunctionType implements Callback {
     private String type;
     private String major;
     private static LinkedHashMap<String, String> majorMap;
+    private static LinkedHashMap<String, String> basicMap;
     private static LinkedHashMap<String, String> semesterMap;
     private static LinkedHashMap<String, String> typeMap;
+
+
 
     String[] yearStrings = {"2016", "2017"};
     String[] semesterStrings = {"1학기", "여름학기", "2학기", "겨울학기"};
@@ -56,6 +59,9 @@ public class Lecture extends FunctionType implements Callback {
     "중국지역연구전공(과)", "문화학전공", "일본지역연구전공(과)", "지역연구전공(유럽)(과)", "지연연구전공(미국)(과)" +
     "인문사회데이터분석전공(과)", "응용화학전공(과)", "생명공학전공(과)", "소프트웨어융합전공(과)", "기초의과학전공(과)"+
     "융합시스템공학전공(과)", "ICT융합전공(과)(폐지)", "자동차SW전공(과)", "디지털휴머니티전공(과)"};
+
+    String[] basicStrings = {"기계공학부", "기계공학과", "산업정보시스템공학부", "산업공학과", "화공ㆍ신소재공학부"};
+
 
 
     public Lecture() {
@@ -91,14 +97,17 @@ public class Lecture extends FunctionType implements Callback {
             sptype = (Spinner) findViewById(R.id.type);
             spmajor = (Spinner) findViewById(R.id.major);
             majorMap = setHashMap(majorMap);
+            basicMap = setHashMap1(basicMap);
             semesterMap = setHashMap2(semesterMap);
             typeMap = setHashMap3(typeMap);
 
 
-            ArrayAdapter arrayAdapter1 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, yearStrings);
-            ArrayAdapter arrayAdapter2 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, semesterStrings);
-            ArrayAdapter arrayAdapter3 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, typeStrings);
-            ArrayAdapter arrayAdapter4 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, majorStrings);
+            final ArrayAdapter arrayAdapter1 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, yearStrings);
+            final ArrayAdapter arrayAdapter2 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, semesterStrings);
+            final ArrayAdapter arrayAdapter3 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, typeStrings);
+            final ArrayAdapter arrayAdapter4 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, majorStrings);
+            final ArrayAdapter arrayAdapter5 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, basicStrings);
+
 
             spyear.setAdapter(arrayAdapter1);
             spsemester.setAdapter(arrayAdapter2);
@@ -161,8 +170,24 @@ public class Lecture extends FunctionType implements Callback {
                     {
                         String str = itr.next();
                         if(sptype.getSelectedItem().toString() == str)
-                        {
-                            type = typeMap.get(str);
+                                {
+                                    type = typeMap.get(str);
+
+                                    if (type == "U0209003")
+                                    {
+
+                                        arrayAdapter5.notifyDataSetChanged();
+                                        spmajor.setAdapter(arrayAdapter5);
+
+                            }
+
+                            else if(type == "U0209001")
+                            {
+
+                                arrayAdapter4.notifyDataSetChanged();
+                                spmajor.setAdapter(arrayAdapter4);
+                            }
+
                         }
                     }
 
@@ -187,21 +212,43 @@ public class Lecture extends FunctionType implements Callback {
     @Override
     public void onItemSelected (AdapterView < ? > adapterView, View view,int i, long l){
 
-        Set<String> set = majorMap.keySet();
-        Iterator<String> itr = set.iterator();
+        if(type == "U0209001") {
+            Set<String> set = majorMap.keySet();
+            Iterator<String> itr = set.iterator();
 
-        while (itr.hasNext()) {
+            while (itr.hasNext()) {
 
-            String str = itr.next();
+                String str = itr.next();
 
 
 
-            if (spmajor.getSelectedItem().toString() == str) {
+                if (spmajor.getSelectedItem().toString() == str) {
 
-                major = majorMap.get(str);
+                    major = majorMap.get(str);
 
+                }
             }
         }
+        else if(type == "U0209003")
+        {
+           Set<String> set = basicMap.keySet();
+            Iterator<String> itr = set.iterator();
+
+            while (itr.hasNext()) {
+
+                String str = itr.next();
+
+
+
+                if (spmajor.getSelectedItem().toString() == str) {
+
+                    major = basicMap.get(str);
+
+                }
+            }
+        }
+
+
     }
               @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
@@ -360,8 +407,47 @@ public class Lecture extends FunctionType implements Callback {
         return majorMap;
     }
 
+    public static LinkedHashMap<String, String> setHashMap1(LinkedHashMap<String, String> basicMap) {
+        basicMap = new LinkedHashMap<>();
+
+        basicMap.put("기계공학부", "DS03001002");
+        basicMap.put("기계공학과", "DS03001021");
+        basicMap.put("산업정보시스템공학부", "DS03001003");
+        basicMap.put("산업공학과", "DS03001022");
+        basicMap.put("화공ㆍ신소재공학부", "DS03001004");
+        basicMap.put("화학공학과", "DS03001023");
+        basicMap.put("신소재공학과", "DS03001024");
+        basicMap.put("생명ㆍ분자공학부", "DS03001005");
+        basicMap.put("응용화학생명공학부", "DS03001006");
+        basicMap.put("응용화학생명공학과", "DS03001025");
+        basicMap.put("환경안전공학과", "DS03001026");
+        basicMap.put("건설시스템공학과", "DS03001027");
+        basicMap.put("교통시스템공학과", "DS03001028");
+        basicMap.put("건축학부", "DS03001008");
+        basicMap.put("건축학과", "DS03001029");
+        basicMap.put("전자공학부", "DS03002002");
+        basicMap.put("전자공학과", "DS03002021");
+        basicMap.put("소프트웨어학과", "DS0300202");
+        basicMap.put("기계공학부", "DS03001002");
+        basicMap.put("기계공학부", "DS03001002");
+        basicMap.put("기계공학부", "DS03001002");
+        basicMap.put("기계공학부", "DS03001002");
+        basicMap.put("기계공학부", "DS03001002");
+        basicMap.put("기계공학부", "DS03001002");
+        basicMap.put("기계공학부", "DS03001002");
+        basicMap.put("기계공학부", "DS03001002");
+        basicMap.put("기계공학부", "DS03001002");
+        basicMap.put("기계공학부", "DS03001002");
+        basicMap.put("기계공학부", "DS03001002");
+        basicMap.put("기계공학부", "DS03001002");
+        basicMap.put("기계공학부", "DS03001002");
+        basicMap.put("기계공학부", "DS03001002");
 
 
+
+
+        return basicMap;
+    }
 
     public static LinkedHashMap<String, String> setHashMap2(LinkedHashMap<String, String> semesterMap)
     {
