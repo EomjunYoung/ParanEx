@@ -5,7 +5,7 @@ using namespace std;
 int main() {
 	vector<short> lines, marks;
 	Mat src, edges, kernel;
-	src = imread("untitled15.jpg");
+	src = imread("untitled16.jpg");
 	if (src.empty()) {
 		printf("error) cannot open image\n");
 		waitKey();

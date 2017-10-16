@@ -1,4 +1,5 @@
 key.h
+ip.txt
 CMakeLists.txt
 *.log
 *.tlog

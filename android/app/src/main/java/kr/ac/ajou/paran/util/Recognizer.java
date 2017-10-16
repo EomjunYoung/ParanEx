@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import org.opencv.android.BaseLoaderCallback;
@@ -25,6 +26,11 @@ import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import kr.ac.ajou.paran.R;
 
@@ -37,6 +43,8 @@ public class Recognizer extends AppCompatActivity
     private Mat matInput;
     private Mat matResult;
     private Recognizer recognizer;
+    private Button buttonCapture;
+    private String ip = "";
 
     public native int rectangle(long matAddrInput, long matAddrResult);
 
@@ -74,6 +82,38 @@ public class Recognizer extends AppCompatActivity
 
         recognizer = this;
         matResult = null;
+        buttonCapture = (Button)findViewById(R.id.buttonCapture);
+        buttonCapture.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if ( matResult != null ) matResult.release();//새로 만듦
+                if(matResult == null)
+                    matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
+
+                if(rectangle(matInput.getNativeObjAddr(), matResult.getNativeObjAddr()) == 1) {
+                    Toast.makeText(recognizer, "this is table", Toast.LENGTH_SHORT).show();
+
+                    try{
+                        InputStream in = getResources().openRawResource(R.raw.ip);
+
+                        if(in != null){
+                            InputStreamReader stream = new InputStreamReader(in, "utf-8");
+                            BufferedReader buffer = new BufferedReader(stream);
+                            ip=buffer.readLine();
+                            in.close();
+                        }
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+
+                    //서버로
+                }
+                else
+                    Toast.makeText(recognizer, "can not recognize table", Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+        });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //퍼미션 상태 확인
             if (!hasPermissions(PERMISSIONS)) {
@@ -87,24 +127,8 @@ public class Recognizer extends AppCompatActivity
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
         mOpenCvCameraView.setCameraIndex(0); // front-camera(1),  back-camera(0)
+        mOpenCvCameraView.setFocusableInTouchMode(true);                //set touch focus
         mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
-
-        mOpenCvCameraView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if ( matResult != null ) matResult.release();//새로 만듦
-                if(matResult == null)
-                    matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
-
-                if(rectangle(matInput.getNativeObjAddr(), matResult.getNativeObjAddr()) == 1) {
-                    Toast.makeText(recognizer, "this is table", Toast.LENGTH_SHORT).show();
-                }
-                else
-                    Toast.makeText(recognizer, "can not recognize table", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
-
     }
 
     @Override
