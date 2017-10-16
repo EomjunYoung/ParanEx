@@ -4,8 +4,8 @@
 # Topic
 - using vision skill and AI algorithm, recognize time table and give time table recommendated 
 ---
-# Skill
-- OpenCV, Google Vision API, AI algorithm 
+# Tool
+- OpenCV library, Google Vision API, AI algorithm, Django framework, python, C++, Java 
 ---
 # Member
 | Avartar | Name | Activity |

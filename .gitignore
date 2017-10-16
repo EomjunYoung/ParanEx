@@ -1,6 +1,13 @@
+#C++ vision key
 key.h
-ip.txt
+
+#C++ OpenCV setup location
 CMakeLists.txt
+
+#Android server ip
+ip.txt
+
+#C++ delete all things without codes, images
 *.log
 *.tlog
 *.suo
@@ -13,3 +20,5 @@ CMakeLists.txt
 *.opendb
 *.vcxproj*
 
+#Python delete pyc files
+*.pyc
