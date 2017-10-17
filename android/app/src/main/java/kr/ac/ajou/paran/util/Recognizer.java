@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -28,9 +29,6 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import kr.ac.ajou.paran.R;
 
@@ -45,6 +43,7 @@ public class Recognizer extends AppCompatActivity
     private Recognizer recognizer;
     private Button buttonCapture;
     private String ip = "";
+    private String port = "";
 
     public native int rectangle(long matAddrInput, long matAddrResult);
 
@@ -80,38 +79,30 @@ public class Recognizer extends AppCompatActivity
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_camera);
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         recognizer = this;
         matResult = null;
         buttonCapture = (Button)findViewById(R.id.buttonCapture);
-        buttonCapture.setOnTouchListener(new View.OnTouchListener() {
+        buttonCapture.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            public void onClick(View view) {
                 if ( matResult != null ) matResult.release();//새로 만듦
                 if(matResult == null)
                     matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
 
                 if(rectangle(matInput.getNativeObjAddr(), matResult.getNativeObjAddr()) == 1) {
                     Toast.makeText(recognizer, "this is table", Toast.LENGTH_SHORT).show();
-
-                    try{
-                        InputStream in = getResources().openRawResource(R.raw.ip);
-
-                        if(in != null){
-                            InputStreamReader stream = new InputStreamReader(in, "utf-8");
-                            BufferedReader buffer = new BufferedReader(stream);
-                            ip=buffer.readLine();
-                            in.close();
-                        }
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-
-                    //서버로
+                    ip = Raw.readIP(Recognizer.this);
+                    port = Raw.readPort(Recognizer.this);
+                    if(!ip.equals("") && !port.equals("")){
+                        HTTP.postTable(ip+":"+port);
+                    }else
+                        Toast.makeText(recognizer, "We can not find server information", Toast.LENGTH_SHORT).show();
                 }
                 else
                     Toast.makeText(recognizer, "can not recognize table", Toast.LENGTH_SHORT).show();
-
-                return false;
             }
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -201,8 +192,6 @@ public class Recognizer extends AppCompatActivity
         //모든 퍼미션이 허가되었음
         return true;
     }
-
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,

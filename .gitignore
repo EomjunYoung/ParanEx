@@ -4,8 +4,9 @@ key.h
 #C++ OpenCV setup location
 CMakeLists.txt
 
-#Android server ip
+#Android server information 
 ip.txt
+port.txt
 
 #C++ delete all things without codes, images
 *.log

@@ -5,8 +5,12 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.api.client.util.Base64;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -36,8 +40,6 @@ public class HTTP {
     private final static String REQUEST_PICTURE = "/QrCodeService/GetPhotoImg.svc/GetUserPhotoAJOU?Loc=AJOU&Idno=";
     private final static String GET_PICTURE = "/KCPPhoto//PHO_";
     private final static String GET_ABEEK = "/uni/uni/abee/cmmn/findAccept.action?strStdNo=";
-
-    private final static String LOGOUT = "/mobile/logout/logout.es";
 
     private static HttpURLConnection makeConnection(URL url) {
         HttpURLConnection con;
@@ -288,9 +290,28 @@ public class HTTP {
         return user;
     }
 
-    public static void logOut(String cookie) {
+    public static void postTable(String server) {
+        String base64="";
         try {
-            getSimple(new URL(MOBILE + LOGOUT), cookie);
+            HttpURLConnection con = makeConnection(new URL("http://"+server+"/postTable"));
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+            File file = new File("/storage/emulated/0/test.jpg");
+            if(file.isFile()){
+                byte[] bt = new byte[(int)file.length()];
+                FileInputStream fileInputStream = new FileInputStream(file);
+                try{
+                    fileInputStream.read(bt);
+                    base64 = new String(Base64.encodeBase64(bt));
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                fileInputStream.close();
+            }
+            wr.write("data="+base64);
+            wr.flush();
+            new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
         } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
