@@ -5,13 +5,13 @@ using namespace std;
 int main() {
 	vector<short> lines, marks;
 	Mat src, edges, kernel;
-	src = imread("untitled16.jpg");
+	src = imread("test.jpg");
 	if (src.empty()) {
 		printf("error) cannot open image\n");
 		waitKey();
 		return -1;
 	}
-	imshow("src", src);
+//	imshow("src", src);
 	printf("%d %d\n", src.rows, src.cols);
 	cvtColor(src, edges, CV_BGR2GRAY);
 	GaussianBlur(edges, edges, Size(11, 11), 0);
@@ -122,7 +122,7 @@ int main() {
 		erode(colums[i], colums[i], Mat(), Point(-1, -1), 10); // should be improved
 		dilate(colums[i], colums[i], Mat(), Point(-1, -1), 5); // should be improved
 		threshold(colums[i], colums[i], 0, 255, THRESH_OTSU);	*/
-		imshow(name[i], colums[i]);
+	//	imshow(name[i], colums[i]);
 		imwrite(name[i], colums[i]);
 	}
 	
