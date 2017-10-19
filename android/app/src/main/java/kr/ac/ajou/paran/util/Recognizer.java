@@ -59,7 +59,7 @@ public class Recognizer extends AppCompatActivity
                 case LoaderCallbackInterface.SUCCESS:
                 {
                     mOpenCvCameraView.enableView();
-              //      mOpenCvCameraView.setMaxFrameSize(640, 360);
+                    mOpenCvCameraView.setMaxFrameSize(720, 1280);
                 } break;
                 default:
                 {
@@ -164,7 +164,9 @@ public class Recognizer extends AppCompatActivity
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         matInput = inputFrame.rgba();
-
+        if(matResult == null)
+            matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
+        rectangle(matInput.getNativeObjAddr(), matResult.getNativeObjAddr());
         return matInput;
     }
 
