@@ -88,8 +88,17 @@ Java_kr_ac_ajou_paran_util_Recognizer_rectangle(JNIEnv *env, jobject instance, j
 
     if (rois.size() == 1) {
         matResult = rois[0];
-        imwrite("/storage/emulated/0/test.jpg",matResult);
     }
     return rois.size();
+}
+}
+
+
+extern "C" {
+JNIEXPORT void JNICALL
+Java_kr_ac_ajou_paran_util_Recognizer_save(JNIEnv *env, jobject instance, jlong matAddrResult) {
+
+    Mat &matResult = *(Mat *) matAddrResult;
+    imwrite("/storage/emulated/0/test.jpg",matResult);
 }
 }

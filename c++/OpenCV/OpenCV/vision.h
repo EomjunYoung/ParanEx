@@ -19,5 +19,6 @@
 vector<float> getLabel(char *name, int size);
 char *base64(char *input, int length);
 char *useOCR(char *name);
+void useOCR();
 
 #endif

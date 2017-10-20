@@ -46,6 +46,7 @@ public class Recognizer extends AppCompatActivity
     private String port = "";
 
     public native int rectangle(long matAddrInput, long matAddrResult);
+    public native void save(long matAddrResult);
 
     static {
         System.loadLibrary("opencv_java3");
@@ -88,21 +89,19 @@ public class Recognizer extends AppCompatActivity
         buttonCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if ( matResult != null ) matResult.release();//새로 만듦
                 if(matResult == null)
-                    matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
-
-                if(rectangle(matInput.getNativeObjAddr(), matResult.getNativeObjAddr()) == 1) {
-                    Toast.makeText(recognizer, "this is table", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(recognizer, "can not recognize table", Toast.LENGTH_SHORT).show();
+                else{
+                    save(matResult.getNativeObjAddr());
                     ip = Raw.readIP(Recognizer.this);
                     port = Raw.readPort(Recognizer.this);
                     if(!ip.equals("") && !port.equals("")){
                         HTTP.postTable(ip+":"+port);
                     }else
                         Toast.makeText(recognizer, "We can not find server information", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(recognizer, "data is transfered", Toast.LENGTH_SHORT).show();
+                    matResult.release();
                 }
-                else
-                    Toast.makeText(recognizer, "can not recognize table", Toast.LENGTH_SHORT).show();
             }
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

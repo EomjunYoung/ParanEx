@@ -74,17 +74,13 @@ int main() {
 	}
 	printf("\n");
 
-	Mat colums[6];
-	string name[] = { "0.jpg","1.jpg","2.jpg","3.jpg","4.jpg","5.jpg" };
-	for (int i = 0, height = marks.at(marks.size() - 1); i < 6; i++) {
-		colums[i] = src(Rect(lines.at(i), marks.at(1), lines.at(i + 1) - lines.at(i), height - marks.at(1)));
-	//	imshow(name[i], colums[i]);
-		imwrite(name[i], colums[i]);
-	}
+	divideTable(src, lines, marks);
 
 	vector<float> labels = getLabel(LABEL_NAME, marks.size() - 2);	//2를 빼는 이유는 양쪽 끝 선은 포함 하면 안되므로
 	printf("\nLabel : ");
 	for (int i = 0; i < labels.size(); printf("%.1f ", labels[i]), i++);
+
+	useOCR();
 
 	printf("\n\nAllocated time : \n");
 

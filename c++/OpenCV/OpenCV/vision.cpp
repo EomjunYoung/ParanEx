@@ -1,4 +1,5 @@
 #include "vision.h"
+#include <locale>
 
 vector<float> getLabel(char *name, int size) {
 	vector<float> labels;
@@ -56,6 +57,90 @@ char *base64(char *input, int length)
 	return buff;
 }
 /* reference : https://devenix.wordpress.com/2008/01/18/howto-base64-encode-and-decode-with-c-and-openssl-2/ */
+
+void useOCR() {
+
+	BIO* bio;
+	SSL* ssl;
+	SSL_CTX* ctx;
+	FILE *fp = NULL;
+	char post[] = "POST /v1/images:annotate?key=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX HTTP/1.1\r\n";
+	char *pc = strstr(post, "XX");
+	for (int i = 0, length = strlen(VISION_KEY); i < length; *(pc + i) = VISION_KEY[i], i++);
+	char host[] = "Host: vision.googleapis.com\r\n";
+	char *buffer;
+
+	SSL_library_init();
+
+	char name[][6] = { "1.jpg","2.jpg","3.jpg","4.jpg","5.jpg" };
+	for (int i = 0; i < 5; i++) {
+
+		fp = fopen(name[i], "rb");
+		if (fp == NULL) {
+			printf("error), cannot open file!\n");
+			waitKey();
+			exit(1);
+		}
+
+		ctx = SSL_CTX_new(SSLv23_client_method());
+		if (ctx == NULL) {
+			printf("error), ctx is null!\n");
+			waitKey();
+			exit(1);
+		}
+
+		bio = BIO_new_ssl_connect(ctx);
+		BIO_set_conn_hostname(bio, GOOGLE_VISION);
+
+		if (BIO_do_connect(bio) <= 0) {
+			printf("error), cannot connect to Google!\n");
+			waitKey();
+			exit(1);
+		}
+
+		fseek(fp, 0, SEEK_END);
+		int fileSize = ftell(fp);
+		fseek(fp, 0, SEEK_SET);
+
+		buffer = (char*)malloc(fileSize + 1);
+
+		fread(buffer, fileSize, 1, fp);
+		char *content = base64(buffer, fileSize);
+		free(buffer);
+		char *request = (char*)malloc((strlen(content) + 140 + 1) * sizeof(char));
+		strcpy(request, "{\"requests\":[{\"image\":{\"content\":\"");
+		strcat(request, content);
+
+		strcat(request, "\"},\"features\" : {\"type\":\"TEXT_DETECTION\",\"maxResults\" : 10}}]}");
+		int digitSize = 0;
+		for (int i = strlen(request); i > 0; digitSize++, i /= 10);
+		char *length = (char*)malloc((20 + digitSize + 1) * sizeof(char));
+		sprintf(length, "Content-Length: %d\r\n\r\n", strlen(request));
+
+		char *message = (char*)malloc((strlen(post) + strlen(host) + strlen(length) + strlen(request) + 1) * sizeof(char));
+		strcpy(message, post);
+		strcat(message, host);
+		strcat(message, length);
+		strcat(message, request);
+
+		if (BIO_write(bio, message, strlen(message)) <= 0) {
+			printf("error), fail to send message!\n");
+			waitKey();
+			exit(1);
+		}
+
+		buffer = (char*)malloc(BUFF_SIZE * 2 * sizeof(char));
+		BIO_read(bio, buffer, BUFF_SIZE * 2);
+		printf("%d\n\n", i + 1);
+		setlocale(LC_ALL, "ko_KR.UTF-8");
+		if(strstr(buffer,"\"description\"")!=NULL)
+			printf("%s\n",buffer);
+
+		BIO_free_all(bio);
+		SSL_CTX_free(ctx);
+
+	}
+}
 
 char *useOCR(char *name) {
 

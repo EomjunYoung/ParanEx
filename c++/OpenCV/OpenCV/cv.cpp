@@ -73,23 +73,13 @@ vector<short> getHorizontalCoord(Mat table, int scale) {
 	return marks;
 }
 
-void divideTable(Mat table, vector<short> lines, short offset) {
+void divideTable(Mat table, vector<short> lines, vector<short> marks) {
+	
 	Mat colums[6];
-	for (int i = 0; i < 6; i++) {
-		if (i == 0)
-			colums[i] = table(Rect(0, offset, lines.at(i), table.rows - offset));
-		else if (i == 5)
-			colums[i] = table(Rect(lines.at(i - 1), offset, table.cols - lines.at(i - 1), table.rows - offset));
-		else
-			colums[i] = table(Rect(lines.at(i - 1), offset, lines.at(i) - lines.at(i - 1), table.rows - offset));
-	}
-
 	string name[] = { "0.jpg","1.jpg","2.jpg","3.jpg","4.jpg","5.jpg" };
-	for (int i = 0; i < 6; i++) {
-		imshow(name[i], colums[i]);
-		cvtColor(colums[i], colums[i], CV_BGR2GRAY);
-		if (i == 0)
-			adaptiveThreshold(~colums[i], colums[i], 255, CV_ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 15, -2);
+	for (int i = 0, height = marks.at(marks.size() - 1); i < 6; i++) {
+		colums[i] = table(Rect(lines.at(i), marks.at(1), lines.at(i + 1) - lines.at(i), height - marks.at(1)));
+		//	imshow(name[i], colums[i]);
 		imwrite(name[i], colums[i]);
 	}
 }
