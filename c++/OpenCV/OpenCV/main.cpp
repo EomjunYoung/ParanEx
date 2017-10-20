@@ -1,18 +1,15 @@
-#include "opencv.hpp"
+#include "main.h"
+
 using namespace cv;
 using namespace std;
 
 int main() {
 	vector<short> lines, marks;
 	Mat src, edges, kernel;
-	src = imread("untitled15.jpg");
-	if (src.empty()) {
-		printf("error) cannot open image\n");
-		waitKey();
-		return -1;
-	}
-	imshow("src", src);
-	printf("%d %d\n", src.rows, src.cols);
+	src = inputFile("test.jpg");
+	printf("this table size is %d X %d\n\n", src.rows, src.cols);
+	//	imshow("src", src);
+
 	cvtColor(src, edges, CV_BGR2GRAY);
 	GaussianBlur(edges, edges, Size(11, 11), 0);
 	adaptiveThreshold(edges, edges, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 5, 2);
@@ -101,7 +98,7 @@ int main() {
 		return -1;
 	}
 
-	printf("this table is %d X %d\n", lines.size(), marks.size());
+	printf("there are %d by %d lines\n", lines.size(), marks.size());
 	printf("lines : ", lines.size());
 	for (int i = 0; i < lines.size(); i++) {
 		printf("%d ", lines.at(i));
@@ -118,12 +115,21 @@ int main() {
 	string name[] = { "0.jpg","1.jpg","2.jpg","3.jpg","4.jpg","5.jpg" };
 	for (int i = 0, height = marks.at(marks.size() - 1); i < 6; i++) {
 		colums[i] = src(Rect(lines.at(i), marks.at(1), lines.at(i + 1) - lines.at(i), height - marks.at(1)));
-	/*	cvtColor(colums[i], colums[i], CV_BGR2GRAY);
-		erode(colums[i], colums[i], Mat(), Point(-1, -1), 10); // should be improved
-		dilate(colums[i], colums[i], Mat(), Point(-1, -1), 5); // should be improved
-		threshold(colums[i], colums[i], 0, 255, THRESH_OTSU);	*/
-		imshow(name[i], colums[i]);
+	//	imshow(name[i], colums[i]);
 		imwrite(name[i], colums[i]);
+	}
+
+	vector<float> labels = getLabel(LABEL_NAME, marks.size() - 2);	//2를 빼는 이유는 양쪽 끝 선은 포함 하면 안되므로
+	printf("\nLabel : ");
+	for (int i = 0; i < labels.size(); printf("%.1f ", labels[i]), i++);
+
+	printf("\n\nAllocated time : \n");
+
+	vector<float> *times = getTime(labels, marks);
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < times[i].size(); j++)
+			printf("%.2f ", times[i][j]);
+		printf("\n");
 	}
 	
 	waitKey();
