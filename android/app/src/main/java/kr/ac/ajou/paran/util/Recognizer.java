@@ -45,8 +45,7 @@ public class Recognizer extends AppCompatActivity
     private String ip = "";
     private String port = "";
 
-    public native int rectangle(long matAddrInput, long matAddrResult);
-    public native void save(long matAddrResult);
+    public native void rectangle(long matAddrInput, long matAddrResult);
 
     static {
         System.loadLibrary("opencv_java3");
@@ -92,7 +91,7 @@ public class Recognizer extends AppCompatActivity
                 if(matResult == null)
                     Toast.makeText(recognizer, "can not recognize table", Toast.LENGTH_SHORT).show();
                 else{
-                    save(matResult.getNativeObjAddr());
+                    rectangle(matInput.getNativeObjAddr(), matResult.getNativeObjAddr());
                     ip = Raw.readIP(Recognizer.this);
                     port = Raw.readPort(Recognizer.this);
                     if(!ip.equals("") && !port.equals("")){
