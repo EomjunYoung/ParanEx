@@ -80,8 +80,6 @@ int main() {
 	printf("\nLabel : ");
 	for (int i = 0; i < labels.size(); printf("%.1f ", labels[i]), i++);
 
-	useOCR();
-
 	printf("\n\nAllocated time : \n");
 
 	vector<float> *times = getTime(labels, marks);
