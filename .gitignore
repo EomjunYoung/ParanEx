@@ -8,7 +8,7 @@ CMakeLists.txt
 ip.txt
 port.txt
 
-#C++ delete all things without codes, images
+#C++ delete all things without codes, important images
 *.log
 *.tlog
 *.suo
@@ -20,6 +20,12 @@ port.txt
 *.ilk
 *.opendb
 *.vcxproj*
+0.jpg
+1.jpg
+2.jpg
+3.jpg
+4.jpg
+5.jpg
 
 #Python delete pyc files
 *.pyc
