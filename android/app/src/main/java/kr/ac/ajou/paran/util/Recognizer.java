@@ -20,6 +20,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.opencv.android.BaseLoaderCallback;
@@ -27,8 +28,6 @@ import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
-
-import java.io.BufferedReader;
 
 import kr.ac.ajou.paran.R;
 
@@ -44,6 +43,14 @@ public class Recognizer extends AppCompatActivity
     private Button buttonCapture;
     private String ip = "";
     private String port = "";
+    private TextView textFPS;
+
+    /* refer : http://gogorchg.tistory.com/entry/Android-FPS-구하기 [항상 초심으로] */
+    long fpsStartTime = 0L;             // Frame 시작 시간
+    int frameCnt = 0;                      // 돌아간 Frame 갯수
+    double timeElapsed = 0.0f;         // 그 동안 쌓인 시간 차이
+    float fps;
+    /* refer : http://gogorchg.tistory.com/entry/Android-FPS-구하기 [항상 초심으로] */
 
     public native void rectangle(long matAddrInput, long matAddrResult);
 
@@ -84,6 +91,7 @@ public class Recognizer extends AppCompatActivity
 
         recognizer = this;
         matResult = null;
+        textFPS =(TextView)findViewById(R.id.textFPS);
         buttonCapture = (Button)findViewById(R.id.buttonCapture);
         buttonCapture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +99,7 @@ public class Recognizer extends AppCompatActivity
                 if(matResult == null)
                     Toast.makeText(recognizer, "can not recognize table", Toast.LENGTH_SHORT).show();
                 else{
+                    textFPS.setText("FPS : "+fps);
                     rectangle(matInput.getNativeObjAddr(), matResult.getNativeObjAddr());
                     ip = Raw.readIP(Recognizer.this);
                     port = Raw.readPort(Recognizer.this);
@@ -165,6 +174,24 @@ public class Recognizer extends AppCompatActivity
         if(matResult == null)
             matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
         rectangle(matInput.getNativeObjAddr(), matResult.getNativeObjAddr());
+
+
+    /* refer : http://gogorchg.tistory.com/entry/Android-FPS-구하기 [항상 초심으로] */
+        long fpsEndTime = System.currentTimeMillis();
+        float timeDelta = (fpsEndTime - fpsStartTime) * 0.001f;
+
+        frameCnt++;
+        timeElapsed += timeDelta;
+
+        if(timeElapsed >= 1.0f){
+            fps = (float)(frameCnt/timeElapsed);
+
+            frameCnt = 0;
+            timeElapsed = 0.0f;
+        }
+        fpsStartTime = System.currentTimeMillis();
+    /* refer : http://gogorchg.tistory.com/entry/Android-FPS-구하기 [항상 초심으로] */
+
         return matInput;
     }
 
