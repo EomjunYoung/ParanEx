@@ -11,6 +11,6 @@ import kr.ac.ajou.paran.util.FunctionType;
 public class Subject extends FunctionType {
 
     public Subject(){
-        super("과목관리",R.layout.activity_subject);
+        super("수강과목 보기",R.layout.activity_subject);
     }
 }

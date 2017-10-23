@@ -65,7 +65,7 @@ public class Lecture extends FunctionType implements Callback {
 
 
     public Lecture() {
-        super("강의시간표", R.layout.activity_lecture);
+        super("강의시간표 보기", R.layout.activity_lecture);
 
 
     }

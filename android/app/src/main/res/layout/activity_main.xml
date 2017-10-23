@@ -110,13 +110,13 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:text="시간표"/>
+                            android:text="시간표 짜기"/>
                         <Button
                             android:id="@+id/buttonSubject"
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:text="과목관리"/>
+                            android:text="수강과목 보기"/>
                 </TableRow>
                 <TableRow
                     android:layout_weight="1"
@@ -126,13 +126,13 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:text="강의시간표"/>
+                            android:text="강의시간표 보기"/>
                         <Button
                             android:id="@+id/buttonBulletinBoard"
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:text="게시판"/>
+                            android:text="커뮤니티"/>
                 </TableRow>
             </TableLayout>
         </FrameLayout>
