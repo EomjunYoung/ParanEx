@@ -104,10 +104,9 @@ public class Recognizer extends AppCompatActivity
                     ip = Raw.readIP(Recognizer.this);
                     port = Raw.readPort(Recognizer.this);
                     if(!ip.equals("") && !port.equals("")){
-                        HTTP.postTable(ip+":"+port);
+                        Toast.makeText(recognizer,  HTTP.postTable(ip+":"+port), Toast.LENGTH_SHORT).show();
                     }else
                         Toast.makeText(recognizer, "We can not find server information", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(recognizer, "data is transfered", Toast.LENGTH_SHORT).show();
                     matResult.release();
                 }
             }
