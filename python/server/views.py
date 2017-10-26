@@ -12,18 +12,24 @@ import json
 def postTable(request):
     data = request.POST.get('data','')
     data = data.replace(' ','+')
+    result = ''
     if data :
         decoded_data = base64.b64decode(data)
         output = open('test.jpg','wb')
         output.write(decoded_data)
         print 'ok data is saved'
         result = os.popen('start /b ../c++/OpenCV/x64/Debug/OpenCV.exe').read()
-        print result
+	
+	result = result[result.find('Allocated time : ')+18:]
+	result = result.replace(' \n','/')
+	result = result.replace('\n','/')
 	
 	file = open('key.txt','rb')
 	key = file.read()
 	file.close()
+	k=0
 	for i in range(1,5):
+		k+=1
 		image = open(str(i)+'.jpg','rb')
        		encoded_image = base64.b64encode(image.read())
 		c = httplib.HTTPSConnection("vision.googleapis.com")
@@ -38,16 +44,19 @@ def postTable(request):
 		data = response.read()
 		j = json.loads(data)
 		try:
-			for t in j['responses'][0]['textAnnotations']:
-				print t['description']
+			if j['responses'][0]['textAnnotations']:
+				result += j['responses'][0]['textAnnotations'][0]['description']
+				result[-1]='/'
 		except:
-			print ''
+				result += '/'
+
 		c.close()
 		image.close()
     # if no data comming
     else :
         print 'no data'
-
-    return render(request,'server/template/index.html')
+	
+    print result
+    return render(request,'server/template/index.html',{'result':result})
 
 # Create your views here.

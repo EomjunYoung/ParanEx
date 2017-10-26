@@ -8,6 +8,9 @@ CMakeLists.txt
 ip.txt
 port.txt
 
+#Python vision key
+key.txt
+
 #C++ delete all things without codes, important images
 *.log
 *.tlog
