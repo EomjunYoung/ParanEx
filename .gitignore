@@ -32,3 +32,6 @@ key.txt
 
 #Python delete pyc files
 *.pyc
+
+#python delete graduate info
+python/graduate/*.txt
