@@ -19,4 +19,7 @@ from . import views
 
 urlpatterns = [
     url(r'^postTable', views.postTable, name='postTable'),
+    url(r'^postUser', views.postUser, name='postUser'),
+    url(r'^postSubject', views.postSubject, name='postSubject'),
+    url(r'^test', views.test, name='test'),
 ]

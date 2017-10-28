@@ -15,8 +15,6 @@ def main(year, abeek) :
 	#get major code
 	h = httplib.HTTPSConnection("haksa.ajou.ac.kr")
 
-#	year="2018"
-#	abeek="1"
 	params='<?xml version="1.0" encoding="utf-8"?>\n'
 	params+='<root>\n'
 	params+='<params>\n'
@@ -52,9 +50,7 @@ def main(year, abeek) :
 	for c in code:
 		h = httplib.HTTPSConnection("haksa.ajou.ac.kr")
 
-#		year="2018"
 		major=c
-#		abeek="1"
 		params='<?xml version="1.0" encoding="utf-8"?>\n'
 		params+='<root>\n'
 		params+='<params>\n'
