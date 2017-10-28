@@ -147,7 +147,6 @@ def test(request):
 
 	result = Subject.objects.filter(number=201222702).distinct()
 	for r in result:
-		print r.name
 		try:
 			index = data.index(r.name.replace(' ',''))
 			if count[index] != 'None':
