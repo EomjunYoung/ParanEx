@@ -21,6 +21,7 @@ import kr.ac.ajou.paran.main.function.Subject;
 import kr.ac.ajou.paran.main.function.TimeTable;
 import kr.ac.ajou.paran.util.DB;
 import kr.ac.ajou.paran.util.HTTP;
+import kr.ac.ajou.paran.util.Raw;
 import kr.ac.ajou.paran.util.User;
 
 
@@ -41,6 +42,8 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
     private ImageView imageLogo;
     private TextView textUser;
     private Button buttonTimeTable, buttonLecture, buttonBulletinBoard, buttonSubject;
+
+    private String ip, port;
 
     @Override
     protected void onCreate(Bundle savedlnstanceState) {
@@ -69,31 +72,25 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
         db = new DB(this);
         /*DB 생성*/
 
-        /*기존 정보 삭제-사용자가 수동으로 추가한 과목 제외*/
-        db.deleteTable();
-        /*기존 정보 삭제-사용자가 수동으로 추가한 과목 제외*/
-
         /*유저 정보 받아옴*/
         user = HTTP.printUser(cookie);
         /*유저 정보 받아옴*/
 
         /*수강 정보 받아옴*/
-        String subjectList;
-        if((subjectList = db.createSubject(cookie,user.getNumber())) != null) {
-            new InitSubject(this, subjectList).showDialog();
-
-            if(user.isNewORtrans() == false)
-                new AlertTrans(this).showDialog();
-
-            /*공학인증 여부 조사*/
-            user.setAbeek(HTTP.checkAbeek(cookie,user.getNumber()));
-            /*공학인증 여부 조사*/
-
-            /*초기 전공 조사*/
-            user.setBefore(HTTP.inspectMajor(cookie,user.getNumber()));
-            /*초기 전공 조사*/
-        }
+        String subjectList = HTTP.printSubject(cookie);
+        new InitSubject(this, subjectList).showDialog();
         /*수강 정보 받아옴*/
+
+        if(user.isNewORtrans() == false)
+            new AlertTrans(this).showDialog();
+
+        /*공학인증 여부 조사*/
+        user.setAbeek(HTTP.checkAbeek(cookie,user.getNumber()));
+        /*공학인증 여부 조사*/
+
+        /*초기 전공 조사*/
+        user.setBefore(HTTP.inspectMajor(cookie,user.getNumber()));
+        /*초기 전공 조사*/
 
         /*이미지 출력을 위해 핸드폰 스크린 크기 계산*/
         width = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay().getWidth();
@@ -109,9 +106,14 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
         textUser.setText(user.getName()+"\n"+user.getNumber()+"\n"+user.getGrade()+"학년"+"\n"+user.getMajor());
         /*뷰에 정보 셋팅*/
 
-        /*DB에 정보 저장*/
-        db.createUserTable(user);
-        /*DB에 정보 저장*/
+        /*서버로 과목 전송*/
+        ip = Raw.readIP(Main.this);
+        port = Raw.readPort(Main.this);
+        if(!ip.equals("") && !port.equals("")) {
+            HTTP.postSubject(ip + ":" + port, subjectList, user.getNumber());
+            HTTP.postUser(ip + ":" + port, user.serializedUser());
+        }
+        /*서버로 과목 전송*/
 
         /*로고 출력*/
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.main_main_logo);
