@@ -86,4 +86,8 @@ public class User {
     public int getNumber(){
         return number;
     }
+
+    public String serializedUser(){
+        return number+"/"+name+"/"+grade+"/"+major+"/"+before+"/"+(abeek?1:0)+"/"+(newORtrans?1:0);
+    }
 }

@@ -74,7 +74,7 @@ public class HTTP {
     public static boolean checkAbeek(String cookie,int number) {
         try {
             String line = null;
-            BufferedReader rd = getSimple(new URL(HAKSA + GET_ABEEK+number), cookie);
+            BufferedReader rd = getXML(new URL(HAKSA + GET_ABEEK+number), cookie);
             while ((line = rd.readLine()) != null) {
                 if(line.indexOf("<accept>")>-1){
                     if(line.indexOf("Y")>-1)
@@ -208,7 +208,6 @@ public class HTTP {
     }
 
     public static Bitmap printPicture(int number, int size) {
-        StringBuilder builder = new StringBuilder();
         try {
             getSimple(new URL(LIBAPP+REQUEST_PICTURE+number),"");
             Bitmap bitmap = BitmapFactory.decodeStream(new BufferedInputStream(makeConnection(new URL(LIBAPP+GET_PICTURE+number+".jpg")).getInputStream()));
@@ -377,7 +376,42 @@ public class HTTP {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
         return result;
+    }
+
+    public static void postSubject(String server, String data, int number) {
+        try {
+            HttpURLConnection con = makeConnection(new URL("http://"+server+"/postSubject"));
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+            wr.write("data="+data+"&number="+number);
+            wr.flush();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public static void postUser(String server, String data) {
+        try {
+            HttpURLConnection con = makeConnection(new URL("http://"+server+"/postUser"));
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+            wr.write("data="+data);
+            wr.flush();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }
