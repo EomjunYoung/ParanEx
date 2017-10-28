@@ -5,14 +5,15 @@ package kr.ac.ajou.paran.util;
  */
 
 public class User {
-    private int number; // 학번
-    private String name; // 이름
-    private String grade; // 학년
-    private String campus; // 대학
-    private String department; // 부서
-    private String major; // 전공
-    private boolean newORtrans; // 신/편입
-    private boolean abeek;
+    private int number;             // 학번
+    private String name;            // 이름
+    private String grade;           // 학년
+    private String campus;          // 대학
+    private String department;      // 부서
+    private String major;           // 전공
+    private String before;          //옛전공
+    private boolean newORtrans;    // 신/편입
+    private boolean abeek;          //공학인증
 
     public String getName() {
         return name;
@@ -52,6 +53,14 @@ public class User {
 
     public void setMajor(String major) {
         this.major = major;
+    }
+
+    public String getBefore() {
+        return before;
+    }
+
+    public void setBefore(String before) {
+        this.before = before;
     }
 
     public boolean isNewORtrans() {

@@ -39,11 +39,14 @@ public class DB extends SQLiteOpenHelper {
         sb.append("id INTEGER PRIMARY KEY, ");
         sb.append("name TEXT, ");
         sb.append("grade TEXT, ");
-        sb.append("major TEXT)");
+        sb.append("major TEXT");
+        sb.append("before TEXT");
+        sb.append("abeek INTEGER");
+        sb.append("fresh INTEGER)");
 
         try {
             db.execSQL(sb.toString());
-            String sql = "insert into userInfo(name, id, grade, major) values('"+user.getName()+"', '"+user.getNumber()+"', '"+user.getGrade()+"', '"+user.getMajor()+"')";
+            String sql = "insert into userInfo(name, id, grade, major, before, abeek, fresh) values('"+user.getName()+"', '"+user.getNumber()+"', '"+user.getGrade()+"', '"+user.getMajor()+"', '"+user.getBefore()+"', '"+(user.isAbeek()?1:0)+"', '"+(user.isNewORtrans()?1:0)+"')";
             db.execSQL(sql);
         }catch(Exception e) {
             e.printStackTrace();
@@ -51,11 +54,6 @@ public class DB extends SQLiteOpenHelper {
     }
 
     public String createSubject(String cookie, int number) {
-        /* 지울 예정 */
-//        db.execSQL("drop table userInfo;");
- //       db.execSQL("drop table subject;");
-        /* 지울 예정 */
-
         Cursor cursor = db.rawQuery("select count(*) from sqlite_master where name='synchronization'", null);
         cursor.moveToFirst();
         if (cursor.getInt(0) == 0) {
@@ -84,6 +82,11 @@ public class DB extends SQLiteOpenHelper {
         }
         cursor.close();
         return null;
+    }
+
+    public void deleteTable(){
+        db.execSQL("drop table userInfo;");
+        db.execSQL("drop table subject;");
     }
 
     @Override

@@ -35,11 +35,11 @@ public class HTTP {
 
     private final static String GET_PROFILE = "/mobile/M03/M03_010_010.es";
     private final static String GET_TOTAL = "/mobile/M02/M02_020.es";
-    private final static String GET_GRADUATION = "/mobile/M01/M01_010.es";
-    private final static String GET_A_GRADUATION = "/mobile/M01/M01_020.es";
     private final static String REQUEST_PICTURE = "/QrCodeService/GetPhotoImg.svc/GetUserPhotoAJOU?Loc=AJOU&Idno=";
     private final static String GET_PICTURE = "/KCPPhoto//PHO_";
     private final static String GET_ABEEK = "/uni/uni/abee/cmmn/findAccept.action?strStdNo=";
+    private final static String GET_INIT_CODE = "/uni/uni/sreg/srms/findSregMasterMajorDiv.action?strStdNo=";
+    private final static String GET_INIT_MAJOR = "/uni/uni/sreg/srms/findSregMasterMajorAply.action?strStdNo=";
 
     private static HttpURLConnection makeConnection(URL url) {
         HttpURLConnection con;
@@ -240,6 +240,25 @@ public class HTTP {
         }
     }
 
+    private static BufferedReader getXML(URL url, String cookie) {
+        try {
+            HttpURLConnection con = makeConnection(url);
+            con.setDoOutput(false);
+
+            if(cookie.equals("") == false) {
+                con.setRequestProperty("Cookie", cookie);
+                con.setRequestProperty("Content-Type", "text/xml/SosFlexMobile;charset=utf-8");
+            }
+            con.setRequestMethod("GET");
+
+            return new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static User printUser(String cookie) {
         User user = new User();
         try {
@@ -288,6 +307,40 @@ public class HTTP {
             e.printStackTrace();
         }
         return user;
+    }
+
+    public static String inspectMajor(String cookie, int number) {
+        String major="";
+        String code="";
+        try {
+            String line = null;
+            BufferedReader rd = getXML(new URL(HAKSA + GET_INIT_CODE + number), cookie);
+            while ((line = rd.readLine()) != null) {
+                if (line.indexOf("<mjFg>") > -1) {
+                    code = line.substring(line.indexOf(">")+1);
+                    code = code.substring(0,code.indexOf("<"));
+                }
+            }
+            if(code.equals("") == false){
+                rd = getXML(new URL(HAKSA + GET_INIT_MAJOR + number + "&strMjFg=" + code), cookie);
+                while ((line = rd.readLine()) != null) {
+                    if (line.indexOf("<record>") > -1) {
+                        line = rd.readLine();
+                        if(line.indexOf("<chgBfDeptNm>")>-1) {
+                            major = line.substring(line.indexOf(";") + 1);
+                            major = major.substring(0, major.indexOf("<"));
+                        }
+                    }
+                }
+            }
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return major;
     }
 
     public static String postTable(String server) {

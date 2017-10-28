@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -64,17 +65,19 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
         buttonLecture.setOnClickListener(this);
         buttonTimeTable.setOnClickListener(this);
 
-
-
         /*DB 생성*/
         db = new DB(this);
         /*DB 생성*/
+
+        /*기존 정보 삭제-사용자가 수동으로 추가한 과목 제외*/
+        db.deleteTable();
+        /*기존 정보 삭제-사용자가 수동으로 추가한 과목 제외*/
 
         /*유저 정보 받아옴*/
         user = HTTP.printUser(cookie);
         /*유저 정보 받아옴*/
 
-        /*처음 로그인시 - 수강 정보 받아옴*/
+        /*수강 정보 받아옴*/
         String subjectList;
         if((subjectList = db.createSubject(cookie,user.getNumber())) != null) {
             new InitSubject(this, subjectList).showDialog();
@@ -85,12 +88,12 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
             /*공학인증 여부 조사*/
             user.setAbeek(HTTP.checkAbeek(cookie,user.getNumber()));
             /*공학인증 여부 조사*/
-        }
-        /*처음 로그인시 - 수강 정보 받아옴*/
 
-        /*원격 접속한 것 로그아웃*/
-     ///   HTTP.logOut(cookie);
-        /*원격 접속한 것 로그아웃*/
+            /*초기 전공 조사*/
+            user.setBefore(HTTP.inspectMajor(cookie,user.getNumber()));
+            /*초기 전공 조사*/
+        }
+        /*수강 정보 받아옴*/
 
         /*이미지 출력을 위해 핸드폰 스크린 크기 계산*/
         width = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay().getWidth();
