@@ -138,11 +138,24 @@ def test(request):
 	count = []
 	group = []
 	root = e.fromstring(f.read())
-	for r in root.find('dataset').findall('record'):
-		if r.find('sustLsnFgNm').text[1]==unicode('ÇÊ','euc-kr').encode('utf-8'):	
-			data.append(r.find('sbjtKorNm').text.replace(' ',''))
-			count.append(str(r.find('abeekChoiceSbjtCnt').text))
-			group.append(str(r.find('abeekGrpChoice').text))	
+	if result.abeek==1:
+		for r in root.find('dataset').findall('record'):
+			try:
+				if r.find('abeekSustLsnFgNm').text[1]==unicode('ÇÊ','euc-kr').encode('utf-8'):	
+					data.append(r.find('sbjtKorNm').text.replace(' ',''))
+					count.append(str(r.find('abeekChoiceSbjtCnt').text))
+					group.append(str(r.find('abeekGrpChoice').text))
+			except:
+				pass
+	else:
+		for r in root.find('dataset').findall('record'):	
+			try:
+				if r.find('sustLsnFgNm').text[1]==unicode('ÇÊ','euc-kr').encode('utf-8'):	
+					data.append(r.find('sbjtKorNm').text.replace(' ',''))
+					count.append(str(r.find('abeekChoiceSbjtCnt').text))
+					group.append(str(r.find('abeekGrpChoice').text))		
+			except:
+				pass
 	f.close()
 
 	result = Subject.objects.filter(number=201222702).distinct()
