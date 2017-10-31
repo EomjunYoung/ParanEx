@@ -18,5 +18,7 @@ class Subject(models.Model):
     re = models.IntegerField()
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=10)
+    class Meta:
+        unique_together = (('number', 'name'),)
     def __str__(self):
         return self.name
