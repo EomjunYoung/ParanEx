@@ -3,6 +3,7 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from models import *
+from lecture import *
 import base64
 import os
 import httplib
@@ -189,4 +190,40 @@ def test(request):
 		print d
 	return render(request,'server/template/index.html')
 
+def getLecture(request):
+	major = set()
+	major = getMajor(2016,1,major)
+	major = getMajor(2016,2,major)
+	major = getMajor(2017,1,major)
+	major = getMajor(2017,2,major)
+	for m in major:
+		Lecture(name=m).save()
 
+	culture = set()
+	culture = getCulture(2016,1,culture)
+	culture = getCulture(2016,2,culture)
+	culture = getCulture(2017,1,culture)
+	culture = getCulture(2017,2,culture)
+	for c in culture:
+		Lecture(name=c).save()
+
+	base = set()
+	base = getBase(2016,1,'00',base)
+	base = getBase(2016,2,'00',base)
+	base = getBase(2017,1,'00',base)
+	base = getBase(2017,2,'00',base)
+	base = getBase(2016,1,'DS0300202',base)
+	base = getBase(2016,2,'DS0300202',base)
+	base = getBase(2017,1,'DS0300202',base)
+	base = getBase(2017,2,'DS0300202',base)
+	for b in base:
+		Lecture(name=b).save()
+
+	area = set()
+	area = getArea(2016,1,area)
+	area = getArea(2016,2,area)
+	area = getArea(2017,1,area)
+	area = getArea(2017,2,area)
+	for a in area:
+		Lecture(name=a).save()
+	return render(request,'server/template/index.html')

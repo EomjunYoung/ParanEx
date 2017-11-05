@@ -29,6 +29,10 @@ key.txt
 3.jpg
 4.jpg
 5.jpg
+test.jpg
+
+#delete db
+db.sqlite3
 
 #Python delete pyc files
 *.pyc

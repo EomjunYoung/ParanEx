@@ -22,3 +22,11 @@ class Subject(models.Model):
         unique_together = (('number', 'name'),)
     def __str__(self):
         return self.name
+
+class Lecture(models.Model):
+    name = models.CharField(max_length=40,primary_key=True)
+    type = models.CharField(max_length=10, null=True)
+    major = models.CharField(max_length=40, null=True)
+    label = models.IntegerField(null=True)
+    def __str__(self):
+        return self.name
