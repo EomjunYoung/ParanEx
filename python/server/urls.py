@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^postTable', views.postTable, name='postTable'),
     url(r'^postUser', views.postUser, name='postUser'),
     url(r'^postSubject', views.postSubject, name='postSubject'),
+    url(r'^getRequirement', views.getRequirement, name='getRequirement'),
     url(r'^getLecture', views.getLecture, name='getLecture'),
     url(r'^test', views.test, name='test'),
 ]

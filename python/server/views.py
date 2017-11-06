@@ -3,7 +3,7 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from models import *
-from lecture import *
+from lecture.getLectureInfo import *
 import base64
 import os
 import httplib
@@ -89,7 +89,7 @@ def postUser(request):
 	User(number=data[0],name=data[1],grade=data[2],major=data[3],before=data[4],abeek=data[5],fresh=data[6]).save()
 	return render(request,'server/template/index.html')
 
-def test(request):
+def getRequirement(request):
 	result = User.objects.filter(number=201222702)[0]
 	year = str(result.number/100000)
 	code=''
@@ -226,4 +226,12 @@ def getLecture(request):
 	area = getArea(2017,2,area)
 	for a in area:
 		Lecture(name=a).save()
+	return render(request,'server/template/index.html')
+
+def test(request):
+	#Please Delete space character
+	result = Lecture.objects.filter(name__startswith=unicode('╫ц╫╨еш','euc-kr').encode('utf-8'))
+	if result.exists():
+		for r in result:
+			print r.name
 	return render(request,'server/template/index.html')
