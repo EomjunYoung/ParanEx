@@ -27,6 +27,11 @@ def postTable(request):
         print 'ok data is saved'
         result = os.popen('start /b ../c++/OpenCV/x64/Debug/OpenCV.exe').read()
 	
+	if 'error' in result:
+		result = result[result.find('error'):]
+		result = result.split('/')[0]
+   		return render(request,'server/template/index.html',{'result':result})
+
 	result = result[result.find('Allocated time : ')+18:]
 	result = result.replace(' \n','/')
 	result = result.replace('\n','/')
@@ -52,7 +57,15 @@ def postTable(request):
 		j = json.loads(data)
 		try:
 			if j['responses'][0]['textAnnotations']:
-				result += j['responses'][0]['textAnnotations'][0]['description']
+				list = j['responses'][0]['textAnnotations'][0]['description'].split('\n')
+				for l in list:
+					if l=='':
+						continue
+					search = Lecture.objects.filter(name__startswith=l)
+					if search.exists():
+						for s in search:
+							result += s.name
+							continue
 				result[-1]='/'
 		except:
 				result += '/'
@@ -229,9 +242,5 @@ def getLecture(request):
 	return render(request,'server/template/index.html')
 
 def test(request):
-	#Please Delete space character
-	result = Lecture.objects.filter(name__startswith=unicode('╫ц╫╨еш','euc-kr').encode('utf-8'))
-	if result.exists():
-		for r in result:
-			print r.name
+	
 	return render(request,'server/template/index.html')
