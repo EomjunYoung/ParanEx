@@ -4,7 +4,15 @@ vector<float> getLabel(char *name, int size) {
 	vector<float> labels;
 	float start;
 	bool manymarks = false;
-	for (char *p = strstr(useOCR(name), "\"description\":") + DESCRIPTION_SIZE; *p != '\"'; p++) {	//읽은 문자열 인식 - 8부터 시작 9부터 시작?
+
+	char *p = strstr(useOCR(name), "\"description\":") + DESCRIPTION_SIZE;
+	if ((int)p == DESCRIPTION_SIZE) {
+		printf("error), cannot read number label!\n");
+		waitKey();
+		exit(1);
+	}
+
+	for (; *p != '\"'; p++) {	//읽은 문자열 인식 - 8부터 시작 9부터 시작?
 		if (*p <= '9' && *p > '0') {
 			start = *p - '0';
 			labels.push_back(start);
