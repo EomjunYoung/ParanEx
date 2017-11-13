@@ -230,5 +230,101 @@ def getLecture(request):
 	return render(request,'server/template/index.html')
 
 def test(request):
+	result = os.popen('start /b ../c++/OpenCV/x64/Debug/OpenCV.exe').read()
+	if 'error' in result:
+		result = result[result.find('error'):]
+		result = result.split('/')[0]
+   		return render(request,'server/template/index.html',{'result':result})
+
+	result = result[result.find('Allocated time : ')+18:]
+	result = result.replace(' \n','/')
+	result = result.replace('\n','/')
+	time = result.split('/')
 	
+	file = open('key.txt','rb')
+	key = file.read()
+	file.close()
+	
+	subject = [[]for cols in range(6)]
+	for i in range(1,6):
+		image = open(str(i)+'.jpg','rb')
+       		encoded_image = base64.b64encode(image.read())
+		c = httplib.HTTPSConnection("vision.googleapis.com")
+
+		params = '{\"requests\":[{\"image\":{\"content\":\"'
+		params += encoded_image
+		params += '\"},\"features\" : {\"type\":\"TEXT_DETECTION\",\"maxResults\" : 10}}]}'
+
+		c.request("POST", "/v1/images:annotate?key=" + key, params)
+		response = c.getresponse()
+		print response.status, response.reason
+		data = response.read()
+		j = json.loads(data)
+		try:
+			if j['responses'][0]['textAnnotations']:
+				list = j['responses'][0]['textAnnotations'][0]['description'].split('\n')
+				for l in list:
+					if l=='':
+						continue
+					search = Lecture.objects.filter(name__startswith=l)
+					if search.exists():
+						for s in search:
+							check = s.time.replace(' ','').split('(')[0][1:]
+							if check.find('~')>=0:
+								if time[i-1].find(check[0:2])<0:
+									continue
+							elif check.find('.')>=0:
+								if time[i-1].find(str(int(check[0:1])+9))<0:
+									continue
+							elif check.find('A')>=0:
+								if time[i-1].find('9.00')<0:
+									continue
+							elif check.find('B')>=0:
+								if time[i-1].find('10.50')<0:
+									continue
+							elif check.find('C')>=0:
+								if time[i-1].find('12.00')<0:
+									continue
+							elif check.find('D')>=0:
+								if time[i-1].find('13.50')<0:
+									continue
+							elif check.find('E')>=0:
+								if time[i-1].find('15.00')<0:
+									continue
+							elif check.find('F')>=0:
+								if time[i-1].find('16.50')<0:
+									continue
+							elif check.find('G')>=0:
+								if time[i-1].find('18.00')<0:
+									continue
+							else:
+								if time[i-1].find(str(int(check[0:1])+8))<0:
+									continue
+
+							index = s.time.find(unicode('월','euc-kr').encode('utf-8')) 
+							if index>=0:
+								subject[0].append((s.name,s.time))
+							index = s.time.find(unicode('화','euc-kr').encode('utf-8')) 
+							if index>=0:
+								subject[1].append((s.name,s.time))
+							index = s.time.find(unicode('수','euc-kr').encode('utf-8')) 
+							if index>=0:
+								subject[2].append((s.name,s.time))
+							index = s.time.find(unicode('목','euc-kr').encode('utf-8')) 
+							if index>=0:
+								subject[3].append((s.name,s.time))
+							index = s.time.find(unicode('금','euc-kr').encode('utf-8')) 
+							if index>=0:
+								subject[4].append((s.name,s.time))
+		except:
+			pass
+		c.close()
+		image.close()	
+
+	for s in subject:
+		for ss in s:
+		#	result += ss[0]+':'+ss[1]+' '
+			result += ss[0]+' '
+		result += '/'
+	print result[:-2]
 	return render(request,'server/template/index.html')
