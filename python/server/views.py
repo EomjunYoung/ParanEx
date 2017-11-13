@@ -204,41 +204,29 @@ def getRequirement(request):
 	return render(request,'server/template/index.html')
 
 def getLecture(request):
-	major = set()
-	major = getMajor(2016,1,major)
-	major = getMajor(2016,2,major)
-	major = getMajor(2017,1,major)
+	if Lecture.objects.count() > 0 :
+		print 'data is already saved'
+		return render(request,'server/template/index.html')
+	major = []
 	major = getMajor(2017,2,major)
 	for m in major:
-		Lecture(name=m).save()
+		Lecture(name=m[0],time=m[1]).save()
 
-	culture = set()
-	culture = getCulture(2016,1,culture)
-	culture = getCulture(2016,2,culture)
-	culture = getCulture(2017,1,culture)
+	culture = []
 	culture = getCulture(2017,2,culture)
 	for c in culture:
-		Lecture(name=c).save()
+		Lecture(name=c[0],time=c[1]).save()
 
-	base = set()
-	base = getBase(2016,1,'00',base)
-	base = getBase(2016,2,'00',base)
-	base = getBase(2017,1,'00',base)
+	base = []
 	base = getBase(2017,2,'00',base)
-	base = getBase(2016,1,'DS0300202',base)
-	base = getBase(2016,2,'DS0300202',base)
-	base = getBase(2017,1,'DS0300202',base)
 	base = getBase(2017,2,'DS0300202',base)
 	for b in base:
-		Lecture(name=b).save()
+		Lecture(name=b[0],time=b[1]).save()
 
-	area = set()
-	area = getArea(2016,1,area)
-	area = getArea(2016,2,area)
-	area = getArea(2017,1,area)
+	area = []
 	area = getArea(2017,2,area)
 	for a in area:
-		Lecture(name=a).save()
+		Lecture(name=a[0],time=a[1]).save()
 	return render(request,'server/template/index.html')
 
 def test(request):

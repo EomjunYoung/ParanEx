@@ -28,7 +28,7 @@ def getMajor(year,semester,major):
 	if response.status == 200:
 		root = e.fromstring(response.read())
 		for r in root.find('dataset').findall('record'):
-			major.add(r.find('sbjtKorNm').text.replace(' ',''))
+			major.append((r.find('sbjtKorNm').text.replace(' ',''),r.find('ltTmNm').text))
 	h.close()
 	return major
 	
@@ -53,7 +53,7 @@ def getCulture(year,semester,culture):
 	if response.status == 200:
 		root = e.fromstring(response.read())
 		for r in root.find('dataset').findall('record'):
-			culture.add(r.find('sbjtKorNm').text.replace(' ',''))
+			culture.append((r.find('sbjtKorNm').text.replace(' ',''),r.find('ltTmNm').text))
 	h.close()
 	return culture;
 
@@ -79,7 +79,7 @@ def getBase(year,semester,major,base):
 	if response.status == 200:
 		root = e.fromstring(response.read())
 		for r in root.find('dataset').findall('record'):
-			base.add(r.find('sbjtKorNm').text.replace(' ',''))
+			base.append((r.find('sbjtKorNm').text.replace(' ',''),r.find('ltTmNm').text))
 	h.close()
 	return base;
 
@@ -104,6 +104,6 @@ def getArea(year,semester,area):
 	if response.status == 200:
 		root = e.fromstring(response.read())
 		for r in root.find('dataset').findall('record'):
-			area.add(r.find('sbjtKorNm').text.replace(' ',''))
+			area.append((r.find('sbjtKorNm').text.replace(' ',''),r.find('ltTmNm').text))
 	h.close()
 	return area;
