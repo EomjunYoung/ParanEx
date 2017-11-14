@@ -17,7 +17,6 @@ Mat workHorizontal(Mat horizontal, int scale) {
 
 	erode(horizontal, horizontal, horizontalStructure, Point(-1, -1));
 	dilate(horizontal, horizontal, horizontalStructure, Point(-1, -1));
-
 	return horizontal;
 }
 
@@ -55,15 +54,16 @@ vector<short> getVerticalCoord(Mat table, int scale) {
 	return lines;
 }
 
-vector<short> getHorizontalCoord(Mat table, int scale) {
+vector<short> getHorizontalCoord(Mat table, int scale, int offset) {
 	int width = table.cols, height = table.rows;
 	int delta = width*0.02f;
 	vector<short> marks;
 
 	Mat matVert = Mat::zeros(height, width, IMREAD_GRAYSCALE);
-	line(matVert, Point(width / 2, 0), Point(width / 2, height), Scalar(255, 255, 255), 3, 8, 0);
+	line(matVert, Point(offset, 0), Point(offset, height), Scalar(255, 255, 255), 3, 8, 0);
 	bitwise_and(matVert, table, matVert);
-	for (int i = 0, j = matVert.cols / 2, delta = matVert.rows*0.02f; i < matVert.rows; i++) {
+
+	for (int i = 0, j = offset, delta = matVert.rows*0.02f; i < matVert.rows; i++) {
 		if (matVert.at<uchar>(i, j) != 0) {
 			marks.push_back(i);
 			i += delta;

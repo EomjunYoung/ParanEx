@@ -60,8 +60,8 @@ int main() {
 	vert = workVertical(vert, 15);
 	//	imshow("vert", vert);
 
-	marks = getHorizontalCoord(hori, 15);
 	lines = getVerticalCoord(vert, 15);
+	marks = getHorizontalCoord(hori, 15,(int)(lines[0]+lines[1])/2);
 	printf("there are %d by %d lines\n", lines.size(), marks.size());
 	printf("lines : ", lines.size());
 	for (int i = 0; i < lines.size(); i++) {
