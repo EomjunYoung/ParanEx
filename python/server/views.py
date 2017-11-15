@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from models import *
 from lecture.getLectureInfo import *
+from time.parseTime import *
 import base64
 import os
 import httplib
@@ -25,8 +26,7 @@ def postTable(request):
         output = open('test.jpg','wb')
         output.write(decoded_data)
         print 'ok data is saved'
-        result = os.popen('start /b ../c++/OpenCV/x64/Debug/OpenCV.exe').read()
-	
+	result = os.popen('start /b ../c++/OpenCV/x64/Debug/OpenCV.exe').read()
 	if 'error' in result:
 		result = result[result.find('error'):]
 		result = result.split('/')[0]
@@ -35,13 +35,14 @@ def postTable(request):
 	result = result[result.find('Allocated time : ')+18:]
 	result = result.replace(' \n','/')
 	result = result.replace('\n','/')
+	time = result.split('/')
 	
 	file = open('key.txt','rb')
 	key = file.read()
 	file.close()
-	k=0
-	for i in range(1,5):
-		k+=1
+	
+	subject = [[]for cols in range(6)]
+	for i in range(1,6):
 		image = open(str(i)+'.jpg','rb')
        		encoded_image = base64.b64encode(image.read())
 		c = httplib.HTTPSConnection("vision.googleapis.com")
@@ -64,14 +65,76 @@ def postTable(request):
 					search = Lecture.objects.filter(name__startswith=l)
 					if search.exists():
 						for s in search:
-							result += s.name
-							continue
-				result[-1]='/'
-		except:
-				result += '/'
+							check = s.time.replace(' ','').split('(')[0][1:]
+							if check.find('~')>=0:
+								if time[i-1].find(check[0:2])<0:
+									continue
+							elif check.find('.')>=0:
+								if time[i-1].find(str(int(check[0:1])+9))<0:
+									continue
+							elif check.find('A')>=0:
+								if time[i-1].find('9.00')<0:
+									continue
+							elif check.find('B')>=0:
+								if time[i-1].find('10.50')<0:
+									continue
+							elif check.find('C')>=0:
+								if time[i-1].find('12.00')<0:
+									continue
+							elif check.find('D')>=0:
+								if time[i-1].find('13.50')<0:
+									continue
+							elif check.find('E')>=0:
+								if time[i-1].find('15.00')<0:
+									continue
+							elif check.find('F')>=0:
+								if time[i-1].find('16.50')<0:
+									continue
+							elif check.find('G')>=0:
+								if time[i-1].find('18.00')<0:
+									continue
+							else:
+								if time[i-1].find(str(int(check[0:1])+8))<0:
+									continue
 
+							index = s.time.find(unicode('월','euc-kr').encode('utf-8')) 
+							if index>=0:
+								subject[0].append((s.name,s.time))
+							index = s.time.find(unicode('화','euc-kr').encode('utf-8')) 
+							if index>=0:
+								subject[1].append((s.name,s.time))
+							index = s.time.find(unicode('수','euc-kr').encode('utf-8')) 
+							if index>=0:
+								subject[2].append((s.name,s.time))
+							index = s.time.find(unicode('목','euc-kr').encode('utf-8')) 
+							if index>=0:
+								subject[3].append((s.name,s.time))
+							index = s.time.find(unicode('금','euc-kr').encode('utf-8')) 
+							if index>=0:
+								subject[4].append((s.name,s.time))
+		except:
+			pass
 		c.close()
-		image.close()
+		image.close()	
+
+	#delete previous timetable to refresh
+	try:
+		TimeTable.objects.get(number=201222702).delete()
+	#if there is no time table
+	except:
+		pass
+
+	result =''
+	i = 0
+	for s in subject:
+		for ss in s:
+			for r in getTime(i,ss[1]):
+				#input data at db
+				TimeTable(number=201222702,name=ss[0],week=i,start=r[0],end=r[1]).save()
+				#save data at buffer to print out
+				result += ss[0]+':'+str(i)+'s'+str(r[0])+'f'+str(r[1])+'/'
+		i=i+1
+	result[-1]=''
     # if no data comming
     else :
         print 'no data'
@@ -321,10 +384,22 @@ def test(request):
 		c.close()
 		image.close()	
 
+	#delete previous timetable to refresh
+	try:
+		TimeTable.objects.get(number=201222702).delete()
+	#if there is no time table
+	except:
+		pass
+
+	result =''
+	i = 0
 	for s in subject:
 		for ss in s:
-		#	result += ss[0]+':'+ss[1]+' '
-			result += ss[0]+' '
-		result += '/'
-	print result[:-2]
+			for r in getTime(i,ss[1]):
+				#input data at db
+				TimeTable(number=201222702,name=ss[0],week=i,start=r[0],end=r[1]).save()
+				#save data at buffer to print out
+				result += ss[0]+':'+str(i)+'s'+str(r[0])+'f'+str(r[1])+'/'
+		i=i+1
+	print result[:-1]
 	return render(request,'server/template/index.html')

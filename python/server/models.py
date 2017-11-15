@@ -41,6 +41,6 @@ class TimeTable(models.Model):
     start = models.FloatField()
     end = models.FloatField()
     class Meta:
-        unique_together = (('number', 'name', 'week'),)
+        unique_together = (('number', 'name', 'week','start'),)
     def __str__(self):
         return self.name
