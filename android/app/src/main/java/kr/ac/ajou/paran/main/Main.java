@@ -19,6 +19,7 @@ import kr.ac.ajou.paran.main.function.BulltinBoard;
 import kr.ac.ajou.paran.main.function.Lecture;
 import kr.ac.ajou.paran.main.function.Subject;
 import kr.ac.ajou.paran.main.function.TimeTable;
+import kr.ac.ajou.paran.subject.SubjectManage;
 import kr.ac.ajou.paran.util.DB;
 import kr.ac.ajou.paran.util.HTTP;
 import kr.ac.ajou.paran.util.Raw;
@@ -136,7 +137,7 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.buttonSubject:
-                startActivity(new Intent(this, Subject.class));
+                startActivity(new Intent(this, SubjectManage.class).putExtra("cookie", cookie));
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.buttonBulletinBoard:

@@ -9,4 +9,22 @@
     android:weightSum="10"
     android:orientation="vertical">
     <include layout="@layout/common_function_upper" />
+
+
+    <ListView
+
+        android:id="@+id/subjectlv"
+        android:layout_width="wrap_content"
+        android:layout_height="500dp">
+
+    </ListView>
+
+
+    <Button
+
+        android:text="back"
+        android:id="@+id/btnback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
