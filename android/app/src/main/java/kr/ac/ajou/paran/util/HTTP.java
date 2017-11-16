@@ -342,43 +342,6 @@ public class HTTP {
         return major;
     }
 
-    public static String postTable(String server) {
-        String base64="";
-        String result="";
-        try {
-            HttpURLConnection con = makeConnection(new URL("http://"+server+"/postTable"));
-            con.setDoOutput(true);
-            con.setRequestMethod("POST");
-            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
-            File file = new File("/storage/emulated/0/test.jpg");
-            if(file.isFile()){
-                byte[] bt = new byte[(int)file.length()];
-                FileInputStream fileInputStream = new FileInputStream(file);
-                try{
-                    fileInputStream.read(bt);
-                    base64 = new String(Base64.encodeBase64(bt));
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-                fileInputStream.close();
-            }
-            wr.write("data="+base64);
-            wr.flush();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
-            String line;
-            while ((line = rd.readLine()) != null) {
-                result+=line;
-            }
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return result;
-    }
-
     public static void postSubject(String server, String data, int number) {
         try {
             HttpURLConnection con = makeConnection(new URL("http://"+server+"/postSubject"));
@@ -413,5 +376,65 @@ public class HTTP {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    public static boolean checkTable(String server, int number) {
+        try {
+            HttpURLConnection con = makeConnection(new URL("http://"+server+"/checkTable"));
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+            wr.write("number="+number);
+            wr.flush();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            if(Integer.parseInt(rd.readLine())==0)
+                return false;
+            else
+                return true;
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static String postTable(String server) {
+        String base64 = "";
+        String result = "";
+        try {
+            HttpURLConnection con = makeConnection(new URL("http://" + server + "/postTable"));
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+            File file = new File("/storage/emulated/0/test.jpg");
+            if (file.isFile()) {
+                byte[] bt = new byte[(int) file.length()];
+                FileInputStream fileInputStream = new FileInputStream(file);
+                try {
+                    fileInputStream.read(bt);
+                    base64 = new String(Base64.encodeBase64(bt));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                fileInputStream.close();
+            }
+            wr.write("data=" + base64);
+            wr.flush();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            String line;
+            while ((line = rd.readLine()) != null) {
+                result += line;
+            }
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return result;
     }
 }

@@ -11,9 +11,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.main.dialog.AlertTrans;
+import kr.ac.ajou.paran.main.dialog.CheckSavedTable;
 import kr.ac.ajou.paran.main.dialog.InitSubject;
 import kr.ac.ajou.paran.main.function.BulltinBoard;
 import kr.ac.ajou.paran.main.function.Lecture;
@@ -129,8 +131,14 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buttonTimeTable:
-                startActivity(new Intent(this, TimeTable.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                 /*시간표 있는지 확인*/
+                if(!ip.equals("") && !port.equals("")) {
+                    if(HTTP.checkTable(ip + ":" + port, user.getNumber())){
+                        new CheckSavedTable(this).showDialog();
+                    }
+                }
+                /*시간표 있는지 확인*/
+
                 break;
             case R.id.buttonLecture:
                 startActivity(new Intent(this, Lecture.class));
