@@ -27,12 +27,33 @@ public class NetworkAsync extends AsyncTask {
         this.mCallback = mCallback;
     }
 
+    public NetworkAsync(String semester, String type, Callback mCallback)
+    {
+
+        this.semester = semester;
+        this.type = type;
+        this.mCallback = mCallback;
+
+    }
+
+
     @Override
     protected String doInBackground(Object[] objects) {
 
 
+
         try {
-            return sendPost(semester, type, major);
+
+            //교양과목
+            if(type == "U0209002") {
+                return sendPost2(semester, type);
+            }
+            else if(type == "U0209003") //기초과목
+                return sendPost3(semester, type, major);
+
+            else //전공과목
+                return sendPost(semester, type, major);
+
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -140,6 +161,211 @@ public class NetworkAsync extends AsyncTask {
         return String.valueOf(response);
 
     }
+
+
+
+
+    private String sendPost3(String tmpSemester, String tmpType, String tmpMajor) {
+        LinkedHashMap<String, String> result = new LinkedHashMap<String, String>();
+
+        String target = "http://haksa.ajou.ac.kr/uni/uni/cour/lssn/findCourLecturePlanDocumentReg.action";
+
+        HttpURLConnection con = null;
+        try {
+            con = (HttpURLConnection) new URL(target).openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        con.setRequestProperty("Accept-Language", "ko-kr,ko;q=0.8,en-us;q=0.6,en;q=0.4");
+        con.setRequestProperty("Content-Type", "text/xml/SosFlexMobile;charset=utf-8");
+        con.setDoOutput(true);
+        try {
+            con.setRequestMethod("POST");
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        }
+
+        OutputStreamWriter wr = null;
+        try {
+            wr = new OutputStreamWriter(con.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String parameter = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+        parameter += "<root>\n";
+        parameter += "<params>\n";
+        parameter += "<param id=\"strYy\" type=\"STRING\">" + "2017" + "</param>\n";
+        parameter += "<param id=\"strShtmCd\" type=\"STRING\">" + tmpSemester + "</param>\n";
+        parameter += "<param id=\"strSubmattFg\" type=\"STRING\">" + tmpType + "</param>\n";
+        parameter += "<param id=\"strSustcd\" type=\"STRING\">" + tmpMajor + "</param>\n";
+        parameter += "</params>\n";
+        parameter += "</root>";
+        try {
+            wr.write(parameter);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            wr.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        String temp;
+        int i = 0;
+        StringBuilder response = new StringBuilder();
+
+        try {
+            while ((temp = br.readLine()) != null) {
+
+
+                i++;
+
+                if (temp.contains("<sbjtKorNm>")) {
+
+                    String name = temp.split(">")[1].split("</")[0];
+                    response.append(name);
+                    response.append(" ");
+
+
+                }
+
+                if (i == 30000)
+                    break;
+
+
+
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return String.valueOf(response);
+
+    }
+
+
+
+
+
+    private String sendPost2(String tmpSemester, String tmpType) {
+        LinkedHashMap<String, String> result = new LinkedHashMap<String, String>();
+
+        String target = "http://haksa.ajou.ac.kr/uni/uni/cour/lssn/findCourLecturePlanDocumentReg.action";
+
+        HttpURLConnection con = null;
+        try {
+            con = (HttpURLConnection) new URL(target).openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        con.setRequestProperty("Accept-Language", "ko-kr,ko;q=0.8,en-us;q=0.6,en;q=0.4");
+        con.setRequestProperty("Content-Type", "text/xml/SosFlexMobile;charset=utf-8");
+        con.setDoOutput(true);
+        try {
+            con.setRequestMethod("POST");
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        }
+
+        OutputStreamWriter wr = null;
+        try {
+            wr = new OutputStreamWriter(con.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String parameter = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+        parameter += "<root>\n";
+        parameter += "<params>\n";
+        parameter += "<param id=\"strYy\" type=\"STRING\">" + "2017" + "</param>\n";
+        parameter += "<param id=\"strShtmCd\" type=\"STRING\">" + tmpSemester + "</param>\n";
+        parameter += "<param id=\"strSubmattFg\" type=\"STRING\">" + tmpType + "</param>\n";
+        parameter += "</params>\n";
+        parameter += "</root>";
+        try {
+            wr.write(parameter);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            wr.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        String temp;
+        int i = 0;
+        StringBuilder response = new StringBuilder();
+
+        try {
+            while ((temp = br.readLine()) != null) {
+
+
+                i++;
+
+                if (temp.contains("<sbjtKorNm>")) {
+
+                    String name = temp.split(">")[1].split("</")[0];
+                    response.append(name);
+                    response.append(" ");
+
+
+                }
+
+                if (i == 10000)
+                    break;
+
+
+
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return String.valueOf(response);
+
+    }
+
+
+
+
+
 
 
     @Override

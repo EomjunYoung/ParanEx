@@ -43,22 +43,22 @@ public class Lecture extends FunctionType implements Callback {
     String[] semesterStrings = {"1학기", "여름학기", "2학기", "겨울학기"};
     String[] typeStrings = {"전공과목", "교양과목", "기초과목", "공학기초", "영역별교양", "학점교류", "공학인증교양"};
     String[] majorStrings = {"기계공학전공", "기계공학전공(과)", "산업정보시스템공학전공", "산업공학전공(과)", "산업정보시스템공학전공(과)" +
-    "화학공학전공", "환경공학전공(과)", "신소재공학전공", "신소재공학전공(과),", "응용화학전공", "생명공학전공", "응용화학생명공학전공" +
-   "응용화학생명공학전공(과)", "환경공학전공", "환경안전공학전공(과)", "건설시스템공학전공", "건설시스템공학전공(과)" +
-    "교통시스템공학전공", "교통시스템공학전공(과)", "건축학전공", "건축학전공(과)", "건축학전공(5년)", "건축학전공(5년)(과)"+
-    "건축공학전공", "건축공학전공(과)", "전자공학전공", "전자공학전공(과)", "소프트웨어및컴퓨터공학전공(과)", "사이버보안전공(과)"+
-    "정보컴퓨터공학전공", "컴퓨터공학전공(과)", "소프트웨어보안전공(과)", "정보컴퓨터공학전공(과)", "소프트웨어융합전공" +
-    "미디어학전공", "미디어콘텐츠전공(과)", "미디어학전공(과)", "소셜미디어전공(과)", "공군ICT전공(과)", "ICT융합전공(과)" +
-    "수학전공", "수학전공(과)", "물리학전공", "물리학전공(과)", "화학전공", "화학전공(과)", "생명과학전공", "생명과학전공(과)"+
-    "경영학전공", "경영학전공(과)", "e-비즈니스학전공", "e-비즈니스학전공(과)", "금융공학전공", "금융공학전공(과)" +
-    "스포츠마케팅학전공", "스포츠마케팅학전공(과)", "국어국문학전공", "국어국문학전공(과)", "영어영문학전공", "영어영문학전공(과)" +
-    "불어불문학전공", "불어불문학전공(과)", "사학전공", "사학전공(과)", "문화콘텐츠학전공", "경제학전공", "경제학전공(과)", "행정학전공" +
-    "행정학전공(과)", "심리학전공", "심리학전공(과)", "정치외교학전공", "정치외교학전공(과)", "스포츠레저학전공", "스포츠레저학전공(과)"+
-    "법학전공", "법학전공(과)", "의학전공(과)", "간호학전공(과)", "간호학전공(특별과정)(과)", "자유전공", "약학전공(과)"+
-    "약학전공", "한국학전공(과)", "기초의과학전공", "국제통상전공(과)", "문화산업과커뮤니케이션전공", "문화산업과커뮤니케이션전공(과)" +
-    "중국지역연구전공(과)", "문화학전공", "일본지역연구전공(과)", "지역연구전공(유럽)(과)", "지연연구전공(미국)(과)" +
-    "인문사회데이터분석전공(과)", "응용화학전공(과)", "생명공학전공(과)", "소프트웨어융합전공(과)", "기초의과학전공(과)"+
-    "융합시스템공학전공(과)", "ICT융합전공(과)(폐지)", "자동차SW전공(과)", "디지털휴머니티전공(과)"};
+            "화학공학전공", "환경공학전공(과)", "신소재공학전공", "신소재공학전공(과),", "응용화학전공", "생명공학전공", "응용화학생명공학전공" +
+            "응용화학생명공학전공(과)", "환경공학전공", "환경안전공학전공(과)", "건설시스템공학전공", "건설시스템공학전공(과)" +
+            "교통시스템공학전공", "교통시스템공학전공(과)", "건축학전공", "건축학전공(과)", "건축학전공(5년)", "건축학전공(5년)(과)"+
+            "건축공학전공", "건축공학전공(과)", "전자공학전공", "전자공학전공(과)", "소프트웨어및컴퓨터공학전공(과)", "사이버보안전공(과)"+
+            "정보컴퓨터공학전공", "컴퓨터공학전공(과)", "소프트웨어보안전공(과)", "정보컴퓨터공학전공(과)", "소프트웨어융합전공" +
+            "미디어학전공", "미디어콘텐츠전공(과)", "미디어학전공(과)", "소셜미디어전공(과)", "공군ICT전공(과)", "ICT융합전공(과)" +
+            "수학전공", "수학전공(과)", "물리학전공", "물리학전공(과)", "화학전공", "화학전공(과)", "생명과학전공", "생명과학전공(과)"+
+            "경영학전공", "경영학전공(과)", "e-비즈니스학전공", "e-비즈니스학전공(과)", "금융공학전공", "금융공학전공(과)" +
+            "스포츠마케팅학전공", "스포츠마케팅학전공(과)", "국어국문학전공", "국어국문학전공(과)", "영어영문학전공", "영어영문학전공(과)" +
+            "불어불문학전공", "불어불문학전공(과)", "사학전공", "사학전공(과)", "문화콘텐츠학전공", "경제학전공", "경제학전공(과)", "행정학전공" +
+            "행정학전공(과)", "심리학전공", "심리학전공(과)", "정치외교학전공", "정치외교학전공(과)", "스포츠레저학전공", "스포츠레저학전공(과)"+
+            "법학전공", "법학전공(과)", "의학전공(과)", "간호학전공(과)", "간호학전공(특별과정)(과)", "자유전공", "약학전공(과)"+
+            "약학전공", "한국학전공(과)", "기초의과학전공", "국제통상전공(과)", "문화산업과커뮤니케이션전공", "문화산업과커뮤니케이션전공(과)" +
+            "중국지역연구전공(과)", "문화학전공", "일본지역연구전공(과)", "지역연구전공(유럽)(과)", "지연연구전공(미국)(과)" +
+            "인문사회데이터분석전공(과)", "응용화학전공(과)", "생명공학전공(과)", "소프트웨어융합전공(과)", "기초의과학전공(과)"+
+            "융합시스템공학전공(과)", "ICT융합전공(과)(폐지)", "자동차SW전공(과)", "디지털휴머니티전공(과)"};
 
     String[] basicStrings = {"기계공학부", "기계공학과", "산업정보시스템공학부", "산업공학과", "화공ㆍ신소재공학부"};
 
@@ -170,14 +170,14 @@ public class Lecture extends FunctionType implements Callback {
                     {
                         String str = itr.next();
                         if(sptype.getSelectedItem().toString() == str)
-                                {
-                                    type = typeMap.get(str);
+                        {
+                            type = typeMap.get(str);
 
-                                    if (type == "U0209003")
-                                    {
+                            if (type == "U0209003")
+                            {
 
-                                        arrayAdapter5.notifyDataSetChanged();
-                                        spmajor.setAdapter(arrayAdapter5);
+                                arrayAdapter5.notifyDataSetChanged();
+                                spmajor.setAdapter(arrayAdapter5);
 
                             }
 
@@ -209,48 +209,48 @@ public class Lecture extends FunctionType implements Callback {
 
 
 
-    @Override
-    public void onItemSelected (AdapterView < ? > adapterView, View view,int i, long l){
+                @Override
+                public void onItemSelected (AdapterView < ? > adapterView, View view,int i, long l){
 
-        if(type == "U0209001") {
-            Set<String> set = majorMap.keySet();
-            Iterator<String> itr = set.iterator();
+                    if(type == "U0209001") {
+                        Set<String> set = majorMap.keySet();
+                        Iterator<String> itr = set.iterator();
 
-            while (itr.hasNext()) {
+                        while (itr.hasNext()) {
 
-                String str = itr.next();
+                            String str = itr.next();
 
 
 
-                if (spmajor.getSelectedItem().toString() == str) {
+                            if (spmajor.getSelectedItem().toString() == str) {
 
-                    major = majorMap.get(str);
+                                major = majorMap.get(str);
+
+                            }
+                        }
+                    }
+                    else if(type == "U0209003")
+                    {
+                        Set<String> set = basicMap.keySet();
+                        Iterator<String> itr = set.iterator();
+
+                        while (itr.hasNext()) {
+
+                            String str = itr.next();
+
+
+
+                            if (spmajor.getSelectedItem().toString() == str) {
+
+                                major = basicMap.get(str);
+
+                            }
+                        }
+                    }
+
 
                 }
-            }
-        }
-        else if(type == "U0209003")
-        {
-           Set<String> set = basicMap.keySet();
-            Iterator<String> itr = set.iterator();
-
-            while (itr.hasNext()) {
-
-                String str = itr.next();
-
-
-
-                if (spmajor.getSelectedItem().toString() == str) {
-
-                    major = basicMap.get(str);
-
-                }
-            }
-        }
-
-
-    }
-              @Override
+                @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
 
                 }
@@ -428,22 +428,58 @@ public class Lecture extends FunctionType implements Callback {
         basicMap.put("전자공학부", "DS03002002");
         basicMap.put("전자공학과", "DS03002021");
         basicMap.put("소프트웨어학과", "DS0300202");
+        basicMap.put("정보컴퓨터공학부", "DS03002003"); //14일부터 한거
+        basicMap.put("미디어학부", "DS03002004");
+        basicMap.put("미디어학과", "DS03002024");
+        basicMap.put("국방디지털융합학과", "DS03002025");
+        basicMap.put("사이버보안학과", "DS0300201");
+        basicMap.put("수학과", "DS03003021");
+        basicMap.put("물리학과", "DS03003022");
+        basicMap.put("화학과", "DS03003023");
+        basicMap.put("생명과학과", "DS03003024");
+        basicMap.put("경영학부", "DS03004002");
+        basicMap.put("경영학과", "DS03004021");
+        basicMap.put("e-비즈니스학부", "DS03004003");
+        basicMap.put("e-비즈니스학과", "DS03004022");
+        basicMap.put("금융공학부", "DS03004005");
+        basicMap.put("금융공학과", "DS03004023");
+        basicMap.put("스포츠마케팅학부", "DS03004004");
+        basicMap.put("글로벌경영학과", "DS03004024");
+        basicMap.put("인문학부", "DS03005002");
+        basicMap.put("국어국문학과", "DS03005021");
+        basicMap.put("사회과학대학(과)", "DS03006029");
+        basicMap.put("영어영문학과", "DS03005022");
+        basicMap.put("불어불문학과", "DS03005023");
+        basicMap.put("사학과", "DS03005024");
+        basicMap.put("문화콘텐츠학과", "DS03005025");
+        basicMap.put("사회과학부", "DS03006002");
+        basicMap.put("경제학과", "DS03006021");
+        basicMap.put("행정학과", "DS03006022");
+        basicMap.put("심리학과", "DS03006023");
+        basicMap.put("사회학과", "DS03006024");
+        basicMap.put("정치외교학과", "DS03006025");
+        basicMap.put("스포츠레저학과", "DS03006026");
+        basicMap.put("스포츠레저학부", "DS03006003");
+        basicMap.put("법학부", "DS03007002");
+        basicMap.put("법학과", "DS03007021");
+        basicMap.put("의학과", "DS03008002");
+        basicMap.put("간호학과", "DS03009001");
+        basicMap.put("간호학과(특별과정)", "DS03009002");
+        basicMap.put("자유전공", "DS03010002");
+        basicMap.put("약학과", "DS03013021");
+        basicMap.put("약학부", "DS03013002");
+        basicMap.put("국제학부", "DS03012001");
+        basicMap.put("문화산업과 커뮤니케이션전공", "DS03006027");
+        basicMap.put("인문사회데이터분석전공", "DS0300203");
+        basicMap.put("정보컴퓨터공학과", "DS03002022");
+        basicMap.put("소프트웨어융합학과", "DS03002023");
+        basicMap.put("기초의과학전공", "DS03003025");
+        basicMap.put("융합시스템공학과", "DS03001030");
+        basicMap.put("자동차SW전공", "DS0300204");
+        basicMap.put("디지털휴머니티전공", "DS03005026");
         basicMap.put("기계공학부", "DS03001002");
         basicMap.put("기계공학부", "DS03001002");
         basicMap.put("기계공학부", "DS03001002");
-        basicMap.put("기계공학부", "DS03001002");
-        basicMap.put("기계공학부", "DS03001002");
-        basicMap.put("기계공학부", "DS03001002");
-        basicMap.put("기계공학부", "DS03001002");
-        basicMap.put("기계공학부", "DS03001002");
-        basicMap.put("기계공학부", "DS03001002");
-        basicMap.put("기계공학부", "DS03001002");
-        basicMap.put("기계공학부", "DS03001002");
-        basicMap.put("기계공학부", "DS03001002");
-        basicMap.put("기계공학부", "DS03001002");
-        basicMap.put("기계공학부", "DS03001002");
-
-
 
 
         return basicMap;
@@ -482,7 +518,6 @@ public class Lecture extends FunctionType implements Callback {
 
 
 }
-
 
 
 
