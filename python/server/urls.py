@@ -18,9 +18,10 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
-    url(r'^postTable', views.postTable, name='postTable'),
     url(r'^postUser', views.postUser, name='postUser'),
     url(r'^postSubject', views.postSubject, name='postSubject'),
+    url(r'^checkTable', views.checkTable, name='checkTable'),
+    url(r'^postTable', views.postTable, name='postTable'),
     url(r'^getRequirement', views.getRequirement, name='getRequirement'),
     url(r'^getLecture', views.getLecture, name='getLecture'),
     url(r'^test', views.test, name='test'),
