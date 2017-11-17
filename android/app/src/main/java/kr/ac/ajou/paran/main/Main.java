@@ -53,8 +53,6 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
         super.onCreate(savedlnstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         /* 쿠키를 가져옴 */
         cookie = getIntent().getStringExtra("Cookie");
         /* 쿠키를 가져옴 */
@@ -134,7 +132,9 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
                  /*시간표 있는지 확인*/
                 if(!ip.equals("") && !port.equals("")) {
                     if(HTTP.checkTable(ip + ":" + port, user.getNumber())){
-                        new CheckSavedTable(this).showDialog();
+                        CheckSavedTable checkSavedTable = new CheckSavedTable(this);
+                        checkSavedTable.setNumber(user.getNumber());
+                        checkSavedTable.showDialog();
                     }
                 }
                 /*시간표 있는지 확인*/

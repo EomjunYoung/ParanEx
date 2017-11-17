@@ -401,7 +401,7 @@ public class HTTP {
         return false;
     }
 
-    public static String postTable(String server) {
+    public static String postTable(String server, int number) {
         String base64 = "";
         String result = "";
         try {
@@ -421,7 +421,7 @@ public class HTTP {
                 }
                 fileInputStream.close();
             }
-            wr.write("data=" + base64);
+            wr.write("data=" + base64 + "&number=" + number);
             wr.flush();
             BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
             String line;
@@ -436,5 +436,25 @@ public class HTTP {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static String getTable(String server, int number) {
+        try {
+            HttpURLConnection con = makeConnection(new URL("http://"+server+"/getTable"));
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+            wr.write("number="+number);
+            wr.flush();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            return rd.readLine();
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return "";
     }
 }

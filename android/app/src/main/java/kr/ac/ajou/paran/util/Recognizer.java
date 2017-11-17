@@ -43,6 +43,7 @@ public class Recognizer extends AppCompatActivity
     private Button buttonCapture;
     private String ip = "";
     private String port = "";
+    private int number;
     private TextView textFPS;
 
     /* refer : http://gogorchg.tistory.com/entry/Android-FPS-구하기 [항상 초심으로] */
@@ -89,6 +90,7 @@ public class Recognizer extends AppCompatActivity
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        number = getIntent().getIntExtra("number",number);
         recognizer = this;
         matResult = null;
         textFPS =(TextView)findViewById(R.id.textFPS);
@@ -104,7 +106,7 @@ public class Recognizer extends AppCompatActivity
                     ip = Raw.readIP(Recognizer.this);
                     port = Raw.readPort(Recognizer.this);
                     if(!ip.equals("") && !port.equals("")){
-                        Toast.makeText(recognizer,  HTTP.postTable(ip+":"+port), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(recognizer,  HTTP.postTable(ip+":"+port,number), Toast.LENGTH_SHORT).show();
                     }else
                         Toast.makeText(recognizer, "We can not find server information", Toast.LENGTH_SHORT).show();
                     matResult.release();

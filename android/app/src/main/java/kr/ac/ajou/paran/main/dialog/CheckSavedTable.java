@@ -14,6 +14,7 @@ import kr.ac.ajou.paran.util.Recognizer;
 
 public class CheckSavedTable extends TwoWays {
     private Button buttonCancel, buttonOK;
+    private int number;
 
     public CheckSavedTable(final Context context) {
         super(context);
@@ -27,20 +28,20 @@ public class CheckSavedTable extends TwoWays {
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, Recognizer.class));
+                context.startActivity(new Intent(context, Recognizer.class).putExtra("number",number));
                 dismiss();
             }
         });
         buttonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, TimeTable.class));
+                context.startActivity(new Intent(context, TimeTable.class).putExtra("number",number));
                 dismiss();
             }
         });
     }
 
-    public void terminate () {
-        dismiss();
+    public void setNumber(int number){
+        this.number = number;
     }
 }
