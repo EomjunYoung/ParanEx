@@ -25,6 +25,7 @@ import kr.ac.ajou.paran.subject.SubjectManage;
 import kr.ac.ajou.paran.util.DB;
 import kr.ac.ajou.paran.util.HTTP;
 import kr.ac.ajou.paran.util.Raw;
+import kr.ac.ajou.paran.util.Recognizer;
 import kr.ac.ajou.paran.util.User;
 
 
@@ -135,6 +136,8 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
                         CheckSavedTable checkSavedTable = new CheckSavedTable(this);
                         checkSavedTable.setNumber(user.getNumber());
                         checkSavedTable.showDialog();
+                    }else{
+                        startActivity(new Intent(Main.this, Recognizer.class).putExtra("number",user.getNumber()));
                     }
                 }
                 /*시간표 있는지 확인*/
