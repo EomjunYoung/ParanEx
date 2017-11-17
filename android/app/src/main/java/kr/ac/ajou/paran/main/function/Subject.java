@@ -1,5 +1,7 @@
 package kr.ac.ajou.paran.main.function;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,16 +15,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import kr.ac.ajou.paran.DBHelper.DBHelper;
 import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.subject.SubjectManage;
-import kr.ac.ajou.paran.util.FunctionType;
-
-import static android.R.id.list;
-import static kr.ac.ajou.paran.R.id.sptest;
+import kr.ac.ajou.paran.util.Callback;
+import kr.ac.ajou.paran.util.NetworkAsync;
 
 
 /**
@@ -51,6 +51,8 @@ public class Subject extends AppCompatActivity implements Callback {
     final List<String> list3 = new ArrayList<>();
     final List<String> list4 = new ArrayList<>();
 
+    DBHelper dbHelper;
+    SQLiteDatabase db;
     /*public Subject(){
         super("수강과목 보기",R.layout.activity_subject);
     }*/
@@ -63,8 +65,7 @@ public class Subject extends AppCompatActivity implements Callback {
         subjectlv = (ListView) findViewById(R.id.subjectlv);
         btnback = (Button)findViewById(R.id.btnback);
         mCallback = this;
-
-
+        dbHelper = new DBHelper(getApplicationContext(), "subject.db", null, 1);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
 
@@ -145,10 +146,34 @@ public class Subject extends AppCompatActivity implements Callback {
                                     @Override
                                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                                        String str = (String)subjectlv.getItemAtPosition(i);
+                                        /*String str = (String)subjectlv.getItemAtPosition(i);
                                         Intent intent = new Intent(Subject.this, SubjectManage.class);
                                         intent.putExtra("eom", str);
-                                        startActivity(intent);
+                                        startActivity(intent);*/
+
+                                        String sql = "select _id from subjectinfo";
+                                        db = dbHelper.getReadableDatabase();
+                                        Cursor cursor = db.rawQuery(sql, null);
+                                        int c = cursor.getCount();
+
+
+                                        String retake = null;
+                                        String mandate = null;
+                                        String name = (String)subjectlv.getItemAtPosition(i);
+
+                                        //dbHelper.insertsubject(c, retake, mandate, name);
+
+                                        Toast.makeText(getApplicationContext(), c+1+"", Toast.LENGTH_SHORT).show();
+
+
+
+
+
+
+
+
+
+
 
 
                                     }

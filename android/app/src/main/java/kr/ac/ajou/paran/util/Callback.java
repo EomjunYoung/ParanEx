@@ -1,4 +1,4 @@
-package kr.ac.ajou.paran.main.function;
+package kr.ac.ajou.paran.util;
 
 /**
  * Created by ejy77 on 2017-09-02.

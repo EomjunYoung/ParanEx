@@ -1,4 +1,4 @@
-package kr.ac.ajou.paran.main.function;
+package kr.ac.ajou.paran.util;
 
 import android.os.AsyncTask;
 
