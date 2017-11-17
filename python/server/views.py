@@ -19,14 +19,21 @@ sys.setdefaultencoding('utf-8')
 @csrf_exempt 
 def postSubject(request):
 	temp = request.POST.get('data','')
-	n = request.POST.get('number','')
+	studentNumber = request.POST.get('number','')
 	print temp
-	print n
+	print studentNumber
+
+	#delete previous subject to refresh
+	try:
+		Subject.objects.filter(number=studentNumber).delete()
+	#if there is no subject
+	except:
+		pass
 
 	line = temp.split('\n')
 	for l in line:
 		data = l.split('\t')
-		Subject(number=n,re=(0 if (data[1]=='X') else 1),type=data[3],name=data[5]).save()
+		Subject(number=studentNumber,re=(0 if (data[1]=='X') else 1),type=data[3],name=data[5]).save()
 	return render(request,'server/template/index.html')
 
 @csrf_exempt 
@@ -40,12 +47,13 @@ def postUser(request):
 @csrf_exempt 
 def checkTable(request):
 	number = request.POST.get('number','')
-	result = TimeTable.objects.filter(number=201222702).count()
+	result = TimeTable.objects.filter(number=number).count()
 	print result
 	return render(request,'server/template/index.html',{'result':result})	
 
 @csrf_exempt 
 def postTable(request):
+    number = request.POST.get('number',0)
     data = request.POST.get('data','')
     data = data.replace(' ','+')
     result = ''
@@ -147,7 +155,7 @@ def postTable(request):
 
 	#delete previous timetable to refresh
 	try:
-		TimeTable.objects.filter(number=201222702).delete()
+		TimeTable.objects.filter(number=number).delete()
 	#if there is no time table
 	except:
 		pass
@@ -159,7 +167,7 @@ def postTable(request):
 			for r in getTime(i,ss[1]):
 				#input data at db
 				try:
-					TimeTable(number=201222702,name=ss[0],week=i,start=r[0],end=r[1]).save()
+					TimeTable(number=number,name=ss[0],week=i,start=r[0],end=r[1]).save()
 				except:
 					pass
 				#save data at buffer to print out
@@ -171,6 +179,18 @@ def postTable(request):
 	
     print result
     return render(request,'server/template/index.html',{'result':result})
+
+@csrf_exempt 
+def getTable(request):
+	result = ''
+	number = request.POST.get('number','')
+	tuples = TimeTable.objects.filter(number=number)
+
+	for tuple in tuples:
+		result+= tuple.name+':'+str(tuple.week)+'s'+str(tuple.start)+'f'+str(tuple.end)+'/'
+	
+	print result
+	return render(request,'server/template/index.html',{'result':result})	
 
 def getRequirement(request):
 	result = User.objects.filter(number=201222702)[0]
