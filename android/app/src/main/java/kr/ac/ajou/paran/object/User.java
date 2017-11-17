@@ -1,4 +1,4 @@
-package kr.ac.ajou.paran.util;
+package kr.ac.ajou.paran.object;
 
 /**
  * Created by dream on 2017-08-05.

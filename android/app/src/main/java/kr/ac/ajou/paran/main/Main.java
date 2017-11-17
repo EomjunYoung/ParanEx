@@ -5,13 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.main.dialog.AlertTrans;
@@ -19,14 +17,12 @@ import kr.ac.ajou.paran.main.dialog.CheckSavedTable;
 import kr.ac.ajou.paran.main.dialog.InitSubject;
 import kr.ac.ajou.paran.main.function.BulltinBoard;
 import kr.ac.ajou.paran.main.function.Lecture;
-import kr.ac.ajou.paran.main.function.Subject;
-import kr.ac.ajou.paran.main.function.TimeTable;
 import kr.ac.ajou.paran.subject.SubjectManage;
 import kr.ac.ajou.paran.util.DB;
 import kr.ac.ajou.paran.util.HTTP;
 import kr.ac.ajou.paran.util.Raw;
 import kr.ac.ajou.paran.util.Recognizer;
-import kr.ac.ajou.paran.util.User;
+import kr.ac.ajou.paran.object.User;
 
 
 /**

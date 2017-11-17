@@ -2,8 +2,6 @@ package kr.ac.ajou.paran.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.google.api.client.util.Base64;
 
@@ -11,7 +9,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -22,6 +19,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import kr.ac.ajou.paran.object.User;
 
 /**
  * Created by dream on 2017-08-05.
