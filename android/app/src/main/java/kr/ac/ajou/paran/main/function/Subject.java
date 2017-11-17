@@ -1,14 +1,20 @@
 package kr.ac.ajou.paran.main.function;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -151,6 +157,24 @@ public class Subject extends AppCompatActivity implements Callback {
                                         intent.putExtra("eom", str);
                                         startActivity(intent);*/
 
+                                        AlertDialog.Builder ad = new AlertDialog.Builder(Subject.this);
+                                        //ad.setTitle("Title");
+                                       // ad.setMessage("Message");
+
+                                        LayoutInflater inflater = getLayoutInflater();
+                                        View view2 = inflater.inflate(R.layout.activity_subject2, null);
+                                        ad.setView(view2);
+
+
+
+                                        final RadioButton rb1 = (RadioButton)view2.findViewById(R.id.rb1);
+                                        final RadioButton rb2 = (RadioButton)view2.findViewById(R.id.rb2);
+                                        final AlertDialog dialog = ad.create();
+
+                                        ad.setView(rb1);
+                                        ad.setView(rb2);
+
+
                                         String sql = "select _id from subjectinfo";
                                         db = dbHelper.getReadableDatabase();
                                         Cursor cursor = db.rawQuery(sql, null);
@@ -163,18 +187,25 @@ public class Subject extends AppCompatActivity implements Callback {
 
                                         //dbHelper.insertsubject(c, retake, mandate, name);
 
-                                        Toast.makeText(getApplicationContext(), c+1+"", Toast.LENGTH_SHORT).show();
+
+                                        ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+
+                                                String retake = rb1.getText().toString();
+                                                String mandate = rb2.getText().toString();
+
+                                                dialog.dismiss();
+
+
+                                            }
+                                        });
 
 
 
 
-
-
-
-
-
-
-
+                                        dialog.show();
 
                                     }
                                 });
@@ -483,11 +514,15 @@ public class Subject extends AppCompatActivity implements Callback {
 
 
         String string = o.toString();
-        StringTokenizer s = new StringTokenizer(string);
+        StringTokenizer s = new StringTokenizer(string, " ");
 
         while (s.hasMoreTokens()) {
 
-            list3.add(s.nextToken());
+            String name = s.nextToken();
+            String mandate = s.nextToken();
+
+
+            list3.add("과목 :" + name + "  " + "구분 :"+ mandate );
         }
 
 

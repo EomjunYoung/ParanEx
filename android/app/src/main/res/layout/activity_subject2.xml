@@ -1,0 +1,54 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp" >
+
+
+
+
+
+    <TextView
+        android:text="추가하는 과목이 재수강이면 O, 아니면 X"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <RadioGroup
+        android:id="@+id/rg"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+
+        <RadioButton
+            android:text="O(재수강)"
+            android:id="@+id/rb1"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content" />
+
+
+        <RadioButton
+            android:text="X(초수강)"
+            android:id="@+id/rb2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+
+
+
+
+        
+    </RadioGroup>
+
+
+
+
+
+
+</LinearLayout>

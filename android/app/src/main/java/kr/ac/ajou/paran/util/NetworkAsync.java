@@ -124,6 +124,7 @@ public class NetworkAsync extends AsyncTask {
         String temp;
         int i = 0;
         StringBuilder response = new StringBuilder();
+        StringBuilder response2 = new StringBuilder();
 
         try {
             while ((temp = br.readLine()) != null) {
@@ -140,11 +141,17 @@ public class NetworkAsync extends AsyncTask {
 
                 }
 
+                if (temp.contains("<sustLsnFgNm>"))
+                {
+                    String name2 = temp.split(">")[1].split("</")[0];
+                    response.append(name2);
+                    response.append(" ");
+                }
+
+
+
                 if (i == 3000)
                     break;
-
-
-
 
             }
         } catch (IOException e) {
