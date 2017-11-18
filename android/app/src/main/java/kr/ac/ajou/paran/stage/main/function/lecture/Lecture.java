@@ -1,4 +1,4 @@
-package kr.ac.ajou.paran.stage.main.function;
+package kr.ac.ajou.paran.stage.main.function.lecture;
 
 import android.os.Bundle;
 import android.view.View;

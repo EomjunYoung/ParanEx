@@ -1,8 +1,7 @@
-package kr.ac.ajou.paran.subject;
+package kr.ac.ajou.paran.stage.main.function.subject;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,10 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import kr.ac.ajou.paran.DBHelper.DBHelper;
-import kr.ac.ajou.paran.DBHelper.SubjectAdapter;
+import kr.ac.ajou.paran.util.DB;
+import kr.ac.ajou.paran.util.adapter.SubjectAdapter;
 import kr.ac.ajou.paran.R;
-import kr.ac.ajou.paran.stage.main.function.Subject;
 import kr.ac.ajou.paran.util.HTTP;
 
 /**
@@ -35,8 +33,7 @@ public class SubjectManage extends AppCompatActivity {
 
 
 
-    DBHelper dbHelper;
-    SQLiteDatabase db;
+    DB db;
     Button btnadd, btndel;
     ListView lv;
     int count = 1;
@@ -52,7 +49,7 @@ public class SubjectManage extends AppCompatActivity {
         btnadd = (Button) findViewById(R.id.btnadd);
         btndel = (Button) findViewById(R.id.btndel);
         lv = (ListView) findViewById(R.id.lv);
-        dbHelper = new DBHelper(getApplicationContext(), "subject.db", null, 1);
+        db = new DB(getApplicationContext());
 
 
         if(subjectList == null) {
@@ -69,7 +66,7 @@ public class SubjectManage extends AppCompatActivity {
                  String name = st.nextToken();
 
                  //list.add(st.nextToken())
-                dbHelper.insertsubject(count, retake, mandate, name);
+                db.insertSubject(count, retake, mandate, name);
                 count++;
             }
 
@@ -77,8 +74,7 @@ public class SubjectManage extends AppCompatActivity {
         }
 
         String sql = "select * from subjectinfo";
-        db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery(sql, null);
+        Cursor cursor = db.getReadableDatabase().rawQuery(sql, null);
 
        // String str = getIntent().getStringExtra("eom");
        // Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();

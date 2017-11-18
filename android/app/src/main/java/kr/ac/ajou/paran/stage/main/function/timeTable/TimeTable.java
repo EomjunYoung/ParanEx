@@ -1,4 +1,4 @@
-package kr.ac.ajou.paran.stage.main.function;
+package kr.ac.ajou.paran.stage.main.function.timeTable;
 
 import android.content.Context;
 import android.os.Bundle;

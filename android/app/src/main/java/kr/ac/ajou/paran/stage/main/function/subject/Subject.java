@@ -1,7 +1,6 @@
-package kr.ac.ajou.paran.stage.main.function;
+package kr.ac.ajou.paran.stage.main.function.subject;
 import android.content.DialogInterface;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,9 +19,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import kr.ac.ajou.paran.DBHelper.DBHelper;
 import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.util.Callback;
+import kr.ac.ajou.paran.util.DB;
 import kr.ac.ajou.paran.util.NetworkAsync;
 
 
@@ -52,8 +51,7 @@ public class Subject extends AppCompatActivity implements Callback {
     final List<String> list3 = new ArrayList<>();
     final List<String> list4 = new ArrayList<>();
 
-    DBHelper dbHelper;
-    SQLiteDatabase db;
+    DB db;
     /*public Subject(){
         super("수강과목 보기",R.layout.activity_subject);
     }*/
@@ -66,7 +64,7 @@ public class Subject extends AppCompatActivity implements Callback {
         subjectlv = (ListView) findViewById(R.id.subjectlv);
         btnback = (Button)findViewById(R.id.btnback);
         mCallback = this;
-        dbHelper = new DBHelper(getApplicationContext(), "subject.db", null, 1);
+        db = new DB(getApplicationContext());
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
 
@@ -171,8 +169,7 @@ public class Subject extends AppCompatActivity implements Callback {
 
 
                                         String sql = "select _id from subjectinfo";
-                                        db = dbHelper.getReadableDatabase();
-                                        Cursor cursor = db.rawQuery(sql, null);
+                                        Cursor cursor = db.getReadableDatabase().rawQuery(sql, null);
                                         int c = cursor.getCount();
 
 

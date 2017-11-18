@@ -1,4 +1,4 @@
-package kr.ac.ajou.paran.DBHelper;
+package kr.ac.ajou.paran.util.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
