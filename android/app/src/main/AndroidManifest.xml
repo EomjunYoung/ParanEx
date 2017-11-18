@@ -45,23 +45,23 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".stage.main.function.TimeTable"
+            android:name=".stage.main.function.timeTable.TimeTable"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".stage.main.function.Subject"
+            android:name=".stage.main.function.subject.Subject"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".stage.main.function.Lecture"
+            android:name=".stage.main.function.lecture.Lecture"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".subject.SubjectManage"
+            android:name=".stage.main.function.subject.SubjectManage"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".stage.main.function.BulltinBoard"
+            android:name=".stage.main.function.bulltinBoard.BulltinBoard"
             android:screenOrientation="portrait" />
 
         <activity android:name=".util.Recognizer"
