@@ -1,4 +1,4 @@
-package kr.ac.ajou.paran.init;
+package kr.ac.ajou.paran.stage.init;
 
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
 import kr.ac.ajou.paran.R;
-import kr.ac.ajou.paran.login.Login;
+import kr.ac.ajou.paran.stage.login.Login;
 
 public class Developer extends AppCompatActivity {
 

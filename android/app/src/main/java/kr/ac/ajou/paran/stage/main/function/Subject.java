@@ -1,21 +1,28 @@
-package kr.ac.ajou.paran.main.function;
-
+package kr.ac.ajou.paran.stage.main.function;
+import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.ListView;
+import android.widget.RadioButton;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import kr.ac.ajou.paran.DBHelper.DBHelper;
 import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.util.Callback;
-import kr.ac.ajou.paran.util.FunctionType;
 import kr.ac.ajou.paran.util.NetworkAsync;
 
 
@@ -23,278 +30,289 @@ import kr.ac.ajou.paran.util.NetworkAsync;
  * Created by user on 2017-08-11.
  */
 
-public class Lecture extends FunctionType implements Callback {
+/*public class Subject extends FunctionType*/
 
+public class Subject extends AppCompatActivity implements Callback {
 
-    private Spinner sptest;
-    private Spinner spyear, spsemester, sptype, spmajor;
-    private Button testbtn;
+    ListView subjectlv;
+    public static LinkedHashMap<String, String> basicMap;
+    private static LinkedHashMap<String, String> typeMap;
+    private static LinkedHashMap<String, String> majorMap;
     private Callback mCallback;
-    private String year;
-    private String semester;
+
+    public boolean checkBackPress;
+    private final String year = "2017";
+    private final String semester = "U0002003";
     private String type;
     private String major;
-    private static LinkedHashMap<String, String> majorMap;
-    private static LinkedHashMap<String, String> basicMap;
-    private static LinkedHashMap<String, String> semesterMap;
-    private static LinkedHashMap<String, String> typeMap;
+    Button btnback;
 
+    final List<String> list = new ArrayList<>();
+    final List<String> list2 = new ArrayList<>();
+    final List<String> list3 = new ArrayList<>();
+    final List<String> list4 = new ArrayList<>();
 
-
-    String[] yearStrings = {"2016", "2017"};
-    String[] semesterStrings = {"1학기", "여름학기", "2학기", "겨울학기"};
-    String[] typeStrings = {"전공과목", "교양과목", "기초과목", "공학기초", "영역별교양", "학점교류", "공학인증교양"};
-    String[] majorStrings = {"기계공학전공", "기계공학전공(과)", "산업정보시스템공학전공", "산업공학전공(과)", "산업정보시스템공학전공(과)" +
-            "화학공학전공", "환경공학전공(과)", "신소재공학전공", "신소재공학전공(과),", "응용화학전공", "생명공학전공", "응용화학생명공학전공" +
-            "응용화학생명공학전공(과)", "환경공학전공", "환경안전공학전공(과)", "건설시스템공학전공", "건설시스템공학전공(과)" +
-            "교통시스템공학전공", "교통시스템공학전공(과)", "건축학전공", "건축학전공(과)", "건축학전공(5년)", "건축학전공(5년)(과)"+
-            "건축공학전공", "건축공학전공(과)", "전자공학전공", "전자공학전공(과)", "소프트웨어및컴퓨터공학전공(과)", "사이버보안전공(과)"+
-            "정보컴퓨터공학전공", "컴퓨터공학전공(과)", "소프트웨어보안전공(과)", "정보컴퓨터공학전공(과)", "소프트웨어융합전공" +
-            "미디어학전공", "미디어콘텐츠전공(과)", "미디어학전공(과)", "소셜미디어전공(과)", "공군ICT전공(과)", "ICT융합전공(과)" +
-            "수학전공", "수학전공(과)", "물리학전공", "물리학전공(과)", "화학전공", "화학전공(과)", "생명과학전공", "생명과학전공(과)"+
-            "경영학전공", "경영학전공(과)", "e-비즈니스학전공", "e-비즈니스학전공(과)", "금융공학전공", "금융공학전공(과)" +
-            "스포츠마케팅학전공", "스포츠마케팅학전공(과)", "국어국문학전공", "국어국문학전공(과)", "영어영문학전공", "영어영문학전공(과)" +
-            "불어불문학전공", "불어불문학전공(과)", "사학전공", "사학전공(과)", "문화콘텐츠학전공", "경제학전공", "경제학전공(과)", "행정학전공" +
-            "행정학전공(과)", "심리학전공", "심리학전공(과)", "정치외교학전공", "정치외교학전공(과)", "스포츠레저학전공", "스포츠레저학전공(과)"+
-            "법학전공", "법학전공(과)", "의학전공(과)", "간호학전공(과)", "간호학전공(특별과정)(과)", "자유전공", "약학전공(과)"+
-            "약학전공", "한국학전공(과)", "기초의과학전공", "국제통상전공(과)", "문화산업과커뮤니케이션전공", "문화산업과커뮤니케이션전공(과)" +
-            "중국지역연구전공(과)", "문화학전공", "일본지역연구전공(과)", "지역연구전공(유럽)(과)", "지연연구전공(미국)(과)" +
-            "인문사회데이터분석전공(과)", "응용화학전공(과)", "생명공학전공(과)", "소프트웨어융합전공(과)", "기초의과학전공(과)"+
-            "융합시스템공학전공(과)", "ICT융합전공(과)(폐지)", "자동차SW전공(과)", "디지털휴머니티전공(과)"};
-
-    String[] basicStrings = {"기계공학부", "기계공학과", "산업정보시스템공학부", "산업공학과", "화공ㆍ신소재공학부"};
-
-
-
-    public Lecture() {
-        super("강의시간표 보기", R.layout.activity_lecture);
-
-
-    }
+    DBHelper dbHelper;
+    SQLiteDatabase db;
+    /*public Subject(){
+        super("수강과목 보기",R.layout.activity_subject);
+    }*/
 
     @Override
-    protected void onCreate(Bundle savedlnstanceState) {
-        super.onCreate(savedlnstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_subject);
 
-        exThread exthread = new exThread();
-
-
+        subjectlv = (ListView) findViewById(R.id.subjectlv);
+        btnback = (Button)findViewById(R.id.btnback);
         mCallback = this;
-        exthread.initspinner();
-        init();
+        dbHelper = new DBHelper(getApplicationContext(), "subject.db", null, 1);
 
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
 
-    }
+        subjectlv.setAdapter(arrayAdapter);
+        majorMap = setHashMap(majorMap);
+        typeMap = setHashMap3(typeMap);
+        basicMap = setHashMap1(basicMap);
 
-    private class exThread extends Thread {
+        list.add("전공과목");
+        list.add("교양과목");
+        list.add("기초과목");
+        list.add("영역별교양");
 
-        public exThread() {
 
-        }
-
-        public void initspinner() {
-
-            spyear = (Spinner) findViewById(R.id.year);
-            spsemester = (Spinner) findViewById(R.id.semester);
-            sptype = (Spinner) findViewById(R.id.type);
-            spmajor = (Spinner) findViewById(R.id.major);
-            majorMap = setHashMap(majorMap);
-            basicMap = setHashMap1(basicMap);
-            semesterMap = setHashMap2(semesterMap);
-            typeMap = setHashMap3(typeMap);
-
-
-            final ArrayAdapter arrayAdapter1 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, yearStrings);
-            final ArrayAdapter arrayAdapter2 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, semesterStrings);
-            final ArrayAdapter arrayAdapter3 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, typeStrings);
-            final ArrayAdapter arrayAdapter4 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, majorStrings);
-            final ArrayAdapter arrayAdapter5 = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, basicStrings);
-
-
-            spyear.setAdapter(arrayAdapter1);
-            spsemester.setAdapter(arrayAdapter2);
-            sptype.setAdapter(arrayAdapter3);
-            spmajor.setAdapter(arrayAdapter4);
-
-
-            spyear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                    if (spyear.getSelectedItem().toString() == "2017")
-                        year = "2017";
-
-                    else if (spyear.getSelectedItem().toString() == "2016")
-                        year = "2016";
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-
-                }
-            });
-
-            spsemester.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                    Set<String> set = semesterMap.keySet();
-                    Iterator<String> itr = set.iterator();
-
-
-                    while(itr.hasNext())
-                    {
-                        String str = itr.next();
-
-                        if(spsemester.getSelectedItem().toString() == str)
-                        {
-                            semester = semesterMap.get(str);
-                        }
-                    }
-
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-
-                }
-            });
-
-            sptype.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-
-                    Set<String> set = typeMap.keySet();
-                    Iterator<String> itr = set.iterator();
-
-                    while(itr.hasNext())
-                    {
-                        String str = itr.next();
-                        if(sptype.getSelectedItem().toString() == str)
-                        {
-                            type = typeMap.get(str);
-
-                            if (type == "U0209003")
-                            {
-
-                                arrayAdapter5.notifyDataSetChanged();
-                                spmajor.setAdapter(arrayAdapter5);
-
-                            }
-
-                            else if(type == "U0209001")
-                            {
-
-                                arrayAdapter4.notifyDataSetChanged();
-                                spmajor.setAdapter(arrayAdapter4);
-                            }
-
-                        }
-                    }
-
-
-
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-
-                }
-            });
-
-
-
-            spmajor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-
-
-
-
-                @Override
-                public void onItemSelected (AdapterView < ? > adapterView, View view,int i, long l){
-
-                    if(type == "U0209001") {
-                        Set<String> set = majorMap.keySet();
-                        Iterator<String> itr = set.iterator();
-
-                        while (itr.hasNext()) {
-
-                            String str = itr.next();
-
-
-
-                            if (spmajor.getSelectedItem().toString() == str) {
-
-                                major = majorMap.get(str);
-
-                            }
-                        }
-                    }
-                    else if(type == "U0209003")
-                    {
-                        Set<String> set = basicMap.keySet();
-                        Iterator<String> itr = set.iterator();
-
-                        while (itr.hasNext()) {
-
-                            String str = itr.next();
-
-
-
-                            if (spmajor.getSelectedItem().toString() == str) {
-
-                                major = basicMap.get(str);
-
-                            }
-                        }
-                    }
-
-
-                }
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-
-                }
-            });
-        }
-
-    }
-
-    public void init() {
-        sptest = (Spinner) findViewById(R.id.sptest);
-        testbtn = (Button) findViewById(R.id.testbtn);
-
-
-        testbtn.setOnClickListener(new View.OnClickListener() {
+        subjectlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                NetworkAsync networkAsync = new NetworkAsync(semester, type, major, mCallback);
-                networkAsync.execute();
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                Set<String> set = typeMap.keySet();
+                Iterator<String> itr = set.iterator();
+
+
+                while(itr.hasNext())
+                {
+
+                    String str = itr.next();
+                    String str2 = (String)subjectlv.getItemAtPosition(i);
+
+
+                    if(str2 == "전공과목")
+                    {
+
+                        type = typeMap.get(str2);
+
+                        Set<String> setM = majorMap.keySet();
+                        Iterator<String> itrM = setM.iterator();
+
+                        while(itrM.hasNext())
+                        {
+                            String majorstring = itrM.next();
+                            list2.add(majorstring);
+                        }
+
+
+                        ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list2);
+                        arrayAdapter2.notifyDataSetChanged();
+                        subjectlv.setAdapter(arrayAdapter2);
+
+                        subjectlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+
+                                Set<String> set = majorMap.keySet();
+                                Iterator<String> itr = set.iterator();
+
+
+                                while(itr.hasNext())
+                                {
+                                    String str = itr.next();
+                                    String str2 = (String)subjectlv.getItemAtPosition(i);
+
+                                    if(str == str2)
+                                    {
+                                        major = majorMap.get(str2);
+                                        NetworkAsync networkAsync = new NetworkAsync(semester, type, major, mCallback);
+                                        networkAsync.execute();
+                                        break;
+
+                                    }
+
+                                }
+
+
+                                subjectlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                                        /*String str = (String)subjectlv.getItemAtPosition(i);
+                                        Intent intent = new Intent(Subject.this, SubjectManage.class);
+                                        intent.putExtra("eom", str);
+                                        startActivity(intent);*/
+
+                                        AlertDialog.Builder ad = new AlertDialog.Builder(Subject.this);
+                                        //ad.setTitle("Title");
+                                       // ad.setMessage("Message");
+
+                                        LayoutInflater inflater = getLayoutInflater();
+                                        View view2 = inflater.inflate(R.layout.activity_subject2, null);
+                                        ad.setView(view2);
+
+
+
+                                        final RadioButton rb1 = (RadioButton)view2.findViewById(R.id.rb1);
+                                        final RadioButton rb2 = (RadioButton)view2.findViewById(R.id.rb2);
+                                        final AlertDialog dialog = ad.create();
+
+                                        ad.setView(rb1);
+                                        ad.setView(rb2);
+
+
+                                        String sql = "select _id from subjectinfo";
+                                        db = dbHelper.getReadableDatabase();
+                                        Cursor cursor = db.rawQuery(sql, null);
+                                        int c = cursor.getCount();
+
+
+                                        String retake = null;
+                                        String mandate = null;
+                                        String name = (String)subjectlv.getItemAtPosition(i);
+
+                                        //dbHelper.insertsubject(c, retake, mandate, name);
+
+
+                                        ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+
+                                                String retake = rb1.getText().toString();
+                                                String mandate = rb2.getText().toString();
+
+                                                dialog.dismiss();
+
+
+                                            }
+                                        });
+
+
+
+
+                                        dialog.show();
+
+                                    }
+                                });
+
+
+
+                            }
+                        });
+
+
+
+                    }
+
+                    else if (str2 == "교양과목")
+                    {
+
+                        type = typeMap.get(str2);
+
+                        subjectlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                                NetworkAsync networkAsync = new NetworkAsync(semester, type, mCallback);
+                                networkAsync.execute();
+
+
+
+
+                            }
+                        });
+
+
+                    }
+
+                    else if (str2 == "기초과목")
+                    {
+
+                        type = typeMap.get(str2);
+
+                        Set<String> setM = basicMap.keySet();
+                        Iterator<String> itrM = setM.iterator();
+
+
+                        while(itrM.hasNext())
+                        {
+                            String basicstring = itrM.next();
+                            list4.add(basicstring);
+                        }
+
+
+                        ArrayAdapter<String> arrayAdapter4 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list4);
+                        arrayAdapter4.notifyDataSetChanged();
+                        subjectlv.setAdapter(arrayAdapter4);
+
+                        subjectlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+
+                                Set<String> set = basicMap.keySet();
+                                Iterator<String> itr = set.iterator();
+
+
+                                while(itr.hasNext())
+                                {
+                                    String str = itr.next();
+                                    String str2 = (String)subjectlv.getItemAtPosition(i);
+
+                                    if(str == str2)
+                                    {
+                                        major = basicMap.get(str2);
+                                        NetworkAsync networkAsync = new NetworkAsync(semester, type, major, mCallback);
+                                        networkAsync.execute();
+                                        break;
+
+                                    }
+
+                                }
+
+
+                            }
+                        });
+
+                    }
+
+                }
+
+
+
             }
         });
 
-    }
-
-
-    @Override
-    public void getReturn(Object o) {
-
-
-        String string = o.toString();
-        StringTokenizer s = new StringTokenizer(string);
-        ArrayList arrayList = new ArrayList();
-
-        while (s.hasMoreTokens()) {
-
-            arrayList.add(s.nextToken());
-        }
-
-        ArrayAdapter arrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, arrayList);
-        sptest.setAdapter(arrayAdapter);
-
 
     }
+
+    public static LinkedHashMap<String, String> setHashMap3(LinkedHashMap<String, String> typeMap)
+    {
+        typeMap = new LinkedHashMap<>();
+
+        typeMap.put("전공과목", "U0209001");
+        typeMap.put("교양과목", "U0209002");
+        typeMap.put("기초과목", "U0209003");
+        //typeMap.put("공학기초", "U0209004");
+        typeMap.put("영역별교양","U0209005");
+        //typeMap.put("학점교류", "U0209006");
+        //typeMap.put("공학인증교양", "U0209007");
+
+        return typeMap;
+    }
+
 
     public static LinkedHashMap<String, String> setHashMap(LinkedHashMap<String, String> majorMap)
     {
@@ -409,9 +427,11 @@ public class Lecture extends FunctionType implements Callback {
         return majorMap;
     }
 
+
     public static LinkedHashMap<String, String> setHashMap1(LinkedHashMap<String, String> basicMap) {
         basicMap = new LinkedHashMap<>();
 
+        basicMap.put("공통", "00");
         basicMap.put("기계공학부", "DS03001002");
         basicMap.put("기계공학과", "DS03001021");
         basicMap.put("산업정보시스템공학부", "DS03001003");
@@ -479,47 +499,50 @@ public class Lecture extends FunctionType implements Callback {
         basicMap.put("융합시스템공학과", "DS03001030");
         basicMap.put("자동차SW전공", "DS0300204");
         basicMap.put("디지털휴머니티전공", "DS03005026");
-        basicMap.put("기계공학부", "DS03001002");
-        basicMap.put("기계공학부", "DS03001002");
-        basicMap.put("기계공학부", "DS03001002");
 
 
         return basicMap;
     }
 
-    public static LinkedHashMap<String, String> setHashMap2(LinkedHashMap<String, String> semesterMap)
-    {
-        semesterMap = new LinkedHashMap<>();
-
-        semesterMap.put("1학기", "U0002001");
-        semesterMap.put("여름학기","U0002002");
-        semesterMap.put("2학기", "U0002003");
-        semesterMap.put("겨울학기", "U0002004");
+    @Override
+    public void getReturn(Object o) {
 
 
-        return semesterMap;
+        String string = o.toString();
+        StringTokenizer s = new StringTokenizer(string, " ");
+
+        while (s.hasMoreTokens()) {
+
+            String name = s.nextToken();
+            String mandate = s.nextToken();
+
+
+            list3.add("과목 :" + name + "  " + "구분 :"+ mandate );
+        }
+
+
+        ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list3);
+        arrayAdapter3.notifyDataSetChanged();
+        subjectlv.setAdapter(arrayAdapter3);
+
+
+
+
+       /* String string = o.toString();
+        StringTokenizer s = new StringTokenizer(string);
+        ArrayList arrayList = new ArrayList();
+
+        while (s.hasMoreTokens()) {
+
+            arrayList.add(s.nextToken());
+        }
+
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, arrayList);
+        subjectlv.setAdapter(arrayAdapter);
+*/
+
+
     }
-
-
-    public static LinkedHashMap<String, String> setHashMap3(LinkedHashMap<String, String> typeMap)
-    {
-        typeMap = new LinkedHashMap<>();
-
-        typeMap.put("전공과목", "U0209001");
-        typeMap.put("교양과목", "U0209002");
-        typeMap.put("기초과목", "U0209003");
-        typeMap.put("공학기초", "U0209004");
-        typeMap.put("영역별교양","U0209005");
-        typeMap.put("학점교류", "U0209006");
-        typeMap.put("공학인증교양", "U0209007");
-
-        return typeMap;
-    }
-
-
 
 
 }
-
-
-

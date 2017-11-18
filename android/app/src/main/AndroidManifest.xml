@@ -34,26 +34,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".init.Developer"
+            android:name=".stage.init.Developer"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".login.Login"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".main.Main"
+            android:name=".stage.login.Login"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".main.function.TimeTable"
+            android:name=".stage.main.Main"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".main.function.Subject"
+            android:name=".stage.main.function.TimeTable"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".main.function.Lecture"
+            android:name=".stage.main.function.Subject"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".stage.main.function.Lecture"
             android:screenOrientation="portrait" />
 
         <activity
@@ -61,7 +61,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".main.function.BulltinBoard"
+            android:name=".stage.main.function.BulltinBoard"
             android:screenOrientation="portrait" />
 
         <activity android:name=".util.Recognizer"

@@ -18,7 +18,6 @@ public class FunctionType extends AppCompatActivity {
     private int layout;
     private String title;
 
-    private Button buttonBack;
     private TextView textTitle;
 
     public FunctionType(String title, int layout){
@@ -32,12 +31,5 @@ public class FunctionType extends AppCompatActivity {
 
         textTitle = (TextView)findViewById(R.id.textTitle);
         textTitle.setText(title);
-        buttonBack = (Button)findViewById(R.id.buttonBack);
-        buttonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
     }
 }

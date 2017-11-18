@@ -1,4 +1,4 @@
-package kr.ac.ajou.paran.login;
+package kr.ac.ajou.paran.stage.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import kr.ac.ajou.paran.R;
-import kr.ac.ajou.paran.main.Main;
+import kr.ac.ajou.paran.stage.main.Main;
 import kr.ac.ajou.paran.util.HTTP;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {

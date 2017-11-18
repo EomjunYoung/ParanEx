@@ -1,4 +1,4 @@
-package kr.ac.ajou.paran.main;
+package kr.ac.ajou.paran.stage.main;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,17 +12,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import kr.ac.ajou.paran.R;
-import kr.ac.ajou.paran.main.dialog.AlertTrans;
-import kr.ac.ajou.paran.main.dialog.CheckSavedTable;
-import kr.ac.ajou.paran.main.dialog.InitSubject;
-import kr.ac.ajou.paran.main.function.BulltinBoard;
-import kr.ac.ajou.paran.main.function.Lecture;
+import kr.ac.ajou.paran.stage.main.dialog.AlertTrans;
+import kr.ac.ajou.paran.stage.main.dialog.CheckSavedTable;
+import kr.ac.ajou.paran.stage.main.dialog.InitSubject;
+import kr.ac.ajou.paran.stage.main.function.BulltinBoard;
+import kr.ac.ajou.paran.stage.main.function.Lecture;
 import kr.ac.ajou.paran.subject.SubjectManage;
 import kr.ac.ajou.paran.util.DB;
 import kr.ac.ajou.paran.util.HTTP;
 import kr.ac.ajou.paran.util.Raw;
 import kr.ac.ajou.paran.util.Recognizer;
-import kr.ac.ajou.paran.object.User;
+import kr.ac.ajou.paran.util.object.User;
 
 
 /**

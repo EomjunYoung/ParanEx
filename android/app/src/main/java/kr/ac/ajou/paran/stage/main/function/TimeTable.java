@@ -1,15 +1,8 @@
-package kr.ac.ajou.paran.main.function;
+package kr.ac.ajou.paran.stage.main.function;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -18,6 +11,7 @@ import java.util.ArrayList;
 import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.util.HTTP;
 import kr.ac.ajou.paran.util.Raw;
+import kr.ac.ajou.paran.util.adapter.TableAdapter;
 
 
 /**
@@ -47,75 +41,10 @@ public class TimeTable extends AppCompatActivity {
         setGridView();
     }
 
-    class GridAdapter extends BaseAdapter {
-        Context context;
-        int layout;
-        ArrayList<String> subjects;
-        LayoutInflater layoutInflater;
-
-        public GridAdapter(Context context, int layout, ArrayList<String> subjects) {
-            this.context = context;
-            this.layout = layout;
-            this.subjects = subjects;
-            layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        }
-
-        @Override
-        public int getCount() {
-            return subjects.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return subjects.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            if (convertView == null) {
-                convertView = layoutInflater.inflate(layout, null);
-                holder = new ViewHolder();
-                holder.textView = (TextView) convertView.findViewById(R.id.textView);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            holder.textView.setHeight((int)(gridViewHeight/24));
-            holder.textView.setText(getItem(position).toString());
-            if(position % 6==0){
-                holder.textView.setBackgroundColor(getResources().getColor(R.color.login_input));
-                holder.textView.setTextColor(getResources().getColor(R.color.white));
-                holder.textView.setGravity(Gravity.TOP|Gravity.RIGHT);
-            }else{
-                holder.textView.setBackgroundResource(R.drawable.grid_item);
-                holder.textView.setTextColor(getResources().getColor(R.color.login_input));
-            }
-
-            return convertView;
-        }
-    }
-    public class ViewHolder {
-        TextView textView;
-    }
-
     public void initSetting(){
         context = this;
         TextView textTitle = (TextView)findViewById(R.id.textTitle);
         textTitle.setText("인식편집");
-        Button buttonBack = (Button)findViewById(R.id.buttonBack);
-        buttonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
     }
 
     public void getTimeTable(){
@@ -161,7 +90,7 @@ public class TimeTable extends AppCompatActivity {
             @Override
             public void run() {
                 gridViewHeight = gridView.getHeight();
-                gridView.setAdapter(new GridAdapter(context,R.layout.grid_subject,subjects));
+                gridView.setAdapter(new TableAdapter(context,R.layout.grid_subject,subjects,gridViewHeight));
                 gridView.getLayoutParams().height = (int)(gridViewHeight/24)*24;
             }
         });

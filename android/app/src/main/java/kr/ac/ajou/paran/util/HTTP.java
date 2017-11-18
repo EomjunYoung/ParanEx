@@ -20,7 +20,7 @@ import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import kr.ac.ajou.paran.object.User;
+import kr.ac.ajou.paran.util.object.User;
 
 /**
  * Created by dream on 2017-08-05.

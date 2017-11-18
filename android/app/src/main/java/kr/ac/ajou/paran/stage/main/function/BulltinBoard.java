@@ -1,4 +1,4 @@
-package kr.ac.ajou.paran.main.function;
+package kr.ac.ajou.paran.stage.main.function;
 
 import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.util.FunctionType;

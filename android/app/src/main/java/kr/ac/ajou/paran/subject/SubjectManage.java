@@ -16,7 +16,7 @@ import java.util.StringTokenizer;
 import kr.ac.ajou.paran.DBHelper.DBHelper;
 import kr.ac.ajou.paran.DBHelper.SubjectAdapter;
 import kr.ac.ajou.paran.R;
-import kr.ac.ajou.paran.main.function.Subject;
+import kr.ac.ajou.paran.stage.main.function.Subject;
 import kr.ac.ajou.paran.util.HTTP;
 
 /**
