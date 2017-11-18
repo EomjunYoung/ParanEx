@@ -1,6 +1,7 @@
 package kr.ac.ajou.paran.util;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -135,8 +136,12 @@ public class NetworkAsync extends AsyncTask {
                 if (temp.contains("<sbjtKorNm>")) {
 
                     String name = temp.split(">")[1].split("</")[0];
+                    if (name.contains("&#32;"))
+                    {
+                        name = name.replace("&#32;", " ");
+                    }
                     response.append(name);
-                    response.append(" ");
+                    response.append("E");
 
 
                 }
@@ -145,7 +150,7 @@ public class NetworkAsync extends AsyncTask {
                 {
                     String name2 = temp.split(">")[1].split("</")[0];
                     response.append(name2);
-                    response.append(" ");
+                    response.append("E");
                 }
 
 
@@ -241,8 +246,14 @@ public class NetworkAsync extends AsyncTask {
                 if (temp.contains("<sbjtKorNm>")) {
 
                     String name = temp.split(">")[1].split("</")[0];
+
+                    if (name.contains("&#32;"))
+                    {
+                        name = name.replace("&#32;", " ");
+                    }
+
                     response.append(name);
-                    response.append(" ");
+                    response.append("E");
 
 
                 }
@@ -341,10 +352,19 @@ public class NetworkAsync extends AsyncTask {
                 if (temp.contains("<sbjtKorNm>")) {
 
                     String name = temp.split(">")[1].split("</")[0];
+                    if (name.contains("&#32;"))
+                    {
+                        name = name.replace("&#32;", " ");
+                    }
                     response.append(name);
-                    response.append(" ");
+                    response.append("E");
+                }
 
-
+                if (temp.contains("<sustLsnFgNm>"))
+                {
+                    String name2 = temp.split(">")[1].split("</")[0];
+                    response.append(name2);
+                    response.append("E");
                 }
 
                 if (i == 10000)

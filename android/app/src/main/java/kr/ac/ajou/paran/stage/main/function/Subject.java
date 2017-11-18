@@ -509,7 +509,7 @@ public class Subject extends AppCompatActivity implements Callback {
 
 
         String string = o.toString();
-        StringTokenizer s = new StringTokenizer(string, " ");
+        StringTokenizer s = new StringTokenizer(string, "E");
 
         while (s.hasMoreTokens()) {
 
