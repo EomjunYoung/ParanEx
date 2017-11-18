@@ -8,5 +8,13 @@
     android:background="@drawable/gradation"
     android:weightSum="10"
     android:orientation="vertical">
-    <include layout="@layout/common_function_upper" />
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:textStyle="bold"
+        android:textSize="30dp"
+        android:textAlignment="center"
+        android:gravity="center_vertical"/>
 </LinearLayout>
