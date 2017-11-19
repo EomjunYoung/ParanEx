@@ -300,23 +300,23 @@ def getLecture(request):
 	major = []
 	major = getMajor(2017,2,major)
 	for m in major:
-		Lecture(name=m[0],time=m[1]).save()
+		Lecture(name=m[0],time=m[1],type=m[2],grade=m[3],score=m[4]).save()
 
 	culture = []
 	culture = getCulture(2017,2,culture)
 	for c in culture:
-		Lecture(name=c[0],time=c[1]).save()
+		Lecture(name=c[0],time=c[1],type=c[2],grade=c[3],score=c[4]).save()
 
 	base = []
 	base = getBase(2017,2,'00',base)
 	base = getBase(2017,2,'DS0300202',base)
 	for b in base:
-		Lecture(name=b[0],time=b[1]).save()
+		Lecture(name=b[0],time=b[1],type=b[2],grade=b[3],score=b[4]).save()
 
 	area = []
 	area = getArea(2017,2,area)
 	for a in area:
-		Lecture(name=a[0],time=a[1]).save()
+		Lecture(name=a[0],time=a[1],type=a[2],grade=a[3],score=a[4]).save()
 	return render(request,'server/template/index.html')
 
 def test(request):

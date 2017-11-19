@@ -28,7 +28,13 @@ def getMajor(year,semester,major):
 	if response.status == 200:
 		root = e.fromstring(response.read())
 		for r in root.find('dataset').findall('record'):
-			major.append((r.find('sbjtKorNm').text.replace(' ',''),r.find('ltTmNm').text))
+			name = r.find('sbjtKorNm').text.replace(' ','')
+			time = r.find('ltTmNm').text
+			type = r.find('sustLsnFgNm').text
+			grade= int(r.find('rcomShyrCdNm').text[0:1]) if (r.find('rcomShyrCdNm').text!=None) else 0
+			score = int(r.find('pnt').text)
+			value = (name,time,type,grade,score)
+			major.append(value)
 	h.close()
 	return major
 	
@@ -53,7 +59,13 @@ def getCulture(year,semester,culture):
 	if response.status == 200:
 		root = e.fromstring(response.read())
 		for r in root.find('dataset').findall('record'):
-			culture.append((r.find('sbjtKorNm').text.replace(' ',''),r.find('ltTmNm').text))
+			name = r.find('sbjtKorNm').text.replace(' ','')
+			time = r.find('ltTmNm').text
+			type = r.find('sustLsnFgNm').text
+			grade= int(r.find('rcomShyrCdNm').text[0:1]) if (r.find('rcomShyrCdNm').text!=None) else 0
+			score = int(r.find('pnt').text)
+			value = (name,time,type,grade,score)
+			culture.append(value)
 	h.close()
 	return culture;
 
@@ -79,7 +91,13 @@ def getBase(year,semester,major,base):
 	if response.status == 200:
 		root = e.fromstring(response.read())
 		for r in root.find('dataset').findall('record'):
-			base.append((r.find('sbjtKorNm').text.replace(' ',''),r.find('ltTmNm').text))
+			name = r.find('sbjtKorNm').text.replace(' ','')
+			time = r.find('ltTmNm').text
+			type = r.find('sustLsnFgNm').text
+			grade= int(r.find('rcomShyrCdNm').text[0:1]) if (r.find('rcomShyrCdNm').text!=None) else 0
+			score = int(r.find('pnt').text)
+			value = (name,time,type,grade,score)
+			base.append(value)
 	h.close()
 	return base;
 
@@ -104,6 +122,12 @@ def getArea(year,semester,area):
 	if response.status == 200:
 		root = e.fromstring(response.read())
 		for r in root.find('dataset').findall('record'):
-			area.append((r.find('sbjtKorNm').text.replace(' ',''),r.find('ltTmNm').text))
+			name = r.find('sbjtKorNm').text.replace(' ','')
+			time = r.find('ltTmNm').text
+			type = r.find('sustLsnFgNm').text
+			grade= int(r.find('rcomShyrCdNm').text[0:1]) if (r.find('rcomShyrCdNm').text!=None) else 0
+			score = int(r.find('pnt').text)
+			value = (name,time,type,grade,score)
+			area.append(value)
 	h.close()
 	return area;
