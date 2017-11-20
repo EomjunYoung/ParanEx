@@ -5,7 +5,9 @@ package kr.ac.ajou.paran.util;
  */
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +32,7 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 
 import kr.ac.ajou.paran.R;
+import kr.ac.ajou.paran.stage.main.function.timeTable.TimeTable;
 
 public class Recognizer extends AppCompatActivity
         implements CameraBridgeViewBase.CvCameraViewListener2, View.OnTouchListener {
@@ -44,14 +47,7 @@ public class Recognizer extends AppCompatActivity
     private String ip = "";
     private String port = "";
     private int number;
-    private TextView textFPS;
-
-    /* refer : http://gogorchg.tistory.com/entry/Android-FPS-구하기 [항상 초심으로] */
-    long fpsStartTime = 0L;             // Frame 시작 시간
-    int frameCnt = 0;                      // 돌아간 Frame 갯수
-    double timeElapsed = 0.0f;         // 그 동안 쌓인 시간 차이
-    float fps;
-    /* refer : http://gogorchg.tistory.com/entry/Android-FPS-구하기 [항상 초심으로] */
+    private Context context;
 
     public native void rectangle(long matAddrInput, long matAddrResult);
 
@@ -90,10 +86,10 @@ public class Recognizer extends AppCompatActivity
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        context = getApplicationContext();
         number = getIntent().getIntExtra("number",number);
         recognizer = this;
         matResult = null;
-        textFPS =(TextView)findViewById(R.id.textFPS);
         buttonCapture = (Button)findViewById(R.id.buttonCapture);
         buttonCapture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,12 +97,15 @@ public class Recognizer extends AppCompatActivity
                 if(matResult == null)
                     Toast.makeText(recognizer, "can not recognize table", Toast.LENGTH_SHORT).show();
                 else{
-                    textFPS.setText("FPS : "+fps);
                     rectangle(matInput.getNativeObjAddr(), matResult.getNativeObjAddr());
                     ip = Raw.readIP(Recognizer.this);
                     port = Raw.readPort(Recognizer.this);
                     if(!ip.equals("") && !port.equals("")){
-                        Toast.makeText(recognizer,  HTTP.postTable(ip+":"+port,number), Toast.LENGTH_SHORT).show();
+                        String data = HTTP.postTable(ip+":"+port,number);
+                        if (data.indexOf('/')<0)
+                            Toast.makeText(recognizer, "can not recognize table", Toast.LENGTH_SHORT).show();
+                        else
+                            context.startActivity(new Intent(context, TimeTable.class).putExtra("number", number));
                     }else
                         Toast.makeText(recognizer, "We can not find server information", Toast.LENGTH_SHORT).show();
                     matResult.release();
@@ -175,23 +174,6 @@ public class Recognizer extends AppCompatActivity
         if(matResult == null)
             matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
         rectangle(matInput.getNativeObjAddr(), matResult.getNativeObjAddr());
-
-
-    /* refer : http://gogorchg.tistory.com/entry/Android-FPS-구하기 [항상 초심으로] */
-        long fpsEndTime = System.currentTimeMillis();
-        float timeDelta = (fpsEndTime - fpsStartTime) * 0.001f;
-
-        frameCnt++;
-        timeElapsed += timeDelta;
-
-        if(timeElapsed >= 1.0f){
-            fps = (float)(frameCnt/timeElapsed);
-
-            frameCnt = 0;
-            timeElapsed = 0.0f;
-        }
-        fpsStartTime = System.currentTimeMillis();
-    /* refer : http://gogorchg.tistory.com/entry/Android-FPS-구하기 [항상 초심으로] */
 
         return matInput;
     }
