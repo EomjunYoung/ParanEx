@@ -64,6 +64,10 @@
             android:name=".stage.main.function.bulltinBoard.BulltinBoard"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".stage.main.function.timeTable.sub.Constraint"
+            android:screenOrientation="portrait" />
+
         <activity android:name=".util.Recognizer"
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation"/>
