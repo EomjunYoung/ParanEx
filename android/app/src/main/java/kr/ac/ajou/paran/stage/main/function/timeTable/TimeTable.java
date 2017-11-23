@@ -1,14 +1,18 @@
 package kr.ac.ajou.paran.stage.main.function.timeTable;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import kr.ac.ajou.paran.R;
+import kr.ac.ajou.paran.stage.main.function.timeTable.sub.Constraint;
 import kr.ac.ajou.paran.util.HTTP;
 import kr.ac.ajou.paran.util.Raw;
 import kr.ac.ajou.paran.util.adapter.TableAdapter;
@@ -18,7 +22,7 @@ import kr.ac.ajou.paran.util.adapter.TableAdapter;
  * Created by user on 2017-08-11.
  */
 
-public class TimeTable extends AppCompatActivity {
+public class TimeTable extends AppCompatActivity{
 
     private Context context;
 
@@ -45,6 +49,15 @@ public class TimeTable extends AppCompatActivity {
         context = this;
         TextView textTitle = (TextView)findViewById(R.id.textTitle);
         textTitle.setText("인식편집");
+        Button buttonPass = (Button)findViewById(R.id.buttonOK);
+        buttonPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(context, Constraint.class).putExtra("parser",parser));
+                finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+        });
     }
 
     public void getTimeTable(){
