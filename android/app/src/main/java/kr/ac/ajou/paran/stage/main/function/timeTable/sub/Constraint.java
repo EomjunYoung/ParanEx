@@ -6,12 +6,15 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import kr.ac.ajou.paran.R;
+import kr.ac.ajou.paran.stage.main.function.timeTable.sub.dialog.ReInput;
+import kr.ac.ajou.paran.stage.main.function.timeTable.sub.dialog.ScoreInput;
 import kr.ac.ajou.paran.util.adapter.ConstraintAdapter;
 
 /**
@@ -38,6 +41,7 @@ public class Constraint extends AppCompatActivity {
         initSetting();
         makeSubjects();
         setGridView();
+        setDialog();
     }
 
     public void initSetting(){
@@ -108,4 +112,24 @@ public class Constraint extends AppCompatActivity {
             }
         });
     }
+
+    private void setDialog() {
+        final TextView textScore = (TextView) findViewById(R.id.textScore);
+        textScore.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                new ScoreInput(context, textScore).showDialog();
+                return false;
+            }
+        });
+
+        Button buttonRe = (Button) findViewById(R.id.buttonRe);
+        buttonRe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new ReInput(context).showDialog();
+            }
+        });
+    }
+
 }
