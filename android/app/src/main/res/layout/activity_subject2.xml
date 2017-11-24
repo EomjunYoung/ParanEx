@@ -17,7 +17,7 @@
 
 
     <RadioGroup
-        android:id="@+id/rg"
+        android:id="@+id/rgbtn"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

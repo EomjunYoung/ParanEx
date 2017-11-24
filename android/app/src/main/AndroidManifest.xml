@@ -26,7 +26,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name="kr.ac.ajou.paran.play.Play">
+        <activity android:name="kr.ac.ajou.paran.stage.login.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,9 +36,7 @@
         <activity
             android:name=".stage.init.Developer"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".stage.login.Login"
-            android:screenOrientation="portrait" />
+
 
         <activity
             android:name=".stage.main.Main"

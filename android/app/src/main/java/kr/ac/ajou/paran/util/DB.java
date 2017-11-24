@@ -8,6 +8,7 @@ import android.util.Log;
 
 import java.util.StringTokenizer;
 
+import static android.R.attr.x;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
@@ -16,15 +17,13 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class DB extends SQLiteOpenHelper {
 
-    private static final String DB_NAME = "mydb.db";
+    private static final String DB_NAME = "mydb2.db";
 
-    private SQLiteDatabase db;
-    private StringBuilder sb;
+    private StringBuilder sb = new StringBuilder();
 
-    public DB(Context context) {
-        super(context, DB_NAME, null, 1);
-        sb = new StringBuilder();
-        db = getReadableDatabase();
+    public DB(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, name, factory, 1);
+
     }
 
     public void initStringBuilder() {
@@ -36,8 +35,9 @@ public class DB extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         initStringBuilder();
 
+
         try {
-            sb.append("CREATE TABLE IF NOT EXISTS subjectinfo( ");
+            sb.append("CREATE TABLE IF NOT EXISTS subjectinfo2( ");
             sb.append("_id integer PRIMARY KEY, ");
             sb.append("retake varchar(20), ");
             sb.append("mandate varchar(20), ");
@@ -54,10 +54,11 @@ public class DB extends SQLiteOpenHelper {
     public void insertSubject(int _id, String retake, String mandate, String name)
     {
         initStringBuilder();
+
         try{
             SQLiteDatabase db = getWritableDatabase();
-            sb.append("INSERT INTO subjectinfo VALUES( ");
-            sb.append("'"+ _id +"', '"+ retake +"' , '"+ mandate +"', '"+ name +"'");
+            sb.append("INSERT INTO subjectinfo2 VALUES( ");
+            sb.append(""+ _id +", '"+ retake +"' , '"+ mandate +"', '"+ name +"'");
             sb.append(")");
             db.execSQL(sb.toString());
             db.close();
@@ -71,9 +72,9 @@ public class DB extends SQLiteOpenHelper {
         initStringBuilder();
         try{
             SQLiteDatabase db = getWritableDatabase();
-            sb.append("DELETE FROM subjectinfo(");
-            sb.append("WHERE = '"+ _id +"'");
-            sb.append(")");
+            sb.append("DELETE FROM subjectinfo2 ");
+            sb.append("WHERE _id="+_id+"");
+
             db.execSQL(sb.toString());
             db.close();
         } catch(Exception e) {

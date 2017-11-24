@@ -1,16 +1,22 @@
 package kr.ac.ajou.paran.stage.main.function.subject;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,6 +29,12 @@ import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.util.Callback;
 import kr.ac.ajou.paran.util.DB;
 import kr.ac.ajou.paran.util.NetworkAsync;
+
+import static android.icu.text.Normalizer.YES;
+import static kr.ac.ajou.paran.R.id.rb1;
+import static kr.ac.ajou.paran.R.id.rb2;
+import static kr.ac.ajou.paran.R.id.rgbtn;
+import static kr.ac.ajou.paran.R.id.subjectlv;
 
 
 /**
@@ -64,7 +76,7 @@ public class Subject extends AppCompatActivity implements Callback {
         subjectlv = (ListView) findViewById(R.id.subjectlv);
         btnback = (Button)findViewById(R.id.btnback);
         mCallback = this;
-        db = new DB(getApplicationContext());
+        db = new DB(getApplicationContext(), "mydb2.db", null, 1);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
 
@@ -143,7 +155,7 @@ public class Subject extends AppCompatActivity implements Callback {
 
                                 subjectlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
-                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                    public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
 
                                         /*String str = (String)subjectlv.getItemAtPosition(i);
                                         Intent intent = new Intent(Subject.this, SubjectManage.class);
@@ -151,53 +163,99 @@ public class Subject extends AppCompatActivity implements Callback {
                                         startActivity(intent);*/
 
                                         AlertDialog.Builder ad = new AlertDialog.Builder(Subject.this);
-                                        //ad.setTitle("Title");
-                                       // ad.setMessage("Message");
+                                        ad.setTitle("Title");
+                                        ad.setMessage("재수강 과목이시면 체크 후 YES를, 아니면 NO를 눌러주세요.");
 
-                                        LayoutInflater inflater = getLayoutInflater();
-                                        View view2 = inflater.inflate(R.layout.activity_subject2, null);
-                                        ad.setView(view2);
+                                       // LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                      //  final ViewGroup view2 = (ViewGroup)inflater.inflate(R.layout.activity_subject2, null);
+                                      //  ad.setView(view2);
 
 
-
-                                        final RadioButton rb1 = (RadioButton)view2.findViewById(R.id.rb1);
+                                        /*final RadioButton rb1 = (RadioButton)view2.findViewById(R.id.rb1);
                                         final RadioButton rb2 = (RadioButton)view2.findViewById(R.id.rb2);
-                                        final AlertDialog dialog = ad.create();
+                                        final RadioGroup rgbtn = (RadioGroup)view2.findViewById(R.id.rgbtn);*/
 
-                                        ad.setView(rb1);
-                                        ad.setView(rb2);
+                                        final RadioGroup rgbtn = new RadioGroup(Subject.this);
+                                        final RadioButton rbbtn = new RadioButton(Subject.this);
 
+                                        rbbtn.setText("O(재수강은 선택후 YES)");
 
-                                        String sql = "select _id from subjectinfo";
+                                        ad.setView(rgbtn);
+                                        ad.setView(rbbtn);
+
+                                        String sql = "select _id from subjectinfo2";
                                         Cursor cursor = db.getReadableDatabase().rawQuery(sql, null);
-                                        int c = cursor.getCount();
-
-
-                                        String retake = null;
-                                        String mandate = null;
-                                        String name = (String)subjectlv.getItemAtPosition(i);
+                                        final int c = cursor.getCount();
 
                                         //dbHelper.insertsubject(c, retake, mandate, name);
-
 
                                         ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
 
+                                                String str = rbbtn.getText().toString();
+                                                String retake = str.substring(0,1);
+                                                //String str3 = (String)subjectlv.getItemAtPosition(i);
+                                                String tmp = null;
+                                                String name = null;
+                                                String type = null;
+                                                try{
 
-                                                String retake = rb1.getText().toString();
-                                                String mandate = rb2.getText().toString();
+
+                                                   tmp = ((String)subjectlv.getItemAtPosition(i));
+                                                   name = tmp.substring(tmp.indexOf(":")+1, tmp.indexOf("구분"));
+                                                   type = tmp.substring(tmp.indexOf("구분")+4, tmp.length());
+                                                   Toast.makeText(getApplicationContext(), c+"", Toast.LENGTH_SHORT).show();
+                                                   db.insertSubject(c+1, retake, type, name);
+                                                   Intent intent = new Intent(Subject.this, SubjectManage.class);
+                                                   startActivity(intent);
+
+                                               }
+
+                                               catch (Exception e)
+                                               {
+                                                   e.printStackTrace();
+                                               }
 
                                                 dialog.dismiss();
-
 
                                             }
                                         });
 
+                                        ad.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
 
 
+                                                //String str3 = (String)subjectlv.getItemAtPosition(i);
+                                                String tmp = null;
+                                                String name = null;
+                                                String type = null;
+                                                try{
 
-                                        dialog.show();
+
+                                                    tmp = ((String)subjectlv.getItemAtPosition(i));
+                                                    name = tmp.substring(tmp.indexOf(":")+1, tmp.indexOf("구분"));
+                                                    type = tmp.substring(tmp.indexOf("구분")+4, tmp.length());
+                                                    Toast.makeText(getApplicationContext(), c+"", Toast.LENGTH_SHORT).show();
+                                                    db.insertSubject(c+1, "X", type, name);
+                                                    Intent intent = new Intent(Subject.this, SubjectManage.class);
+                                                    startActivity(intent);
+
+                                                }
+
+                                                catch (Exception e)
+                                                {
+                                                    e.printStackTrace();
+                                                }
+
+
+                                                dialog.dismiss();
+                                            }
+                                        });
+
+                                        ad.create();
+                                        ad.show();
 
                                     }
                                 });
@@ -229,6 +287,8 @@ public class Subject extends AppCompatActivity implements Callback {
 
                             }
                         });
+
+
 
 
                     }

@@ -67,7 +67,7 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
         buttonTimeTable.setOnClickListener(this);
 
         /*DB 생성*/
-        db = new DB(this);
+        db = new DB(getApplicationContext(), "mydb2.db", null, 1);
         /*DB 생성*/
 
         /*유저 정보 받아옴*/
