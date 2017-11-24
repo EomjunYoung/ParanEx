@@ -17,6 +17,7 @@
             android:textAlignment="center" />
 
         <TextView
+            android:id="@+id/textMon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -24,6 +25,7 @@
             android:textAlignment="center" />
 
         <TextView
+            android:id="@+id/textTue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -31,6 +33,7 @@
             android:textAlignment="center" />
 
         <TextView
+            android:id="@+id/textWed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -38,6 +41,7 @@
             android:textAlignment="center" />
 
         <TextView
+            android:id="@+id/textThu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -45,6 +49,7 @@
             android:textAlignment="center"/>
 
         <TextView
+            android:id="@+id/textFri"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

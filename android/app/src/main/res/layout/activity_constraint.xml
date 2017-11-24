@@ -49,8 +49,12 @@
                     android:text="학점"
                     android:background="@drawable/gradation_blue"/>
                 <TextView
+                    android:id="@+id/textScore"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/login_input"
+                    android:text="19학점"
                     android:background="@color/white"/>
             </LinearLayout>
 

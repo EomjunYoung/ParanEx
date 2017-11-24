@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -11,7 +13,6 @@ import java.util.ArrayList;
 
 import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.util.adapter.ConstraintAdapter;
-import kr.ac.ajou.paran.util.adapter.TableAdapter;
 
 /**
  * Created by dream on 2017-11-23.
@@ -21,6 +22,8 @@ public class Constraint extends AppCompatActivity {
 
     private Context context;
     private String parser;
+
+    private ConstraintAdapter adapter;
 
     private int gridViewHeight;
     private final int NUMBER_OF_ITEMS = 6*2*12;
@@ -54,7 +57,7 @@ public class Constraint extends AppCompatActivity {
                 subjects.add("");
         }
 
-        //parser = "시프:1s10.5f11.0/객프:3s9.0f10.5/";
+        parser = "시프:1s10.5f11.0/객프:3s9.0f10.5/";
         if(parser != null){
             String name;
             int week;
@@ -79,8 +82,29 @@ public class Constraint extends AppCompatActivity {
             @Override
             public void run() {
                 gridViewHeight = gridView.getHeight();
-                gridView.setAdapter(new ConstraintAdapter(context,R.layout.grid_subject,subjects,gridViewHeight));
-                gridView.getLayoutParams().height = (int)(gridViewHeight/24)*24;
+                adapter = new ConstraintAdapter(context,R.layout.grid_subject,subjects,gridViewHeight);
+                gridView.setAdapter(adapter);
+                gridView.getLayoutParams().height = (gridViewHeight/24)*24;
+
+                TextView textWeek[] = new TextView[5];
+                textWeek[0] = (TextView)findViewById(R.id.textMon);
+                textWeek[1] = (TextView)findViewById(R.id.textTue);
+                textWeek[2] = (TextView)findViewById(R.id.textWed);
+                textWeek[3] = (TextView)findViewById(R.id.textThu);
+                textWeek[4] = (TextView)findViewById(R.id.textFri);
+
+                for(int i=0;i<5;i++) {
+                    final int finalI = i;
+                    textWeek[i].setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View view, MotionEvent motionEvent) {
+                            adapter.setColumn(finalI);
+                            adapter.notifyDataSetInvalidated();
+                            return false;
+                        }
+                    });
+                }
+
             }
         });
     }
