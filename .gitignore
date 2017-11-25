@@ -40,7 +40,7 @@ db.sqlite3
 #python delete graduate info
 python/server/graduate/*.txt
 
-android/.idea/misc.xml
+android/.idea/*
 android/build.gradle
 android/openCVLibrary310/build/*
 *.class

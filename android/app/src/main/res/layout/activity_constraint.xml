@@ -103,11 +103,6 @@
             android:gravity="center"
             android:text="과목 포함 / 제외"
             android:background="@drawable/gradation_blue"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="검색"
-                android:backgroundTint="@color/login_button"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -115,50 +110,70 @@
             android:orientation="horizontal"
             android:weightSum="2">
             <LinearLayout
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@color/white">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="재수강 가능 리스트"
+                    android:text="포함할 과목"
                     android:background="@drawable/gradation_blue"/>
                 <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:background="@color/white">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </ScrollView>
+                <Button
+                    android:id="@+id/buttonInclude"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="추가하기"
+                    android:backgroundTint="@color/login_button"/>
             </LinearLayout>
             <LinearLayout
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@color/white">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="재수강 가능 리스트"
+                    android:text="제외할 과목"
                     android:background="@drawable/gradation_blue"/>
                 <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:background="@color/white">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </ScrollView>
+                <Button
+                    android:id="@+id/buttonExclude"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="0"
+                    android:text="추가하기"
+                    android:backgroundTint="@color/login_button"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.stage.main.function.timeTable.sub.dialog.ReInput;
 import kr.ac.ajou.paran.stage.main.function.timeTable.sub.dialog.ScoreInput;
+import kr.ac.ajou.paran.stage.main.function.timeTable.sub.dialog.SubjectInput;
 import kr.ac.ajou.paran.util.adapter.ConstraintAdapter;
 
 /**
@@ -130,6 +131,21 @@ public class Constraint extends AppCompatActivity {
                 new ReInput(context).showDialog();
             }
         });
-    }
 
+        Button buttonInclude = (Button) findViewById(R.id.buttonInclude);
+        buttonInclude.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new SubjectInput(context).showDialog();
+            }
+        });
+
+        Button buttonExclude = (Button) findViewById(R.id.buttonExclude);
+        buttonExclude.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new SubjectInput(context).showDialog();
+            }
+        });
+    }
 }
