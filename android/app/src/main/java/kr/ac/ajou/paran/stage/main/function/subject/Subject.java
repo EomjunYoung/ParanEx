@@ -353,6 +353,15 @@ public class Subject extends AppCompatActivity implements Callback {
         });
 
 
+        btnback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                onBackPressed();
+
+            }
+        });
+
     }
 
     public static LinkedHashMap<String, String> setHashMap3(LinkedHashMap<String, String> typeMap)

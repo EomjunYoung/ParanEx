@@ -158,6 +158,24 @@ public class SubjectManage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+
+                AlertDialog.Builder ad = new AlertDialog.Builder(SubjectManage.this);
+                ad.setTitle("Title");
+                ad.setMessage("삭제를 원하시는 과목을 리스트에서 클릭하세요.");
+
+                ad.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+
+                        dialog.dismiss();
+
+                    }
+                });
+
+                ad.create();
+                ad.show();
+
+
             }
         });
 
