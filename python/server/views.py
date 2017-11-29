@@ -300,24 +300,42 @@ def getLecture(request):
 	major = []
 	major = getMajor(2017,2,major)
 	for m in major:
-		Lecture(name=m[0],time=m[1],type=m[2],grade=m[3],score=m[4]).save()
+		Lecture(name=m[0],diff=m[1],time=m[2],type=m[3],grade=m[4],score=m[5]).save()
 
 	culture = []
 	culture = getCulture(2017,2,culture)
 	for c in culture:
-		Lecture(name=c[0],time=c[1],type=c[2],grade=c[3],score=c[4]).save()
+		Lecture(name=c[0],diff=c[1],time=c[2],type=c[3],grade=c[4],score=c[5]).save()
 
 	base = []
 	base = getBase(2017,2,'00',base)
 	base = getBase(2017,2,'DS0300202',base)
 	for b in base:
-		Lecture(name=b[0],time=b[1],type=b[2],grade=b[3],score=b[4]).save()
+		Lecture(name=b[0],diff=b[1],time=b[2],type=b[3],grade=b[4],score=b[5]).save()
 
 	area = []
 	area = getArea(2017,2,area)
 	for a in area:
-		Lecture(name=a[0],time=a[1],type=a[2],grade=a[3],score=a[4]).save()
+		Lecture(name=a[0],diff=a[1],time=a[2],type=a[3],grade=a[4],score=a[5]).save()
 	return render(request,'server/template/index.html')
+
+
+
+def getProcessed(request):
+	if Processed.objects.count() > 0 :
+		print 'data is already saved'
+		return render(request,'server/template/index.html')
+	result = Lecture.objects.filter()
+	for r in result:
+		for i in range(0,5):
+			try :
+				for a in getTime(i,r.time):
+					Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,week=i,start=a[0],finish=a[1]).save()
+			except:
+					Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,week=i,start=0,finish=0).save()
+	return render(request,'server/template/index.html')
+
+
 
 def test(request):
 	result = ''
