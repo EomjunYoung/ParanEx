@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 
 import kr.ac.ajou.paran.stage.main.function.timeTable.TimeTable;
+import kr.ac.ajou.paran.stage.main.function.timeTable.sub.Constraint;
 import kr.ac.ajou.paran.util.Recognizer;
 
 /**
@@ -28,15 +29,26 @@ public class CheckSavedTable extends TwoWays {
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, Recognizer.class).putExtra("number",number));
-                dismiss();
+                if(buttonCancel.getText().toString().equals("새로 인식")) {
+                    CheckSavedTable.super.setContent("카메라를 통해 시간표를 인식하시겠습니까?");
+                    buttonCancel.setText("예");
+                    buttonOK.setText("아니오");
+                }else{
+                    context.startActivity(new Intent(context, Recognizer.class).putExtra("number", number));
+                    dismiss();
+                }
             }
         });
         buttonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, TimeTable.class).putExtra("number",number));
-                dismiss();
+                if(buttonOK.getText().toString().equals("사용 하기")) {
+                    context.startActivity(new Intent(context, TimeTable.class).putExtra("number", number));
+                    dismiss();
+                }else {
+                    context.startActivity(new Intent(context, TimeTable.class).putExtra("number", number).putExtra("new",true));
+                    dismiss();
+                }
             }
         });
     }

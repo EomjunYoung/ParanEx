@@ -62,7 +62,7 @@ public class Constraint extends AppCompatActivity {
                 subjects.add("");
         }
 
-        parser = "시프:1s10.5f11.0/객프:3s9.0f10.5/";
+        //parser = "시프:1s10.5f11.0/객프:3s9.0f10.5/";
         if(parser != null){
             String name;
             int week;

@@ -62,10 +62,12 @@ public class TimeTable extends AppCompatActivity{
 
     public void getTimeTable(){
         studentNumber = super.getIntent().getIntExtra("number", 0);
-        if (studentNumber != 0) {
-            String ip = Raw.readIP(TimeTable.this);
-            String port = Raw.readPort(TimeTable.this);
-            parser = HTTP.getTable(ip + ":" + port,studentNumber);
+        if(super.getIntent().getBooleanExtra("new",false) == false) {
+            if (studentNumber != 0) {
+                String ip = Raw.readIP(TimeTable.this);
+                String port = Raw.readPort(TimeTable.this);
+                parser = HTTP.getTable(ip + ":" + port, studentNumber);
+            }
         }
     }
 
@@ -92,7 +94,7 @@ public class TimeTable extends AppCompatActivity{
                 week = Integer.parseInt(resultOfRegular[1])+1;
                 start = (int)((Float.parseFloat(resultOfRegular[2])-9)*2);
                 finish = (int)((Float.parseFloat(resultOfRegular[3])-9)*2);
-                for(int i=start;i<=finish;subjects.set(6*i+week,name),i++);
+                for(int i=start;i<finish;subjects.set(6*i+week,name),i++);
             }
         }
     }
