@@ -128,13 +128,13 @@ public class Main extends AppCompatActivity implements View.OnClickListener{
             case R.id.buttonTimeTable:
                  /*시간표 있는지 확인*/
                 if(!ip.equals("") && !port.equals("")) {
-                    if(HTTP.checkTable(ip + ":" + port, user.getNumber())){
-                        CheckSavedTable checkSavedTable = new CheckSavedTable(this);
-                        checkSavedTable.setNumber(user.getNumber());
-                        checkSavedTable.showDialog();
-                    }else{
-                        startActivity(new Intent(Main.this, Recognizer.class).putExtra("number",user.getNumber()));
-                    }
+                    CheckSavedTable checkSavedTable;
+                    if(HTTP.checkTable(ip + ":" + port, user.getNumber()))
+                        checkSavedTable = new CheckSavedTable(this,true);
+                    else
+                        checkSavedTable = new CheckSavedTable(this,false);
+                    checkSavedTable.setNumber(user.getNumber());
+                    checkSavedTable.showDialog();
                 }
                 /*시간표 있는지 확인*/
 

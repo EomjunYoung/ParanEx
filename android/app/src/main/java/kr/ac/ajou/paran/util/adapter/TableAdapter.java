@@ -1,6 +1,7 @@
 package kr.ac.ajou.paran.util.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ public class TableAdapter extends BaseAdapter {
     private Context context;
     private  int layout;
     private  int height;
+    private final int NUMBER_OF_ITEMS = 6*2*12;
     private  ArrayList<String> subjects;
     private  LayoutInflater layoutInflater;
 
@@ -73,5 +75,21 @@ public class TableAdapter extends BaseAdapter {
     }
     public class ViewHolder {
         TextView textView;
+    }
+
+    public String getParser(){
+        String parser="";
+        StringBuffer stringBuffer=new StringBuffer();
+        for(int i=0;i<NUMBER_OF_ITEMS;i++){
+            if(i%6==0)
+                continue;
+            if(subjects.get(i).equals("") == false)
+                stringBuffer.append(subjects.get(i)+":"+((i%6)-1)+String.format("s%.1ff%.1f/",((i/6)/2.0+9),((i/6)/2.0+9.5)));
+        }
+        parser = stringBuffer.toString();
+
+        if(parser.length()>0)
+            parser = parser.substring(0,parser.length()-1);
+        return parser;
     }
 }

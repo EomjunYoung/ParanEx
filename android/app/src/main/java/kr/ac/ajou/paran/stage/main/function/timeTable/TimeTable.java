@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -33,6 +34,9 @@ public class TimeTable extends AppCompatActivity{
     private final int NUMBER_OF_ITEMS = 6*2*12;
 
     private ArrayList<String> subjects;
+    private TableAdapter tableAdapter;
+    private String ip;
+    private String port;
 
     @Override
     protected void onCreate(Bundle savedlnstanceState) {
@@ -53,7 +57,9 @@ public class TimeTable extends AppCompatActivity{
         buttonPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(context, Constraint.class).putExtra("parser",parser));
+                parser = tableAdapter.getParser();
+                HTTP.updateTable(ip + ":" + port, parser,studentNumber);
+                startActivity(new Intent(context, Constraint.class).putExtra("parser",parser).putExtra("number",studentNumber));
                 finish();
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
@@ -64,8 +70,8 @@ public class TimeTable extends AppCompatActivity{
         studentNumber = super.getIntent().getIntExtra("number", 0);
         if(super.getIntent().getBooleanExtra("new",false) == false) {
             if (studentNumber != 0) {
-                String ip = Raw.readIP(TimeTable.this);
-                String port = Raw.readPort(TimeTable.this);
+                ip = Raw.readIP(TimeTable.this);
+                port = Raw.readPort(TimeTable.this);
                 parser = HTTP.getTable(ip + ":" + port, studentNumber);
             }
         }
@@ -80,7 +86,7 @@ public class TimeTable extends AppCompatActivity{
                 subjects.add("");
         }
 
-     //   parser = "시프:1s10.5f11.0/객프:3s9.0f10.5/";
+     //   parser = "시프:1s10.5f11.0/객프:3s9.0f10.5";
         if(parser != null){
             String name;
             int week;
@@ -105,8 +111,9 @@ public class TimeTable extends AppCompatActivity{
             @Override
             public void run() {
                 gridViewHeight = gridView.getHeight();
-                gridView.setAdapter(new TableAdapter(context,R.layout.grid_subject,subjects,gridViewHeight));
-                gridView.getLayoutParams().height = (int)(gridViewHeight/24)*24;
+                tableAdapter = new TableAdapter(context,R.layout.grid_subject,subjects,gridViewHeight);
+                gridView.setAdapter(tableAdapter);
+                gridView.getLayoutParams().height = (gridViewHeight/24)*24;
             }
         });
     }

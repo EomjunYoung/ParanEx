@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -63,7 +64,7 @@ public class Constraint extends AppCompatActivity {
         }
 
         //parser = "시프:1s10.5f11.0/객프:3s9.0f10.5/";
-        if(parser != null){
+        if(parser.equals("") == false){
             String name;
             int week;
             int start;

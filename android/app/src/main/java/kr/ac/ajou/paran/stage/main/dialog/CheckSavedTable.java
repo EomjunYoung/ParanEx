@@ -17,15 +17,21 @@ public class CheckSavedTable extends TwoWays {
     private Button buttonCancel, buttonOK;
     private int number;
 
-    public CheckSavedTable(final Context context) {
+    public CheckSavedTable(final Context context, boolean timeTable_exist) {
         super(context);
-        super.setContent("기존에 저장된 시간표가 있습니다.\n사용하시겠습니까?");
-
         buttonOK = super.getButtonOK();
         buttonCancel = super.getButtonNO();
 
-        buttonOK.setText("사용 하기");
-        buttonCancel.setText("새로 인식");
+        if(timeTable_exist) {
+            super.setContent("기존에 저장된 시간표가 있습니다.\n사용하시겠습니까?");
+            buttonOK.setText("사용 하기");
+            buttonCancel.setText("새로 인식");
+        }else {
+            super.setContent("카메라를 통해 시간표를 인식하시겠습니까?");
+            buttonOK.setText("아니오");
+            buttonCancel.setText("예");
+        }
+
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

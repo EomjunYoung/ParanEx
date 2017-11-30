@@ -2,6 +2,7 @@ package kr.ac.ajou.paran.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.google.api.client.util.Base64;
 
@@ -344,6 +345,24 @@ public class HTTP {
     public static void postSubject(String server, String data, int number) {
         try {
             HttpURLConnection con = makeConnection(new URL("http://"+server+"/postSubject"));
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+            wr.write("data="+data+"&number="+number);
+            wr.flush();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateTable(String server, String data, int number) {
+        try {
+            HttpURLConnection con = makeConnection(new URL("http://"+server+"/updateTable"));
             con.setDoOutput(true);
             con.setRequestMethod("POST");
             OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
