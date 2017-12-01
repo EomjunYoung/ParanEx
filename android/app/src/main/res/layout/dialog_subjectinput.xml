@@ -19,6 +19,7 @@
         android:orientation="horizontal"
         android:weightSum="5">
         <ListView
+            android:id="@+id/listSubject"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_width="0dp"
@@ -31,11 +32,13 @@
             android:orientation="vertical"
             android:layout_weight="1">
             <Button
+                android:id="@+id/buttonAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="+"
                 android:backgroundTint="@color/login_button"/>
             <Button
+                android:id="@+id/buttonDelete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-"

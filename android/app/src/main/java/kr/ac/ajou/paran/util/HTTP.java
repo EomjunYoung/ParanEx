@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,6 +41,7 @@ public class HTTP {
     private final static String GET_ABEEK = "/uni/uni/abee/cmmn/findAccept.action?strStdNo=";
     private final static String GET_INIT_CODE = "/uni/uni/sreg/srms/findSregMasterMajorDiv.action?strStdNo=";
     private final static String GET_INIT_MAJOR = "/uni/uni/sreg/srms/findSregMasterMajorAply.action?strStdNo=";
+    private final static String GET_LECTURE = "/uni/uni/cour/lssn/findCourLecturePlanDocumentReg.action";
 
     private static HttpURLConnection makeConnection(URL url) {
         HttpURLConnection con;
@@ -306,6 +308,67 @@ public class HTTP {
             e.printStackTrace();
         }
         return user;
+    }
+
+    public static ArrayList<String> printLecture(int mode, String code) {
+        ArrayList<String> subjects = new ArrayList<String>();
+
+        try {
+            String line = null;
+            HttpURLConnection con = makeConnection(new URL(HAKSA+GET_LECTURE));
+            con.setRequestProperty("Content-Type", "text/xml/SosFlexMobile;charset=utf-8");
+            con.setRequestProperty("Accept-Language", "ko-kr,ko;q=0.8,en-us;q=0.6,en;q=0.4");
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+            String param = "";
+            switch(mode){
+                case 0:
+                    break;
+                case 1:
+                    param+="<param id=\"strYy\" type=\"STRING\">2017</param>\n";
+                    param+="<param id=\"strShtmCd\" type=\"STRING\">U0002003</param>\n";
+                    param+="<param id=\"strSubmattFg\" type=\"STRING\">U0209001</param>\n";
+                    param+="<param id=\"strMjCd\" type=\"STRING\">"+code+"</param>\n";
+                    break;
+                case 2:
+                    param+="<param id=\"strYy\" type=\"STRING\">2017</param>\n";
+                    param+="<param id=\"strShtmCd\" type=\"STRING\">U0002003</param>\n";
+                param+="<param id=\"strSubmattFg\" type=\"STRING\">U0209002</param>\n";
+                break;
+                case 3:
+                    param+="<param id=\"strYy\" type=\"STRING\">2017</param>\n";
+                    param+="<param id=\"strShtmCd\" type=\"STRING\">U0002003</param>\n";
+                    param+="<param id=\"strSubmattFg\" type=\"STRING\">U0209003</param>\n";
+                    param+="<param id=\"strSustcd\" type=\"STRING\">"+code+"</param>\n";
+                    break;
+                case 4:
+                    param+="<param id=\"strYy\" type=\"STRING\">2017</param>\n";
+                    param+="<param id=\"strShtmCd\" type=\"STRING\">U0002003</param>\n";
+                    param+="<param id=\"strSubmattFg\" type=\"STRING\">U0209005</param>\n";
+                    param+="<param id=\"strSubmattFldFg\" type=\"STRING\">"+code+"</param>\n";
+                    break;
+            }
+            wr.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<root>\n<params>\n"+param+"</params>\n</root>");
+            wr.flush();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            while ((line = rd.readLine()) != null) {
+                if (line.indexOf("<sbjtKorNm>") > -1) {
+                    line = line.substring(line.indexOf("<sbjtKorNm>")+11,line.indexOf("</sbjtKorNm>"));
+                    line = line.replaceAll("&#32;", " ");
+                    if(subjects.contains(line) == false)
+                        subjects.add(line);
+                }
+            }
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return subjects;
     }
 
     public static String inspectMajor(String cookie, int number) {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -24,6 +25,7 @@ public class TableAdapter extends BaseAdapter {
     private final int NUMBER_OF_ITEMS = 6*2*12;
     private  ArrayList<String> subjects;
     private  LayoutInflater layoutInflater;
+    private int cursor;
 
     public TableAdapter(Context context, int layout, ArrayList<String> subjects, int height) {
         this.context = context;
@@ -31,6 +33,7 @@ public class TableAdapter extends BaseAdapter {
         this.subjects = subjects;
         this.height = height;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        cursor = -1;
     }
 
     @Override
@@ -49,7 +52,7 @@ public class TableAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
             convertView = layoutInflater.inflate(layout, null);
@@ -67,12 +70,37 @@ public class TableAdapter extends BaseAdapter {
             holder.textView.setTextColor(context.getResources().getColor(R.color.white));
             holder.textView.setGravity(Gravity.TOP|Gravity.RIGHT);
         }else{
-            holder.textView.setBackgroundResource(R.drawable.grid_item);
-            holder.textView.setTextColor(context.getResources().getColor(R.color.login_input));
+            if(position == cursor) {
+                holder.textView.setBackgroundResource(R.color.login_button);
+                holder.textView.setTextColor(context.getResources().getColor(R.color.white));
+            }else{
+                holder.textView.setBackgroundResource(R.drawable.grid_item);
+                holder.textView.setTextColor(context.getResources().getColor(R.color.login_input));
+            }
+            holder.textView.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        if(cursor == position)
+                            cursor = -1;
+                        else
+                            cursor = position;
+                        notifyDataSetChanged();
+                        return false;
+                    }
+            });
         }
 
         return convertView;
     }
+
+    public int getCursor() {
+        return cursor;
+    }
+
+    public void setCursor(int cursor){
+        this.cursor = cursor;
+    }
+
     public class ViewHolder {
         TextView textView;
     }

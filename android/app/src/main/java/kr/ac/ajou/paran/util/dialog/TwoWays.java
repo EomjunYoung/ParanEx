@@ -1,4 +1,4 @@
-package kr.ac.ajou.paran.stage.main.dialog;
+package kr.ac.ajou.paran.util.dialog;
 
 import android.content.Context;
 import android.widget.Button;

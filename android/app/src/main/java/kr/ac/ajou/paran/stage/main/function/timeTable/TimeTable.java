@@ -5,14 +5,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import kr.ac.ajou.paran.R;
+import kr.ac.ajou.paran.stage.main.function.timeTable.dialog.AddTimeTable;
+import kr.ac.ajou.paran.stage.main.function.timeTable.dialog.DeleteTimeTable;
 import kr.ac.ajou.paran.stage.main.function.timeTable.sub.Constraint;
 import kr.ac.ajou.paran.util.HTTP;
 import kr.ac.ajou.paran.util.Raw;
@@ -33,6 +37,8 @@ public class TimeTable extends AppCompatActivity{
     private int studentNumber;
     private final int NUMBER_OF_ITEMS = 6*2*12;
 
+    private String recentSubject;
+
     private ArrayList<String> subjects;
     private TableAdapter tableAdapter;
     private String ip;
@@ -47,6 +53,7 @@ public class TimeTable extends AppCompatActivity{
         getTimeTable();
         makeSubjects();
         setGridView();
+        setDialog();
     }
 
     public void initSetting(){
@@ -86,7 +93,7 @@ public class TimeTable extends AppCompatActivity{
                 subjects.add("");
         }
 
-     //   parser = "시프:1s10.5f11.0/객프:3s9.0f10.5";
+        //parser = "시프:1s10.5f11.0/객프:3s9.0f10.5";
         if(parser != null){
             String name;
             int week;
@@ -116,5 +123,71 @@ public class TimeTable extends AppCompatActivity{
                 gridView.getLayoutParams().height = (gridViewHeight/24)*24;
             }
         });
+    }
+
+    private void setDialog() {
+        TextView textAdd = (TextView) findViewById(R.id.textAdd);
+        recentSubject = "";
+        textAdd.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int cursor = tableAdapter.getCursor();
+                if(cursor>0)
+                    if(subjects.get(cursor).equals("") == true)
+                        new AddTimeTable(context,recentSubject).showDialog();
+                    else
+                        Toast.makeText(context,"이미 과목이 존재합니다",Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(context,"과목을 추가할 구간을 선택해주세요",Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+
+        TextView textModify = (TextView) findViewById(R.id.textModify);
+        textModify.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int cursor = tableAdapter.getCursor();
+                if(cursor>0)
+                    if(subjects.get(cursor).equals("") == false)
+                        new AddTimeTable(context,subjects.get(cursor)).showDialog();
+                    else
+                        Toast.makeText(context,"과목을 선택해주세요",Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(context,"과목을 편집할 구간을 선택해주세요",Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+
+        TextView textDelete = (TextView) findViewById(R.id.textDelete);
+        textDelete.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int cursor = tableAdapter.getCursor();
+                if(cursor>0){
+                    if(subjects.get(cursor).equals("") == false)
+                        new DeleteTimeTable(context).showDialog();
+                    else
+                        Toast.makeText(context,"과목을 선택해주세요",Toast.LENGTH_SHORT).show();
+                }
+                else
+                    Toast.makeText(context,"과목을 삭제할 구간을 선택해주세요",Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+    }
+
+    public ArrayList<String> getSubjects(){
+        return subjects;
+    }
+
+    public TableAdapter getTableAdapter(){
+        return tableAdapter;
+    }
+
+    public void setRecentSubject(String recentSubject) {
+        this.recentSubject = recentSubject;
+        subjects.set(tableAdapter.getCursor(),recentSubject);
+        tableAdapter.notifyDataSetChanged();
     }
 }

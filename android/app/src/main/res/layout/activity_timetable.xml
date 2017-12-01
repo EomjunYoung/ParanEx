@@ -29,6 +29,7 @@
             android:orientation="horizontal"
             android:gravity="right|bottom">
             <TextView
+                android:id="@+id/textAdd"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_width="30dp"
@@ -39,6 +40,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"/>
             <TextView
+                android:id="@+id/textModify"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_width="30dp"
@@ -49,6 +51,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"/>
             <TextView
+                android:id="@+id/textDelete"
                 android:layout_marginRight="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_width="30dp"

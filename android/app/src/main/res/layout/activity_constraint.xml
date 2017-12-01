@@ -130,6 +130,8 @@
                     android:layout_weight="1"
                     android:background="@color/white">
                     <TextView
+                        android:id="@+id/textInclude"
+                        android:textColor="@color/login_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </ScrollView>
@@ -162,6 +164,8 @@
                     android:layout_weight="1"
                     android:background="@color/white">
                     <TextView
+                        android:id="@+id/textExclude"
+                        android:textColor="@color/login_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </ScrollView>

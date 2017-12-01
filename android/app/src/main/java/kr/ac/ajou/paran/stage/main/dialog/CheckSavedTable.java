@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.Button;
 
 import kr.ac.ajou.paran.stage.main.function.timeTable.TimeTable;
-import kr.ac.ajou.paran.stage.main.function.timeTable.sub.Constraint;
 import kr.ac.ajou.paran.util.Recognizer;
+import kr.ac.ajou.paran.util.dialog.TwoWays;
 
 /**
  * Created by dream on 2017-11-16.

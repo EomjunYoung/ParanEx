@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -77,7 +76,7 @@ public class Constraint extends AppCompatActivity {
                 week = Integer.parseInt(resultOfRegular[1])+1;
                 start = (int)((Float.parseFloat(resultOfRegular[2])-9)*2);
                 finish = (int)((Float.parseFloat(resultOfRegular[3])-9)*2);
-                for(int i=start;i<=finish;subjects.set(6*i+week,name),i++);
+                for(int i=start;i<finish;subjects.set(6*i+week,name),i++);
             }
         }
     }
@@ -133,19 +132,21 @@ public class Constraint extends AppCompatActivity {
             }
         });
 
+        final TextView textInclude = (TextView)findViewById(R.id.textInclude);
         Button buttonInclude = (Button) findViewById(R.id.buttonInclude);
         buttonInclude.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new SubjectInput(context).showDialog();
+                new SubjectInput(context,textInclude).showDialog();
             }
         });
 
+        final TextView textExclude = (TextView)findViewById(R.id.textExclude);
         Button buttonExclude = (Button) findViewById(R.id.buttonExclude);
         buttonExclude.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new SubjectInput(context).showDialog();
+                new SubjectInput(context,textExclude).showDialog();
             }
         });
     }
