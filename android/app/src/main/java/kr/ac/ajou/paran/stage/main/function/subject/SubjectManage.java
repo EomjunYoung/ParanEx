@@ -115,6 +115,7 @@ public class SubjectManage extends AppCompatActivity {
                     SubjectAdapter subjectAdapter = new SubjectAdapter(getApplicationContext(), cursor, 0);
                     subjectAdapter.notifyDataSetChanged();
                     lv.setAdapter(subjectAdapter);
+                    Toast.makeText(getApplicationContext(), "정상적으로 삭제되었습니다.", Toast.LENGTH_SHORT).show();
                 }
                 catch(Exception e)
                 {

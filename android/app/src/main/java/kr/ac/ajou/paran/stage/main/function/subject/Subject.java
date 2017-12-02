@@ -49,6 +49,7 @@ public class Subject extends AppCompatActivity implements Callback {
     public static LinkedHashMap<String, String> basicMap;
     private static LinkedHashMap<String, String> typeMap;
     private static LinkedHashMap<String, String> majorMap;
+    private static LinkedHashMap<String, String> areaMap;
     private Callback mCallback;
 
     public boolean checkBackPress;
@@ -62,6 +63,7 @@ public class Subject extends AppCompatActivity implements Callback {
     final List<String> list2 = new ArrayList<>();
     final List<String> list3 = new ArrayList<>();
     final List<String> list4 = new ArrayList<>();
+    final List<String> list5 = new ArrayList<>();
 
     DB db;
     /*public Subject(){
@@ -84,6 +86,7 @@ public class Subject extends AppCompatActivity implements Callback {
         majorMap = setHashMap(majorMap);
         typeMap = setHashMap3(typeMap);
         basicMap = setHashMap1(basicMap);
+        areaMap = setHashMap2(areaMap);
 
         list.add("전공과목");
         list.add("교양과목");
@@ -130,11 +133,8 @@ public class Subject extends AppCompatActivity implements Callback {
                             @Override
                             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-
-
                                 Set<String> set = majorMap.keySet();
                                 Iterator<String> itr = set.iterator();
-
 
                                 while(itr.hasNext())
                                 {
@@ -147,148 +147,21 @@ public class Subject extends AppCompatActivity implements Callback {
                                         NetworkAsync networkAsync = new NetworkAsync(semester, type, major, mCallback);
                                         networkAsync.execute();
                                         break;
-
                                     }
-
                                 }
-
-
-                                subjectlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-
-                                        /*String str = (String)subjectlv.getItemAtPosition(i);
-                                        Intent intent = new Intent(Subject.this, SubjectManage.class);
-                                        intent.putExtra("eom", str);
-                                        startActivity(intent);*/
-
-                                        AlertDialog.Builder ad = new AlertDialog.Builder(Subject.this);
-                                        ad.setTitle("Title");
-                                        ad.setMessage("재수강 과목이시면 체크 후 YES를, 아니면 NO를 눌러주세요.");
-
-                                       // LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                                      //  final ViewGroup view2 = (ViewGroup)inflater.inflate(R.layout.activity_subject2, null);
-                                      //  ad.setView(view2);
-
-
-                                        /*final RadioButton rb1 = (RadioButton)view2.findViewById(R.id.rb1);
-                                        final RadioButton rb2 = (RadioButton)view2.findViewById(R.id.rb2);
-                                        final RadioGroup rgbtn = (RadioGroup)view2.findViewById(R.id.rgbtn);*/
-
-                                        final RadioGroup rgbtn = new RadioGroup(Subject.this);
-                                        final RadioButton rbbtn = new RadioButton(Subject.this);
-
-                                        rbbtn.setText("O(재수강은 선택후 YES)");
-
-                                        ad.setView(rgbtn);
-                                        ad.setView(rbbtn);
-
-                                        String sql = "select _id from subjectinfo2";
-                                        Cursor cursor = db.getReadableDatabase().rawQuery(sql, null);
-                                        final int c = cursor.getCount();
-
-                                        //dbHelper.insertsubject(c, retake, mandate, name);
-
-                                        ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-
-                                                String str = rbbtn.getText().toString();
-                                                String retake = str.substring(0,1);
-                                                //String str3 = (String)subjectlv.getItemAtPosition(i);
-                                                String tmp = null;
-                                                String name = null;
-                                                String type = null;
-                                                try{
-
-
-                                                   tmp = ((String)subjectlv.getItemAtPosition(i));
-                                                   name = tmp.substring(tmp.indexOf(":")+1, tmp.indexOf("구분"));
-                                                   type = tmp.substring(tmp.indexOf("구분")+4, tmp.length());
-                                                   Toast.makeText(getApplicationContext(), c+"", Toast.LENGTH_SHORT).show();
-                                                   db.insertSubject(c+1, retake, type, name);
-                                                   Intent intent = new Intent(Subject.this, SubjectManage.class);
-                                                   startActivity(intent);
-
-                                               }
-
-                                               catch (Exception e)
-                                               {
-                                                   e.printStackTrace();
-                                               }
-
-                                                dialog.dismiss();
-
-                                            }
-                                        });
-
-                                        ad.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-
-
-                                                //String str3 = (String)subjectlv.getItemAtPosition(i);
-                                                String tmp = null;
-                                                String name = null;
-                                                String type = null;
-                                                try{
-
-
-                                                    tmp = ((String)subjectlv.getItemAtPosition(i));
-                                                    name = tmp.substring(tmp.indexOf(":")+1, tmp.indexOf("구분"));
-                                                    type = tmp.substring(tmp.indexOf("구분")+4, tmp.length());
-                                                    Toast.makeText(getApplicationContext(), c+"", Toast.LENGTH_SHORT).show();
-                                                    db.insertSubject(c+1, "X", type, name);
-                                                    Intent intent = new Intent(Subject.this, SubjectManage.class);
-                                                    startActivity(intent);
-
-                                                }
-
-                                                catch (Exception e)
-                                                {
-                                                    e.printStackTrace();
-                                                }
-
-
-                                                dialog.dismiss();
-                                            }
-                                        });
-
-                                        ad.create();
-                                        ad.show();
-
-                                    }
-                                });
-
-
-
-                            }
-                        });
-
-
-
-                    }
-
+                   register();
+                }
+            });
+        }
                     else if (str2 == "교양과목")
                     {
 
                         type = typeMap.get(str2);
 
-                        subjectlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-
                                 NetworkAsync networkAsync = new NetworkAsync(semester, type, mCallback);
                                 networkAsync.execute();
 
-
-
-
-                            }
-                        });
-
-
+                        register();
 
 
                     }
@@ -318,7 +191,6 @@ public class Subject extends AppCompatActivity implements Callback {
                             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
 
-
                                 Set<String> set = basicMap.keySet();
                                 Iterator<String> itr = set.iterator();
 
@@ -339,16 +211,63 @@ public class Subject extends AppCompatActivity implements Callback {
 
                                 }
 
+                                register();
 
                             }
                         });
 
                     }
 
+
+                    else if (str2 == "영역별교양")
+                    {
+                        type = typeMap.get(str2);
+
+                        Set<String> setA = areaMap.keySet();
+                        Iterator<String> itrA = setA.iterator();
+
+
+                        while(itrA.hasNext())
+                        {
+                            String majorstring = itrA.next();
+                            list2.add(majorstring);
+                        }
+
+
+                        ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list2);
+                        arrayAdapter3.notifyDataSetChanged();
+                        subjectlv.setAdapter(arrayAdapter3);
+
+                        subjectlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                                Set<String> setA = areaMap.keySet();
+                                Iterator<String> itr = setA.iterator();
+
+                                while(itr.hasNext())
+                                {
+                                    String str = itr.next();
+                                    String str2 = (String)subjectlv.getItemAtPosition(i);
+
+                                    if(str==str2)
+                                    {
+                                        major = areaMap.get(str2);
+                                        NetworkAsync networkAsync = new NetworkAsync(semester, type, major, mCallback);
+                                        networkAsync.execute();
+                                        break;
+
+                                    }
+
+                                }
+
+                                register();
+
+                            }
+                        });
+                    }
                 }
-
-
-
             }
         });
 
@@ -377,6 +296,96 @@ public class Subject extends AppCompatActivity implements Callback {
         //typeMap.put("공학인증교양", "U0209007");
 
         return typeMap;
+    }
+
+
+    public static LinkedHashMap<String, String> setHashMap2(LinkedHashMap<String, String> areaMap)
+    {
+        areaMap = new LinkedHashMap<>();
+
+        areaMap.put("역사와 철학(인문학1)", "U0204006");
+        areaMap.put("문학과 예술(인문학2)", "U0204007");
+        areaMap.put("인간과 사회(사회과학)", "U0204008");
+        areaMap.put("자연과 과학(자연과학)", "U0204009");
+
+        return areaMap;
+    }
+
+
+    public static LinkedHashMap<String, String> setHashMap1(LinkedHashMap<String, String> basicMap) {
+        basicMap = new LinkedHashMap<>();
+
+        basicMap.put("공통", "00");
+        basicMap.put("기계공학부", "DS03001002");
+        basicMap.put("기계공학과", "DS03001021");
+        basicMap.put("산업정보시스템공학부", "DS03001003");
+        basicMap.put("산업공학과", "DS03001022");
+        basicMap.put("화공ㆍ신소재공학부", "DS03001004");
+        basicMap.put("화학공학과", "DS03001023");
+        basicMap.put("신소재공학과", "DS03001024");
+        basicMap.put("생명ㆍ분자공학부", "DS03001005");
+        basicMap.put("응용화학생명공학부", "DS03001006");
+        basicMap.put("응용화학생명공학과", "DS03001025");
+        basicMap.put("환경안전공학과", "DS03001026");
+        basicMap.put("건설시스템공학과", "DS03001027");
+        basicMap.put("교통시스템공학과", "DS03001028");
+        basicMap.put("건축학부", "DS03001008");
+        basicMap.put("건축학과", "DS03001029");
+        basicMap.put("전자공학부", "DS03002002");
+        basicMap.put("전자공학과", "DS03002021");
+        basicMap.put("소프트웨어학과", "DS0300202");
+        basicMap.put("정보컴퓨터공학부", "DS03002003"); //14일부터 한거
+        basicMap.put("미디어학부", "DS03002004");
+        basicMap.put("미디어학과", "DS03002024");
+        basicMap.put("국방디지털융합학과", "DS03002025");
+        basicMap.put("사이버보안학과", "DS0300201");
+        basicMap.put("수학과", "DS03003021");
+        basicMap.put("물리학과", "DS03003022");
+        basicMap.put("화학과", "DS03003023");
+        basicMap.put("생명과학과", "DS03003024");
+        basicMap.put("경영학부", "DS03004002");
+        basicMap.put("경영학과", "DS03004021");
+        basicMap.put("e-비즈니스학부", "DS03004003");
+        basicMap.put("e-비즈니스학과", "DS03004022");
+        basicMap.put("금융공학부", "DS03004005");
+        basicMap.put("금융공학과", "DS03004023");
+        basicMap.put("스포츠마케팅학부", "DS03004004");
+        basicMap.put("글로벌경영학과", "DS03004024");
+        basicMap.put("인문학부", "DS03005002");
+        basicMap.put("국어국문학과", "DS03005021");
+        basicMap.put("사회과학대학(과)", "DS03006029");
+        basicMap.put("영어영문학과", "DS03005022");
+        basicMap.put("불어불문학과", "DS03005023");
+        basicMap.put("사학과", "DS03005024");
+        basicMap.put("문화콘텐츠학과", "DS03005025");
+        basicMap.put("사회과학부", "DS03006002");
+        basicMap.put("경제학과", "DS03006021");
+        basicMap.put("행정학과", "DS03006022");
+        basicMap.put("심리학과", "DS03006023");
+        basicMap.put("사회학과", "DS03006024");
+        basicMap.put("정치외교학과", "DS03006025");
+        basicMap.put("스포츠레저학과", "DS03006026");
+        basicMap.put("스포츠레저학부", "DS03006003");
+        basicMap.put("법학부", "DS03007002");
+        basicMap.put("법학과", "DS03007021");
+        basicMap.put("의학과", "DS03008002");
+        basicMap.put("간호학과", "DS03009001");
+        basicMap.put("간호학과(특별과정)", "DS03009002");
+        basicMap.put("자유전공", "DS03010002");
+        basicMap.put("약학과", "DS03013021");
+        basicMap.put("약학부", "DS03013002");
+        basicMap.put("국제학부", "DS03012001");
+        basicMap.put("문화산업과 커뮤니케이션전공", "DS03006027");
+        basicMap.put("인문사회데이터분석전공", "DS0300203");
+        basicMap.put("정보컴퓨터공학과", "DS03002022");
+        basicMap.put("소프트웨어융합학과", "DS03002023");
+        basicMap.put("기초의과학전공", "DS03003025");
+        basicMap.put("융합시스템공학과", "DS03001030");
+        basicMap.put("자동차SW전공", "DS0300204");
+        basicMap.put("디지털휴머니티전공", "DS03005026");
+
+
+        return basicMap;
     }
 
 
@@ -494,82 +503,6 @@ public class Subject extends AppCompatActivity implements Callback {
     }
 
 
-    public static LinkedHashMap<String, String> setHashMap1(LinkedHashMap<String, String> basicMap) {
-        basicMap = new LinkedHashMap<>();
-
-        basicMap.put("공통", "00");
-        basicMap.put("기계공학부", "DS03001002");
-        basicMap.put("기계공학과", "DS03001021");
-        basicMap.put("산업정보시스템공학부", "DS03001003");
-        basicMap.put("산업공학과", "DS03001022");
-        basicMap.put("화공ㆍ신소재공학부", "DS03001004");
-        basicMap.put("화학공학과", "DS03001023");
-        basicMap.put("신소재공학과", "DS03001024");
-        basicMap.put("생명ㆍ분자공학부", "DS03001005");
-        basicMap.put("응용화학생명공학부", "DS03001006");
-        basicMap.put("응용화학생명공학과", "DS03001025");
-        basicMap.put("환경안전공학과", "DS03001026");
-        basicMap.put("건설시스템공학과", "DS03001027");
-        basicMap.put("교통시스템공학과", "DS03001028");
-        basicMap.put("건축학부", "DS03001008");
-        basicMap.put("건축학과", "DS03001029");
-        basicMap.put("전자공학부", "DS03002002");
-        basicMap.put("전자공학과", "DS03002021");
-        basicMap.put("소프트웨어학과", "DS0300202");
-        basicMap.put("정보컴퓨터공학부", "DS03002003"); //14일부터 한거
-        basicMap.put("미디어학부", "DS03002004");
-        basicMap.put("미디어학과", "DS03002024");
-        basicMap.put("국방디지털융합학과", "DS03002025");
-        basicMap.put("사이버보안학과", "DS0300201");
-        basicMap.put("수학과", "DS03003021");
-        basicMap.put("물리학과", "DS03003022");
-        basicMap.put("화학과", "DS03003023");
-        basicMap.put("생명과학과", "DS03003024");
-        basicMap.put("경영학부", "DS03004002");
-        basicMap.put("경영학과", "DS03004021");
-        basicMap.put("e-비즈니스학부", "DS03004003");
-        basicMap.put("e-비즈니스학과", "DS03004022");
-        basicMap.put("금융공학부", "DS03004005");
-        basicMap.put("금융공학과", "DS03004023");
-        basicMap.put("스포츠마케팅학부", "DS03004004");
-        basicMap.put("글로벌경영학과", "DS03004024");
-        basicMap.put("인문학부", "DS03005002");
-        basicMap.put("국어국문학과", "DS03005021");
-        basicMap.put("사회과학대학(과)", "DS03006029");
-        basicMap.put("영어영문학과", "DS03005022");
-        basicMap.put("불어불문학과", "DS03005023");
-        basicMap.put("사학과", "DS03005024");
-        basicMap.put("문화콘텐츠학과", "DS03005025");
-        basicMap.put("사회과학부", "DS03006002");
-        basicMap.put("경제학과", "DS03006021");
-        basicMap.put("행정학과", "DS03006022");
-        basicMap.put("심리학과", "DS03006023");
-        basicMap.put("사회학과", "DS03006024");
-        basicMap.put("정치외교학과", "DS03006025");
-        basicMap.put("스포츠레저학과", "DS03006026");
-        basicMap.put("스포츠레저학부", "DS03006003");
-        basicMap.put("법학부", "DS03007002");
-        basicMap.put("법학과", "DS03007021");
-        basicMap.put("의학과", "DS03008002");
-        basicMap.put("간호학과", "DS03009001");
-        basicMap.put("간호학과(특별과정)", "DS03009002");
-        basicMap.put("자유전공", "DS03010002");
-        basicMap.put("약학과", "DS03013021");
-        basicMap.put("약학부", "DS03013002");
-        basicMap.put("국제학부", "DS03012001");
-        basicMap.put("문화산업과 커뮤니케이션전공", "DS03006027");
-        basicMap.put("인문사회데이터분석전공", "DS0300203");
-        basicMap.put("정보컴퓨터공학과", "DS03002022");
-        basicMap.put("소프트웨어융합학과", "DS03002023");
-        basicMap.put("기초의과학전공", "DS03003025");
-        basicMap.put("융합시스템공학과", "DS03001030");
-        basicMap.put("자동차SW전공", "DS0300204");
-        basicMap.put("디지털휴머니티전공", "DS03005026");
-
-
-        return basicMap;
-    }
-
     @Override
     public void getReturn(Object o) {
 
@@ -582,33 +515,107 @@ public class Subject extends AppCompatActivity implements Callback {
             String name = s.nextToken();
             String mandate = s.nextToken();
 
-
             list3.add("과목 :" + name + "  " + "구분 :"+ mandate );
         }
-
 
         ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list3);
         arrayAdapter3.notifyDataSetChanged();
         subjectlv.setAdapter(arrayAdapter3);
 
+    }
 
 
+    public void register()
+    {
 
-       /* String string = o.toString();
-        StringTokenizer s = new StringTokenizer(string);
-        ArrayList arrayList = new ArrayList();
+        subjectlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view2, final int i, long l) {
 
-        while (s.hasMoreTokens()) {
 
-            arrayList.add(s.nextToken());
-        }
+                AlertDialog.Builder ad = new AlertDialog.Builder(Subject.this);
+                ad.setTitle("Title");
+                ad.setMessage("재수강 과목이시면 체크 후 YES를, 아니면 NO를 눌러주세요.");
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, arrayList);
-        subjectlv.setAdapter(arrayAdapter);
-*/
+                final RadioGroup rgbtn = new RadioGroup(Subject.this);
+                final RadioButton rbbtn = new RadioButton(Subject.this);
 
+                rbbtn.setText("O(재수강은 선택후 YES)");
+
+                ad.setView(rgbtn);
+                ad.setView(rbbtn);
+
+                String sql = "select _id from subjectinfo2";
+                Cursor cursor = db.getReadableDatabase().rawQuery(sql, null);
+                final int c = cursor.getCount();
+
+                ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        String str = rbbtn.getText().toString();
+                        String retake = str.substring(0,1);
+                        //String str3 = (String)subjectlv.getItemAtPosition(i);
+                        String tmp = null;
+                        String name = null;
+                        String type = null;
+                        try{
+                            tmp = ((String)subjectlv.getItemAtPosition(i));
+                            name = tmp.substring(tmp.indexOf(":")+1, tmp.indexOf("구분"));
+                            type = tmp.substring(tmp.indexOf("구분")+4, tmp.length());
+                            Toast.makeText(getApplicationContext(), "정상적으로 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                            db.insertSubject(c+1, retake, type, name);
+                            Intent intent = new Intent(Subject.this, SubjectManage.class);
+                            startActivity(intent);
+                        }
+
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                        dialog.dismiss();
+
+                    }
+                });
+
+                ad.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                        //String str3 = (String)subjectlv.getItemAtPosition(i);
+                        String tmp = null;
+                        String name = null;
+                        String type = null;
+                        try{
+                            tmp = ((String)subjectlv.getItemAtPosition(i));
+                            name = tmp.substring(tmp.indexOf(":")+1, tmp.indexOf("구분"));
+                            type = tmp.substring(tmp.indexOf("구분")+4, tmp.length());
+                            Toast.makeText(getApplicationContext(), "정상적으로 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                            db.insertSubject(c+1, "X", type, name);
+                            Intent intent = new Intent(Subject.this, SubjectManage.class);
+                            startActivity(intent);
+                        }
+
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
+
+                        dialog.dismiss();
+                    }
+                });
+
+                ad.create();
+                ad.show();
+            }
+        });
 
     }
+
+
 
 
 }
