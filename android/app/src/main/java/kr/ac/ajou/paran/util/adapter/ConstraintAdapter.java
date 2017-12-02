@@ -74,8 +74,7 @@ public class ConstraintAdapter extends BaseAdapter {
             holder.textView.setBackgroundColor(context.getResources().getColor(R.color.login_input));
             holder.textView.setTextColor(context.getResources().getColor(R.color.white));
             holder.textView.setGravity(Gravity.TOP|Gravity.RIGHT);
-            if(position!=0) {
-                holder.textView.setOnTouchListener(new View.OnTouchListener() {
+            holder.textView.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View view, MotionEvent motionEvent) {
                         row = (position/6);
@@ -87,7 +86,6 @@ public class ConstraintAdapter extends BaseAdapter {
                         return false;
                     }
                 });
-            }
         }else{
             if(getItem(position).toString().equals("") == false)
                 holder.textView.setText("●");
@@ -108,8 +106,6 @@ public class ConstraintAdapter extends BaseAdapter {
             }
         }
 
-
-
         return convertView;
     }
 
@@ -123,5 +119,13 @@ public class ConstraintAdapter extends BaseAdapter {
             columns.remove(column);
         else
             columns.add(column);
+    }
+
+    public ArrayList<Integer> getRows(){
+        return rows;
+    }
+
+    public ArrayList<Integer> getColumns(){
+        return columns;
     }
 }
