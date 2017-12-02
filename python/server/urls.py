@@ -26,5 +26,7 @@ urlpatterns = [
     url(r'^getRequirement', views.getRequirement, name='getRequirement'),
     url(r'^getLecture', views.getLecture, name='getLecture'),
     url(r'^getProcessed', views.getProcessed, name='getProcessed'),
+    url(r'^updateTable', views.updateTable, name='updateTable'),
+    url(r'^postConstraint', views.postConstraint, name='postConstraint'),
     url(r'^test', views.test, name='test'),
 ]

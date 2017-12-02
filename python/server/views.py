@@ -330,13 +330,57 @@ def getProcessed(request):
 		for i in range(0,5):
 			try :
 				for a in getTime(i,r.time):
-					Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,week=i,start=a[0],finish=a[1]).save()
+					if r.name == unicode('운영체제','euc-kr').encode('utf-8') or r.name == unicode('시스템프로그래밍','euc-kr').encode('utf-8') or r.name == unicode('임베디드소프트웨어','euc-kr').encode('utf-8') or r.name == unicode('분산시스템설계','euc-kr').encode('utf-8'):
+						Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,label=1,week=i,start=a[0],finish=a[1]).save()
+#select * from server_processed where label is NULL and name like '%분산시스템설계%';
+
+#2 : 컴네, 네소(미), 컴통, 무선, 네운사(미)
+#3 : 집교, it영어, 자기주도, 캡스톤
+#4 : 현장실습, 창업론(미), 창업현장실습
+
+					else:
+						Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,week=i,start=a[0],finish=a[1]).save()
 			except:
+				if r.name == unicode('운영체제','euc-kr').encode('utf-8') or r.name == unicode('시스템프로그래밍','euc-kr').encode('utf-8') or r.name == unicode('임베디드소프트웨어','euc-kr').encode('utf-8') or r.name == unicode('분산시스템설계','euc-kr').encode('utf-8'):
+					Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,label=1,week=i,start=0,finish=0).save()
+				else:
 					Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,week=i,start=0,finish=0).save()
 	return render(request,'server/template/index.html')
 
+@csrf_exempt 
+def updateTable(request):
+	timeTables = request.POST.get('data','')
+	studentNumber = request.POST.get('number','')
+	print timeTables
+	print studentNumber
 
+	#delete previous table to refresh
+	try:
+		TimeTable.objects.filter(number=studentNumber).delete()
+	#if there is no subject
+	except:
+		pass
+
+	line = timeTables.split('/')
+	for l in line:
+		temp = l.split(':')		
+		name = temp[0]
+		temp = temp[1].split('s')
+		week = temp[0]
+		temp = temp[1].split('f')
+		start = temp[0]
+		end = temp[1]
+		TimeTable(number=studentNumber,name=name,week=week,start=start,end=end).save()
+	return render(request,'server/template/index.html')
+
+@csrf_exempt
+def postConstraint(request):
+	print request.POST.get('week','')
+	print request.POST.get('time','')
+	print request.POST.get('score','')
+	print request.POST.get('re','')
+	print request.POST.get('include','')
+	return render(request,'server/template/index.html')
 
 def test(request):
-	result = ''
 	return render(request,'server/template/index.html')
