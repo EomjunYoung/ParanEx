@@ -538,4 +538,65 @@ public class HTTP {
         }
         return "";
     }
+
+    public static void postConstraint(String server, int number, ArrayList<Integer> weeks, ArrayList<Integer> times, int score, ArrayList<String> res, ArrayList<String> includes, ArrayList<String> excludes) {
+        try {
+            HttpURLConnection con = makeConnection(new URL("http://"+server+"/postConstraint"));
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+            String data="";
+            data+="number="+number;
+            data+="&week=";
+            if(weeks != null){
+                String str="";
+                for(Integer week : weeks)
+                    str+=week.toString()+"/";
+                if(str.length()>0)
+                    data+=str.substring(0,str.length()-1);
+            }
+            data+="&time=";
+            if(times != null){
+                String str="";
+                for(Integer time : times)
+                    str+=time.toString()+"/";
+                if(str.length()>0)
+                    data+=str.substring(0,str.length()-1);
+            }
+            data+="&score="+score;
+            data+="&re=";
+            if(res != null){
+                String str="";
+                for(String re : res)
+                    str+=re+"/";
+                if(str.length()>0)
+                    data+=str.substring(0,str.length()-1);
+            }
+            data+="&include=";
+            if(includes != null){
+                String str="";
+                for(String include : includes)
+                    str+=include+"/";
+                if(str.length()>0)
+                    data+=str.substring(0,str.length()-1);
+            }
+            data+="&exclude=";
+            if(res != null){
+                String str="";
+                for(String exclude : excludes)
+                    str+=exclude+"/";
+                if(str.length()>0)
+                    data+=str.substring(0,str.length()-1);
+            }
+            wr.write(data);
+            wr.flush();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 }

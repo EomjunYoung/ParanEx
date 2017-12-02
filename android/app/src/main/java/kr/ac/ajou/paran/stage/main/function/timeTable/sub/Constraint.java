@@ -2,6 +2,7 @@ package kr.ac.ajou.paran.stage.main.function.timeTable.sub;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -16,6 +17,8 @@ import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.stage.main.function.timeTable.sub.dialog.ReInput;
 import kr.ac.ajou.paran.stage.main.function.timeTable.sub.dialog.ScoreInput;
 import kr.ac.ajou.paran.stage.main.function.timeTable.sub.dialog.SubjectInput;
+import kr.ac.ajou.paran.util.HTTP;
+import kr.ac.ajou.paran.util.Raw;
 import kr.ac.ajou.paran.util.adapter.ConstraintAdapter;
 
 /**
@@ -26,6 +29,7 @@ public class Constraint extends AppCompatActivity {
 
     private Context context;
     private String parser;
+    private int studentNumber;
 
     private ConstraintAdapter adapter;
 
@@ -33,6 +37,8 @@ public class Constraint extends AppCompatActivity {
     private final int NUMBER_OF_ITEMS = 6*2*12;
 
     private ArrayList<String> subjects;
+
+    private TextView textRe, textInclude, textExclude, textScore;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +49,55 @@ public class Constraint extends AppCompatActivity {
         makeSubjects();
         setGridView();
         setDialog();
+        setRecommend();
+    }
+
+    private void setRecommend() {
+        Button buttonRecommend = (Button)findViewById(R.id.buttonRecommend);
+        buttonRecommend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                ArrayList<Integer> rows = adapter.getRows();
+                ArrayList<Integer> columns = adapter.getColumns();
+
+                String str;
+
+                int score;
+                str = textScore.getText().toString();
+                str = str.substring(0,str.indexOf("학"));
+                score = Integer.parseInt(str);
+
+                ArrayList<String> res = new ArrayList<>();
+                ArrayList<String> includes = new ArrayList<>();
+                ArrayList<String> excludes = new ArrayList<>();
+
+                str = textRe.getText().toString();
+                if(str.equals("") == false){
+                    for(String re : str.split("\n"))
+                        res.add(re);
+                }
+
+                str = textInclude.getText().toString();
+                if(str.equals("") == false){
+                    for(String include : str.split("\n"))
+                        includes.add(include);
+                }
+
+                str = textExclude.getText().toString();
+                if(str.equals("") == false){
+                    for(String exclude : str.split("\n"))
+                        excludes.add(exclude);
+                }
+
+                //studentNumber = 201222702;
+                if (studentNumber != 0) {
+                    String ip = Raw.readIP(Constraint.this);
+                    String port = Raw.readPort(Constraint.this);
+                    HTTP.postConstraint(ip+":"+port,studentNumber,columns,rows,score,res,includes,excludes);
+                }
+            }
+        });
     }
 
     public void initSetting(){
@@ -51,6 +106,14 @@ public class Constraint extends AppCompatActivity {
         textTitle.setText("제약조건");
 
         parser = super.getIntent().getStringExtra("parser");
+        studentNumber = super.getIntent().getIntExtra("number",0);
+
+        setNetwork();
+    }
+
+    private void setNetwork() {
+           StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+           StrictMode.setThreadPolicy(policy);
     }
 
     public void makeSubjects(){
@@ -115,7 +178,7 @@ public class Constraint extends AppCompatActivity {
     }
 
     private void setDialog() {
-        final TextView textScore = (TextView) findViewById(R.id.textScore);
+        textScore = (TextView) findViewById(R.id.textScore);
         textScore.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -124,6 +187,7 @@ public class Constraint extends AppCompatActivity {
             }
         });
 
+        textRe = (TextView)findViewById(R.id.textRe);
         Button buttonRe = (Button) findViewById(R.id.buttonRe);
         buttonRe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +196,7 @@ public class Constraint extends AppCompatActivity {
             }
         });
 
-        final TextView textInclude = (TextView)findViewById(R.id.textInclude);
+        textInclude = (TextView)findViewById(R.id.textInclude);
         Button buttonInclude = (Button) findViewById(R.id.buttonInclude);
         buttonInclude.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +205,7 @@ public class Constraint extends AppCompatActivity {
             }
         });
 
-        final TextView textExclude = (TextView)findViewById(R.id.textExclude);
+        textExclude = (TextView)findViewById(R.id.textExclude);
         Button buttonExclude = (Button) findViewById(R.id.buttonExclude);
         buttonExclude.setOnClickListener(new View.OnClickListener() {
             @Override
