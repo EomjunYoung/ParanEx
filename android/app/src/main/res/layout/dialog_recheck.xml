@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:background="@drawable/gradation"
+android:orientation="vertical">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:text="재수강여부 선택 알림창"
+    android:textColor="@color/white"
+    android:background="@drawable/gradation_blue"/>
+<RadioGroup
+    android:id="@+id/btnGroup"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <RadioButton
+        android:text="X"
+        android:id="@+id/btnNretake"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <RadioButton
+        android:text="O"
+        android:id="@+id/btnRetake"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+</RadioGroup>
+<LinearLayout
+
+    android:layout_gravity="center"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="2">
+    <Button
+        android:layout_gravity="center"
+        android:id="@+id/buttonCancel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/login_button"
+        android:text="Cancel" />
+    <Button
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="center"
+        android:id="@+id/buttonRegister"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="@color/login_button"
+        android:text="Register"/>
+
+</LinearLayout>
+
+</LinearLayout>

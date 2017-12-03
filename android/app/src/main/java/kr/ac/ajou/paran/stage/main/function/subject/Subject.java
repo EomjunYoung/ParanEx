@@ -31,6 +31,7 @@ import kr.ac.ajou.paran.util.DB;
 import kr.ac.ajou.paran.util.NetworkAsync;
 
 import static android.icu.text.Normalizer.YES;
+import static kr.ac.ajou.paran.R.id.buttonRe;
 import static kr.ac.ajou.paran.R.id.rb1;
 import static kr.ac.ajou.paran.R.id.rb2;
 import static kr.ac.ajou.paran.R.id.rgbtn;
@@ -59,6 +60,7 @@ public class Subject extends AppCompatActivity implements Callback {
     private String major;
     Button btnback;
 
+
     final List<String> list = new ArrayList<>();
     final List<String> list2 = new ArrayList<>();
     final List<String> list3 = new ArrayList<>();
@@ -79,6 +81,7 @@ public class Subject extends AppCompatActivity implements Callback {
         btnback = (Button)findViewById(R.id.btnback);
         mCallback = this;
         db = new DB(getApplicationContext(), "mydb2.db", null, 1);
+
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
 
@@ -276,7 +279,8 @@ public class Subject extends AppCompatActivity implements Callback {
             @Override
             public void onClick(View view) {
 
-                onBackPressed();
+                //onBackPressed();
+                finish();
 
             }
         });
@@ -509,13 +513,21 @@ public class Subject extends AppCompatActivity implements Callback {
 
         String string = o.toString();
         StringTokenizer s = new StringTokenizer(string, "E");
+        String tmp="";
 
         while (s.hasMoreTokens()) {
+
 
             String name = s.nextToken();
             String mandate = s.nextToken();
 
+            if(tmp.equals(name))
+            {
+                continue;
+            }
+
             list3.add("과목 :" + name + "  " + "구분 :"+ mandate );
+            tmp = name;
         }
 
         ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list3);
@@ -534,88 +546,69 @@ public class Subject extends AppCompatActivity implements Callback {
 
 
                 AlertDialog.Builder ad = new AlertDialog.Builder(Subject.this);
-                ad.setTitle("Title");
-                ad.setMessage("재수강 과목이시면 체크 후 YES를, 아니면 NO를 눌러주세요.");
+                LayoutInflater inflater = getLayoutInflater();
+                final View view3 = inflater.inflate(R.layout.dialog_recheck, null);
+                ad.setView(view3);
+                final Button buttonCancel = (Button)view3.findViewById(R.id.buttonCancel);
+                final Button buttonRegister = (Button)view3.findViewById(R.id.buttonRegister);
+                final AlertDialog dialog = ad.create();
 
-                final RadioGroup rgbtn = new RadioGroup(Subject.this);
-                final RadioButton rbbtn = new RadioButton(Subject.this);
+                final RadioGroup btnGroup = (RadioGroup)view3.findViewById(R.id.btnGroup);
+                //final int checkedID = btnGroup.getCheckedRadioButtonId();
+                //Toast.makeText(getApplicationContext(), checkedbtn.getText().toString(), Toast.LENGTH_SHORT).show();
 
-                rbbtn.setText("O(재수강은 선택후 YES)");
-
-                ad.setView(rgbtn);
-                ad.setView(rbbtn);
-
-                String sql = "select _id from subjectinfo2";
-                Cursor cursor = db.getReadableDatabase().rawQuery(sql, null);
-                final int c = cursor.getCount();
-
-                ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                buttonRegister.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(View view) {
 
-                        String str = rbbtn.getText().toString();
-                        String retake = str.substring(0,1);
-                        //String str3 = (String)subjectlv.getItemAtPosition(i);
-                        String tmp = null;
-                        String name = null;
-                        String type = null;
-                        try{
-                            tmp = ((String)subjectlv.getItemAtPosition(i));
-                            name = tmp.substring(tmp.indexOf(":")+1, tmp.indexOf("구분"));
-                            type = tmp.substring(tmp.indexOf("구분")+4, tmp.length());
-                            Toast.makeText(getApplicationContext(), "정상적으로 추가되었습니다.", Toast.LENGTH_SHORT).show();
-                            db.insertSubject(c+1, retake, type, name);
-                            Intent intent = new Intent(Subject.this, SubjectManage.class);
-                            startActivity(intent);
-                        }
 
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
 
-                        dialog.dismiss();
+                try{
+
+                    final int checkedID = btnGroup.getCheckedRadioButtonId();
+                    final RadioButton checkedbtn = (RadioButton)btnGroup.findViewById(checkedID);
+                    String retake = checkedbtn.getText().toString();
+                    String sql = "select _id from subjectinfo2";
+                    Cursor cursor = db.getReadableDatabase().rawQuery(sql, null);
+                    int c = cursor.getCount();
+                    String tmp = null;
+                    String name = null;
+                    String type = null;
+
+                    tmp = (String)subjectlv.getItemAtPosition(i);
+                    name = tmp.substring(tmp.indexOf(":")+1, tmp.indexOf("구분"));
+                    type = tmp.substring(tmp.indexOf("구분")+4, tmp.length());
+                    Toast.makeText(getApplicationContext(), "정상적으로 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                    db.insertSubject(c+1, retake, type, name);
+                    Intent intent = new Intent(Subject.this, SubjectManage.class);
+                    startActivity(intent);
+                    finish();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
 
                     }
                 });
 
-                ad.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                buttonCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-
-                        //String str3 = (String)subjectlv.getItemAtPosition(i);
-                        String tmp = null;
-                        String name = null;
-                        String type = null;
-                        try{
-                            tmp = ((String)subjectlv.getItemAtPosition(i));
-                            name = tmp.substring(tmp.indexOf(":")+1, tmp.indexOf("구분"));
-                            type = tmp.substring(tmp.indexOf("구분")+4, tmp.length());
-                            Toast.makeText(getApplicationContext(), "정상적으로 추가되었습니다.", Toast.LENGTH_SHORT).show();
-                            db.insertSubject(c+1, "X", type, name);
-                            Intent intent = new Intent(Subject.this, SubjectManage.class);
-                            startActivity(intent);
-                        }
-
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-
+                    public void onClick(View view) {
 
                         dialog.dismiss();
                     }
                 });
 
-                ad.create();
-                ad.show();
+
+                dialog.show();
+
+
             }
         });
 
     }
-
-
 
 
 }

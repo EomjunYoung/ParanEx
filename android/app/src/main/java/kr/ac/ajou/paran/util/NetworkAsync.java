@@ -2,6 +2,7 @@ package kr.ac.ajou.paran.util;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +12,8 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.LinkedHashMap;
+
+import static kr.ac.ajou.paran.R.id.temp;
 
 /**
  * Created by ejy77 on 2017-09-02.
@@ -52,10 +55,10 @@ public class NetworkAsync extends AsyncTask {
             else if(type == "U0209003") //기초과목
                 return sendPost3(semester, type, major);
 
-            else if(type == "U0209001")
+            else if(type == "U0209001") // 전공과목
                 return sendPost(semester, type, major);
 
-            else
+            else // 영역별교양
                 return sendPost2(semester, type, major);
 
         } catch (Exception e) {
@@ -220,7 +223,7 @@ public class NetworkAsync extends AsyncTask {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try {
+        try {;
             wr.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -235,14 +238,20 @@ public class NetworkAsync extends AsyncTask {
         }
 
 
+
+
         String temp;
+        String tmp="";
+        boolean b;
         int i = 0;
+        int a;
         StringBuilder response = new StringBuilder();
         StringBuilder response2 = new StringBuilder();
 
         try {
-            while ((temp = br.readLine()) != null) {
 
+
+            while ((temp = br.readLine()) != null) {
 
                 i++;
 
@@ -255,8 +264,6 @@ public class NetworkAsync extends AsyncTask {
                     }
                     response.append(name);
                     response.append("E");
-
-
                 }
 
                 if (temp.contains("<sustLsnFgNm>"))
@@ -266,10 +273,11 @@ public class NetworkAsync extends AsyncTask {
                     response.append("E");
                 }
 
-
-
-                if (i == 3000)
+                if (i == 10000)
                     break;
+
+
+
 
             }
         } catch (IOException e) {

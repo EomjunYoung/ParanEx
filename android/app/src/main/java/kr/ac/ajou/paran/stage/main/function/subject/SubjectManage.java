@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -98,45 +99,46 @@ public class SubjectManage extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
 
                 AlertDialog.Builder ad = new AlertDialog.Builder(SubjectManage.this);
-                ad.setTitle("Title");
-                ad.setMessage("정말 삭제를 원하십니까?");
+                LayoutInflater inflater = getLayoutInflater();
+                final View view2 = inflater.inflate(R.layout.dialog_deletecheck, null);
+                ad.setView(view2);
+                final Button buttonRegister = (Button)view2.findViewById(R.id.buttonRegister);
+                final Button buttonCancel = (Button)view2.findViewById(R.id.buttonCancel);
+                final AlertDialog dialog = ad.create();
 
-                ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                buttonRegister.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int i2) {
-
-
-                try {
-                    db.deleteSubject(i + 1);
-                    subjectAdapter.notifyDataSetChanged();
-                    SQLiteDatabase sqLiteDatabase = db.getReadableDatabase();
-                    String sql = "select * from subjectinfo2";
-                    Cursor cursor = sqLiteDatabase.rawQuery(sql, null);
-                    SubjectAdapter subjectAdapter = new SubjectAdapter(getApplicationContext(), cursor, 0);
-                    subjectAdapter.notifyDataSetChanged();
-                    lv.setAdapter(subjectAdapter);
-                    Toast.makeText(getApplicationContext(), "정상적으로 삭제되었습니다.", Toast.LENGTH_SHORT).show();
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-                dialog.dismiss();
-            }
-        });
-
-                ad.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-
+                    public void onClick(View view) {
+                        try {
+                            db.deleteSubject(i + 1);
+                            subjectAdapter.notifyDataSetChanged();
+                            SQLiteDatabase sqLiteDatabase = db.getReadableDatabase();
+                            String sql = "select * from subjectinfo2";
+                            Cursor cursor = sqLiteDatabase.rawQuery(sql, null);
+                            SubjectAdapter subjectAdapter = new SubjectAdapter(getApplicationContext(), cursor, 0);
+                            subjectAdapter.notifyDataSetChanged();
+                            lv.setAdapter(subjectAdapter);
+                            Toast.makeText(getApplicationContext(), "정상적으로 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                        catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }
                         dialog.dismiss();
-
                     }
                 });
 
-                ad.create();
-                ad.show();
+
+                buttonCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+
+               dialog.show();
 
             }
         });
@@ -152,6 +154,7 @@ public class SubjectManage extends AppCompatActivity {
 
                 Intent intent = new Intent(SubjectManage.this, Subject.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -160,7 +163,7 @@ public class SubjectManage extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                AlertDialog.Builder ad = new AlertDialog.Builder(SubjectManage.this);
+               /* AlertDialog.Builder ad = new AlertDialog.Builder(SubjectManage.this);
                 ad.setTitle("Title");
                 ad.setMessage("삭제를 원하시는 과목을 리스트에서 클릭하세요.");
 
@@ -174,7 +177,24 @@ public class SubjectManage extends AppCompatActivity {
                 });
 
                 ad.create();
-                ad.show();
+                ad.show();*/
+
+
+               AlertDialog.Builder ad = new AlertDialog.Builder(SubjectManage.this);
+                LayoutInflater inflater = getLayoutInflater();
+                final View view2 = inflater.inflate(R.layout.dialog_delete, null);
+                ad.setView(view2);
+                final Button buttonRegister = (Button)view2.findViewById(R.id.buttonRegister);
+                final AlertDialog dialog = ad.create();
+
+                buttonRegister.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
 
 
             }
