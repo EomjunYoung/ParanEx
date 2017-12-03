@@ -14,6 +14,7 @@ public class User {
     private String before;          //옛전공
     private boolean newORtrans;    // 신/편입
     private boolean abeek;          //공학인증
+    private String subjectList;     //수강과목 리스트
 
     public String getName() {
         return name;
@@ -89,5 +90,13 @@ public class User {
 
     public String serializedUser(){
         return number+"/"+name+"/"+grade+"/"+major+"/"+before+"/"+(abeek?1:0)+"/"+(newORtrans?1:0);
+    }
+
+    public String getSubjectList() {
+        return subjectList;
+    }
+
+    public void setSubjectList(String subjectList) {
+        this.subjectList = subjectList;
     }
 }

@@ -1,57 +1,71 @@
 package kr.ac.ajou.paran.util.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.database.Cursor;
-import android.util.Log;
+import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import kr.ac.ajou.paran.R;
 
 /**
- * Created by ejy77 on 2017-11-16.
+ * Created by dream on 2017-12-02.
  */
 
-public class SubjectAdapter extends CursorAdapter
+public class SubjectAdapter extends BaseAdapter {
+    private  Context context;
+    private  int layout;
+    private  ArrayList<String> subjects;
+    private  LayoutInflater layoutInflater;
 
-{
-
-    public SubjectAdapter(Context context, Cursor c, int flag)
-    {
-        super(context,c,flag);
-    }
-
-
-
-    @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-
-        return LayoutInflater.from(context).inflate(R.layout.activity_adapter, parent, false);
+    public SubjectAdapter(Context context, int layout, ArrayList<String> subjects) {
+        this.context = context;
+        this.layout = layout;
+        this.subjects = subjects;
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public int getCount() {
+        return subjects.size();
+    }
 
+    @Override
+    public Object getItem(int position) {
+        return subjects.get(position);
+    }
 
-        TextView tvretake = (TextView)view.findViewById(R.id.retake);
-        TextView tvmandate = (TextView)view.findViewById(R.id.mandate);
-        TextView tvname = (TextView)view.findViewById(R.id.name);
-        Log.d("eom", "TEXTVIEW 완료");
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-        String retake = cursor.getString(cursor.getColumnIndexOrThrow("retake"));
-        String mandate = cursor.getString(cursor.getColumnIndexOrThrow("mandate"));
-        String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
-        Log.d("eom", "TEST 완료");
+    @SuppressLint("ResourceAsColor")
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView = layoutInflater.inflate(layout, null);
+            holder = new ViewHolder();
+            holder.textView = (TextView) convertView.findViewById(R.id.textView);
+            holder.layout = (ConstraintLayout)convertView.findViewById(R.id.layoutSubject);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        holder.textView.setTextColor(context.getResources().getColor(R.color.white));
+        holder.textView.setText(subjects.get(position));
 
+        return convertView;
+    }
 
-        tvretake.setText(retake);
-        tvmandate.setText(mandate);
-        tvname.setText(name);
-        Log.d("eom", "setTEXT 완료");
-
-
+    public class ViewHolder {
+        TextView textView;
+        ConstraintLayout layout;
     }
 }

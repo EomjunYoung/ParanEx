@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -89,7 +88,7 @@ public class AddSubject extends DialogType {
                     public void onItemSelected(AdapterView<?> adapterView, View view, int j, long l) {
                         if (i != 0 && j != 0) {
                             subjects = HTTP.printLecture(i, codes[i][j]);
-                            subjectAdapter = new LectureAdapter(context, R.layout.list_subject, subjects);
+                            subjectAdapter = new LectureAdapter(context, R.layout.list_lecture, subjects);
                             listSubject.setAdapter(subjectAdapter);
                         }
                     }

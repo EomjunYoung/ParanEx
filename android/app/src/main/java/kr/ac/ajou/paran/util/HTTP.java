@@ -413,7 +413,7 @@ public class HTTP {
             OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
             wr.write("data="+data+"&number="+number);
             wr.flush();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
         } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

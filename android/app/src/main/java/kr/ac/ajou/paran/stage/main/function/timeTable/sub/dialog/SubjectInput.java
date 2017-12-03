@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ public class SubjectInput extends DialogType{
             for (String subject : str.split("\n"))
                 subjects.add(subject);
         }
-        subjectAdapter = new LectureAdapter(context, R.layout.list_subject, subjects);
+        subjectAdapter = new LectureAdapter(context, R.layout.list_lecture, subjects);
         listSubject.setAdapter(subjectAdapter);
     }
 

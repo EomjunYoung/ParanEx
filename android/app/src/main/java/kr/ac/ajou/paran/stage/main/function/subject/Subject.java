@@ -1,21 +1,18 @@
 package kr.ac.ajou.paran.stage.main.function.subject;
-import android.content.Context;
-import android.content.DialogInterface;
+
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -28,105 +25,102 @@ import java.util.StringTokenizer;
 import kr.ac.ajou.paran.R;
 import kr.ac.ajou.paran.util.Callback;
 import kr.ac.ajou.paran.util.DB;
+import kr.ac.ajou.paran.util.HTTP;
 import kr.ac.ajou.paran.util.NetworkAsync;
-
-import static android.icu.text.Normalizer.YES;
-import static kr.ac.ajou.paran.R.id.buttonRe;
-import static kr.ac.ajou.paran.R.id.rb1;
-import static kr.ac.ajou.paran.R.id.rb2;
-import static kr.ac.ajou.paran.R.id.rgbtn;
-import static kr.ac.ajou.paran.R.id.subjectlv;
+import kr.ac.ajou.paran.util.Raw;
+import kr.ac.ajou.paran.util.adapter.SubjectAdapter;
 
 
 /**
  * Created by user on 2017-08-11.
  */
 
-/*public class Subject extends FunctionType*/
-
 public class Subject extends AppCompatActivity implements Callback {
 
-    ListView subjectlv;
-    public static LinkedHashMap<String, String> basicMap;
-    private static LinkedHashMap<String, String> typeMap;
-    private static LinkedHashMap<String, String> majorMap;
-    private static LinkedHashMap<String, String> areaMap;
-    private Callback mCallback;
+    private int studentNumber;
 
-    public boolean checkBackPress;
-    private final String year = "2017";
+    private LinkedHashMap<String, String> basicMap;
+    private LinkedHashMap<String, String> typeMap;
+    private LinkedHashMap<String, String> majorMap;
+    private LinkedHashMap<String, String> areaMap;
+
     private final String semester = "U0002003";
     private String type;
     private String major;
-    Button btnback;
 
+    private ListView subjectlv;
 
-    final List<String> list = new ArrayList<>();
-    final List<String> list2 = new ArrayList<>();
-    final List<String> list3 = new ArrayList<>();
-    final List<String> list4 = new ArrayList<>();
-    final List<String> list5 = new ArrayList<>();
-
-    DB db;
-    /*public Subject(){
-        super("수강과목 보기",R.layout.activity_subject);
-    }*/
+    List<String> list;
+    List<String> list2;
+    List<String> list3;
+    List<String> list4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subject);
 
+        studentNumber = super.getIntent().getIntExtra("number", 0);
+
+        setNetwork();
+        setMap();
+        setList();
+        setButton();
+    }
+
+    private void setNetwork() {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+    }
+
+    private void setButton() {
+        Button btnback = (Button) findViewById(R.id.btnback);
+        btnback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
+
+    private void setList() {
+
+        list = new ArrayList<>();
+        list2 = new ArrayList<>();
+        list3 = new ArrayList<>();
+        list4 = new ArrayList<>();
+
         subjectlv = (ListView) findViewById(R.id.subjectlv);
-        btnback = (Button)findViewById(R.id.btnback);
-        mCallback = this;
-        db = new DB(getApplicationContext(), "mydb2.db", null, 1);
-
-
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
-
         subjectlv.setAdapter(arrayAdapter);
-        majorMap = setHashMap(majorMap);
-        typeMap = setHashMap3(typeMap);
-        basicMap = setHashMap1(basicMap);
-        areaMap = setHashMap2(areaMap);
 
         list.add("전공과목");
         list.add("교양과목");
         list.add("기초과목");
         list.add("영역별교양");
 
+        final Callback mCallback = this;
 
         subjectlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-
                 Set<String> set = typeMap.keySet();
                 Iterator<String> itr = set.iterator();
 
-
-                while(itr.hasNext())
-                {
-
+                while (itr.hasNext()) {
                     String str = itr.next();
-                    String str2 = (String)subjectlv.getItemAtPosition(i);
+                    String str2 = (String) subjectlv.getItemAtPosition(i);
 
-
-                    if(str2 == "전공과목")
-                    {
-
+                    if (str2 == "전공과목") {
                         type = typeMap.get(str2);
 
                         Set<String> setM = majorMap.keySet();
                         Iterator<String> itrM = setM.iterator();
 
-                        while(itrM.hasNext())
-                        {
+                        while (itrM.hasNext()) {
                             String majorstring = itrM.next();
                             list2.add(majorstring);
                         }
-
 
                         ArrayAdapter<String> arrayAdapter2 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list2);
                         arrayAdapter2.notifyDataSetChanged();
@@ -139,38 +133,30 @@ public class Subject extends AppCompatActivity implements Callback {
                                 Set<String> set = majorMap.keySet();
                                 Iterator<String> itr = set.iterator();
 
-                                while(itr.hasNext())
-                                {
+                                while (itr.hasNext()) {
                                     String str = itr.next();
-                                    String str2 = (String)subjectlv.getItemAtPosition(i);
+                                    String str2 = (String) subjectlv.getItemAtPosition(i);
 
-                                    if(str == str2)
-                                    {
+                                    if (str == str2) {
                                         major = majorMap.get(str2);
                                         NetworkAsync networkAsync = new NetworkAsync(semester, type, major, mCallback);
                                         networkAsync.execute();
                                         break;
                                     }
                                 }
-                   register();
-                }
-            });
-        }
-                    else if (str2 == "교양과목")
-                    {
-
+                                register();
+                            }
+                        });
+                    } else if (str2 == "교양과목") {
                         type = typeMap.get(str2);
 
-                                NetworkAsync networkAsync = new NetworkAsync(semester, type, mCallback);
-                                networkAsync.execute();
+                        NetworkAsync networkAsync = new NetworkAsync(semester, type, mCallback);
+                        networkAsync.execute();
 
                         register();
 
 
-                    }
-
-                    else if (str2 == "기초과목")
-                    {
+                    } else if (str2 == "기초과목") {
 
                         type = typeMap.get(str2);
 
@@ -178,8 +164,7 @@ public class Subject extends AppCompatActivity implements Callback {
                         Iterator<String> itrM = setM.iterator();
 
 
-                        while(itrM.hasNext())
-                        {
+                        while (itrM.hasNext()) {
                             String basicstring = itrM.next();
                             list4.add(basicstring);
                         }
@@ -193,25 +178,20 @@ public class Subject extends AppCompatActivity implements Callback {
                             @Override
                             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-
                                 Set<String> set = basicMap.keySet();
                                 Iterator<String> itr = set.iterator();
 
 
-                                while(itr.hasNext())
-                                {
+                                while (itr.hasNext()) {
                                     String str = itr.next();
-                                    String str2 = (String)subjectlv.getItemAtPosition(i);
+                                    String str2 = (String) subjectlv.getItemAtPosition(i);
 
-                                    if(str == str2)
-                                    {
+                                    if (str == str2) {
                                         major = basicMap.get(str2);
                                         NetworkAsync networkAsync = new NetworkAsync(semester, type, major, mCallback);
                                         networkAsync.execute();
                                         break;
-
                                     }
-
                                 }
 
                                 register();
@@ -219,19 +199,14 @@ public class Subject extends AppCompatActivity implements Callback {
                             }
                         });
 
-                    }
-
-
-                    else if (str2 == "영역별교양")
-                    {
+                    } else if (str2 == "영역별교양") {
                         type = typeMap.get(str2);
 
                         Set<String> setA = areaMap.keySet();
                         Iterator<String> itrA = setA.iterator();
 
 
-                        while(itrA.hasNext())
-                        {
+                        while (itrA.hasNext()) {
                             String majorstring = itrA.next();
                             list2.add(majorstring);
                         }
@@ -249,13 +224,11 @@ public class Subject extends AppCompatActivity implements Callback {
                                 Set<String> setA = areaMap.keySet();
                                 Iterator<String> itr = setA.iterator();
 
-                                while(itr.hasNext())
-                                {
+                                while (itr.hasNext()) {
                                     String str = itr.next();
-                                    String str2 = (String)subjectlv.getItemAtPosition(i);
+                                    String str2 = (String) subjectlv.getItemAtPosition(i);
 
-                                    if(str==str2)
-                                    {
+                                    if (str == str2) {
                                         major = areaMap.get(str2);
                                         NetworkAsync networkAsync = new NetworkAsync(semester, type, major, mCallback);
                                         networkAsync.execute();
@@ -273,44 +246,30 @@ public class Subject extends AppCompatActivity implements Callback {
                 }
             }
         });
-
-
-        btnback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //onBackPressed();
-                finish();
-
-            }
-        });
-
     }
 
-    public static LinkedHashMap<String, String> setHashMap3(LinkedHashMap<String, String> typeMap)
-    {
+    private void setMap() {
+        majorMap = setHashMap(majorMap);
+        typeMap = setHashMap3(typeMap);
+        basicMap = setHashMap1(basicMap);
+        areaMap = setHashMap2(areaMap);
+    }
+
+    public static LinkedHashMap<String, String> setHashMap3(LinkedHashMap<String, String> typeMap) {
         typeMap = new LinkedHashMap<>();
 
         typeMap.put("전공과목", "U0209001");
         typeMap.put("교양과목", "U0209002");
         typeMap.put("기초과목", "U0209003");
-        //typeMap.put("공학기초", "U0209004");
-        typeMap.put("영역별교양","U0209005");
-        //typeMap.put("학점교류", "U0209006");
-        //typeMap.put("공학인증교양", "U0209007");
+        typeMap.put("영역별교양", "U0209005");
 
         return typeMap;
     }
 
 
-    public static LinkedHashMap<String, String> setHashMap2(LinkedHashMap<String, String> areaMap)
-    {
+    public static LinkedHashMap<String, String> setHashMap2(LinkedHashMap<String, String> areaMap) {
         areaMap = new LinkedHashMap<>();
-
-        areaMap.put("역사와 철학(인문학1)", "U0204006");
-        areaMap.put("문학과 예술(인문학2)", "U0204007");
-        areaMap.put("인간과 사회(사회과학)", "U0204008");
-        areaMap.put("자연과 과학(자연과학)", "U0204009");
+        putAreaMap(areaMap);
 
         return areaMap;
     }
@@ -318,7 +277,126 @@ public class Subject extends AppCompatActivity implements Callback {
 
     public static LinkedHashMap<String, String> setHashMap1(LinkedHashMap<String, String> basicMap) {
         basicMap = new LinkedHashMap<>();
+        putBasicMap(basicMap);
 
+        return basicMap;
+    }
+
+    public static LinkedHashMap<String, String> setHashMap(LinkedHashMap<String, String> majorMap) {
+        majorMap = new LinkedHashMap<>();
+        putMajorMap(majorMap);
+
+
+        return majorMap;
+    }
+
+    @Override
+    public void getReturn(Object o) {
+
+
+        String string = o.toString();
+        StringTokenizer s = new StringTokenizer(string, "E");
+        String tmp = "";
+
+        while (s.hasMoreTokens()) {
+
+
+            String name = s.nextToken();
+            String mandate = s.nextToken();
+
+            if (tmp.equals(name)) {
+                continue;
+            }
+
+            list3.add("과목 :" + name + "  " + "구분 :" + mandate);
+            tmp = name;
+        }
+
+        ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list3);
+        arrayAdapter3.notifyDataSetChanged();
+        subjectlv.setAdapter(arrayAdapter3);
+
+    }
+
+
+    public void register() {
+
+        subjectlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view2, final int i, long l) {
+
+
+                AlertDialog.Builder ad = new AlertDialog.Builder(Subject.this);
+                LayoutInflater inflater = getLayoutInflater();
+                final View view3 = inflater.inflate(R.layout.dialog_recheck, null);
+                ad.setView(view3);
+                final Button buttonCancel = (Button) view3.findViewById(R.id.buttonCancel);
+                final Button buttonRegister = (Button) view3.findViewById(R.id.buttonRegister);
+                final AlertDialog dialog = ad.create();
+
+                final RadioGroup btnGroup = (RadioGroup) view3.findViewById(R.id.btnGroup);
+
+                buttonRegister.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+
+                            final int checkedID = btnGroup.getCheckedRadioButtonId();
+                            final RadioButton checkedbtn = (RadioButton) btnGroup.findViewById(checkedID);
+                            String retake = checkedbtn.getText().toString().trim();
+                            String tmp = null;
+                            String name = null;
+
+                            tmp = (String) subjectlv.getItemAtPosition(i);
+                            name = tmp.substring(tmp.indexOf(":") + 1, tmp.indexOf("구분")).trim();
+                            type = tmp.substring(tmp.indexOf("구분") + 4, tmp.length()).trim();
+                            Toast.makeText(getApplicationContext(), "정상적으로 추가되었습니다.", Toast.LENGTH_SHORT).show();
+
+                            updateDB(retake, name);
+
+                            Intent intent = new Intent(Subject.this, SubjectManage.class).putExtra("number", studentNumber);;
+                            startActivity(intent);
+                            finish();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+                buttonCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
+
+    }
+
+    private void updateDB(String retake, String name) {
+        DB db = new DB(getApplicationContext(), "mydb2.db", null, 1);
+        db.insertSubject(retake, type, name);
+        updateSubjectToServer(db.getSubjectList());
+        db.close();
+    }
+
+    private void updateSubjectToServer(String subjectList) {
+        String ip, port;
+        ip = Raw.readIP(Subject.this);
+        port = Raw.readPort(Subject.this);
+        HTTP.postSubject(ip + ":" + port, subjectList, studentNumber);
+    }
+
+    private static void putAreaMap(LinkedHashMap<String, String> areaMap) {
+        areaMap.put("역사와 철학(인문학1)", "U0204006");
+        areaMap.put("문학과 예술(인문학2)", "U0204007");
+        areaMap.put("인간과 사회(사회과학)", "U0204008");
+        areaMap.put("자연과 과학(자연과학)", "U0204009");
+    }
+
+    private static void putBasicMap(LinkedHashMap<String, String> basicMap) {
         basicMap.put("공통", "00");
         basicMap.put("기계공학부", "DS03001002");
         basicMap.put("기계공학과", "DS03001021");
@@ -387,15 +465,9 @@ public class Subject extends AppCompatActivity implements Callback {
         basicMap.put("융합시스템공학과", "DS03001030");
         basicMap.put("자동차SW전공", "DS0300204");
         basicMap.put("디지털휴머니티전공", "DS03005026");
-
-
-        return basicMap;
     }
 
-
-    public static LinkedHashMap<String, String> setHashMap(LinkedHashMap<String, String> majorMap)
-    {
-        majorMap = new LinkedHashMap<>();
+    private static void putMajorMap(LinkedHashMap<String, String> majorMap) {
         majorMap.put("기계공학전공", "DS03001002001");
         majorMap.put("기계공학전공(과)", "DS03001021001");
         majorMap.put("산업정보시스템공학전공", "DS03001003001");
@@ -501,114 +573,5 @@ public class Subject extends AppCompatActivity implements Callback {
         majorMap.put("ICT융합전공(과)(폐지)", "DS03002022004");
         majorMap.put("자동차SW전공(과)", "DS030020401");
         majorMap.put("디지털휴머니티전공(과)", "DS0300502601");
-
-
-        return majorMap;
     }
-
-
-    @Override
-    public void getReturn(Object o) {
-
-
-        String string = o.toString();
-        StringTokenizer s = new StringTokenizer(string, "E");
-        String tmp="";
-
-        while (s.hasMoreTokens()) {
-
-
-            String name = s.nextToken();
-            String mandate = s.nextToken();
-
-            if(tmp.equals(name))
-            {
-                continue;
-            }
-
-            list3.add("과목 :" + name + "  " + "구분 :"+ mandate );
-            tmp = name;
-        }
-
-        ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list3);
-        arrayAdapter3.notifyDataSetChanged();
-        subjectlv.setAdapter(arrayAdapter3);
-
-    }
-
-
-    public void register()
-    {
-
-        subjectlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view2, final int i, long l) {
-
-
-                AlertDialog.Builder ad = new AlertDialog.Builder(Subject.this);
-                LayoutInflater inflater = getLayoutInflater();
-                final View view3 = inflater.inflate(R.layout.dialog_recheck, null);
-                ad.setView(view3);
-                final Button buttonCancel = (Button)view3.findViewById(R.id.buttonCancel);
-                final Button buttonRegister = (Button)view3.findViewById(R.id.buttonRegister);
-                final AlertDialog dialog = ad.create();
-
-                final RadioGroup btnGroup = (RadioGroup)view3.findViewById(R.id.btnGroup);
-                //final int checkedID = btnGroup.getCheckedRadioButtonId();
-                //Toast.makeText(getApplicationContext(), checkedbtn.getText().toString(), Toast.LENGTH_SHORT).show();
-
-                buttonRegister.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-
-
-                try{
-
-                    final int checkedID = btnGroup.getCheckedRadioButtonId();
-                    final RadioButton checkedbtn = (RadioButton)btnGroup.findViewById(checkedID);
-                    String retake = checkedbtn.getText().toString();
-                    String sql = "select _id from subjectinfo2";
-                    Cursor cursor = db.getReadableDatabase().rawQuery(sql, null);
-                    int c = cursor.getCount();
-                    String tmp = null;
-                    String name = null;
-                    String type = null;
-
-                    tmp = (String)subjectlv.getItemAtPosition(i);
-                    name = tmp.substring(tmp.indexOf(":")+1, tmp.indexOf("구분"));
-                    type = tmp.substring(tmp.indexOf("구분")+4, tmp.length());
-                    Toast.makeText(getApplicationContext(), "정상적으로 추가되었습니다.", Toast.LENGTH_SHORT).show();
-                    db.insertSubject(c+1, retake, type, name);
-                    Intent intent = new Intent(Subject.this, SubjectManage.class);
-                    startActivity(intent);
-                    finish();
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-                    }
-                });
-
-
-                buttonCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        dialog.dismiss();
-                    }
-                });
-
-
-                dialog.show();
-
-
-            }
-        });
-
-    }
-
-
 }
