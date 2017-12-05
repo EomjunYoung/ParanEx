@@ -38,9 +38,6 @@ public class HTTP {
     private final static String GET_TOTAL = "/mobile/M02/M02_020.es";
     private final static String REQUEST_PICTURE = "/QrCodeService/GetPhotoImg.svc/GetUserPhotoAJOU?Loc=AJOU&Idno=";
     private final static String GET_PICTURE = "/KCPPhoto//PHO_";
-    private final static String GET_ABEEK = "/uni/uni/abee/cmmn/findAccept.action?strStdNo=";
-    private final static String GET_INIT_CODE = "/uni/uni/sreg/srms/findSregMasterMajorDiv.action?strStdNo=";
-    private final static String GET_INIT_MAJOR = "/uni/uni/sreg/srms/findSregMasterMajorAply.action?strStdNo=";
     private final static String GET_LECTURE = "/uni/uni/cour/lssn/findCourLecturePlanDocumentReg.action";
 
     private static HttpURLConnection makeConnection(URL url) {
@@ -71,28 +68,6 @@ public class HTTP {
             e.printStackTrace();
             return null;
         }
-    }
-
-    public static boolean checkAbeek(String cookie,int number) {
-        try {
-            String line = null;
-            BufferedReader rd = getXML(new URL(HAKSA + GET_ABEEK+number), cookie);
-            while ((line = rd.readLine()) != null) {
-                if(line.indexOf("<accept>")>-1){
-                    if(line.indexOf("Y")>-1)
-                        return true;
-                    else
-                        return false;
-                }
-            }
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return false;
     }
 
     public static String printSubject(String cookie) {
@@ -371,28 +346,52 @@ public class HTTP {
         return subjects;
     }
 
-    public static String inspectMajor(String cookie, int number) {
-        String major="";
-        String code="";
+    public static ArrayList<String> printBefore(int abeek, int year){
+        ArrayList<String> majors = new ArrayList<>();
+
+        String line = "";
         try {
-            String line = null;
-            BufferedReader rd = getXML(new URL(HAKSA + GET_INIT_CODE + number), cookie);
-            while ((line = rd.readLine()) != null) {
-                if (line.indexOf("<mjFg>") > -1) {
-                    code = line.substring(line.indexOf(">")+1);
-                    code = code.substring(0,code.indexOf("<"));
-                }
+            HttpURLConnection con = makeConnection(new URL("http://haksa.ajou.ac.kr/com/com/cmmn/code/findDeptList3.action"));
+            con.setRequestProperty("Content-Type", "text/xml/SosFlexMobile;charset=utf-8");
+            con.setRequestProperty("Accept-Language", "ko-kr,ko;q=0.8,en-us;q=0.6,en;q=0.4");
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+            String params;
+            params="<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+            params+="<root>\n";
+            params+="<params>\n";
+            params+="<param id=\"strDataSet\" type=\"STRING\">DS_MJ_CD_SH</param>\n";
+            params+="<param id=\"strUserNo\" type=\"STRING\">000000000</param>\n";
+            params+="<param id=\"strDeptUseFg\" type=\"STRING\">C0040002</param>\n";
+            params+="<param id=\"strMngtYn1\" type=\"STRING\">1</param>\n";
+            params+="<param id=\"strMngtYn2\" type=\"STRING\">0</param>\n";
+            params+="<param id=\"strModeFg\" type=\"STRING\">S</param>\n";
+            params+="<param id=\"strYy\" type=\"STRING\">"+year+"</param>\n";
+            params+="<param id=\"strPosiGrpCd\" type=\"STRING\">31</param>\n";
+            params+="<param id=\"strUpDeptCd\" type=\"STRING\"></param>\n";
+            params+="<param id=\"strUseFg\" type=\"STRING\">1</param>\n";
+            params+="<param id=\"strCampCd\" type=\"STRING\">S</param>\n";
+            params+="<param id=\"strUserDeptCd\" type=\"STRING\">0000000000</param>\n";
+            params+="<param id=\"strFg\" type=\"STRING\">"+abeek+"</param>\n";
+            params+="<param id=\"AUDIT9_ID\" type=\"STRING\"></param>\n";
+            params+="</params>\n";
+            params+="</root>\n";
+            wr.write(params);
+            wr.flush();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            while ((line = rd.readLine()) != null){
+                if(line.indexOf("<useFg/>") > -1)
+                    break;
             }
-            if(code.equals("") == false){
-                rd = getXML(new URL(HAKSA + GET_INIT_MAJOR + number + "&strMjFg=" + code), cookie);
-                while ((line = rd.readLine()) != null) {
-                    if (line.indexOf("<record>") > -1) {
-                        line = rd.readLine();
-                        if(line.indexOf("<chgBfDeptNm>")>-1) {
-                            major = line.substring(line.indexOf(";") + 1);
-                            major = major.substring(0, major.indexOf("<"));
-                        }
-                    }
+            String str="";
+            while ((line = rd.readLine()) != null) {
+                if (line.indexOf("<deptCd>") > -1) {
+                    str = line.substring(line.indexOf("<deptCd>")+8,line.indexOf("</deptCd>"));
+                }else if(line.indexOf("<deptKorNm>") > -1){
+                    line = line.substring(line.indexOf("<deptKorNm>")+11,line.indexOf("</deptKorNm>"));
+                    line = line.replaceAll("&#32;", " ");
+                    majors.add(line+"/"+str);
                 }
             }
         } catch (MalformedURLException e) {
@@ -402,7 +401,8 @@ public class HTTP {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return major;
+
+        return majors;
     }
 
     public static void postSubject(String server, String data, int number) {

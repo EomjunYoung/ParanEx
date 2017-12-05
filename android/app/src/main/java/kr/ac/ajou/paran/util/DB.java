@@ -24,6 +24,27 @@ public class DB extends SQLiteOpenHelper {
     public DB(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, 1);
         db = getReadableDatabase();
+        try {
+            initStringBuilder();
+            sb.append("CREATE TABLE IF NOT EXISTS subjectinfo2( ");
+            sb.append("retake varchar(20), ");
+            sb.append("mandate varchar(20), ");
+            sb.append("name varchar(20) PRIMARY KEY) ");
+
+            db.execSQL(sb.toString());
+
+            initStringBuilder();
+            sb.append("CREATE TABLE IF NOT EXISTS etc2( ");
+            sb.append("number integer PRIMARY KEY, ");
+            sb.append("abeek integer, ");
+            sb.append("before varchar(20))");
+
+            db.execSQL(sb.toString());
+            Log.d("eom", "db 생성완료!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void initStringBuilder() {
@@ -39,20 +60,6 @@ public class DB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        initStringBuilder();
-
-        try {
-            sb.append("CREATE TABLE IF NOT EXISTS subjectinfo2( ");
-            sb.append("retake varchar(20), ");
-            sb.append("mandate varchar(20), ");
-            sb.append("name varchar(20) PRIMARY KEY) ");
-
-            db.execSQL(sb.toString());
-            Log.d("eom", "db 생성완료!");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public int checkSubject(){
@@ -70,6 +77,19 @@ public class DB extends SQLiteOpenHelper {
     public boolean checkSubject(String subject){
         boolean check =  false;
         Cursor cursor = db.rawQuery("select count(*) as number from subjectinfo2 where name='"+subject.trim()+"'", null);
+        if (cursor.moveToFirst()) {
+            final int indexNumber = cursor.getColumnIndex("number");
+            if(cursor.getInt(indexNumber) != 0)
+                check = true;
+        }
+        cursor.close();
+
+        return check;
+    }
+
+    public boolean checkETC(int number){
+        boolean check =  false;
+        Cursor cursor = db.rawQuery("select count(*) as number from etc2 where number="+number, null);
         if (cursor.moveToFirst()) {
             final int indexNumber = cursor.getColumnIndex("number");
             if(cursor.getInt(indexNumber) != 0)
@@ -99,6 +119,20 @@ public class DB extends SQLiteOpenHelper {
             return subjectList.toString();
     }
 
+    public String getETC(int number)
+    {
+        String etc = "";
+        Cursor cursor = db.rawQuery("select * from etc2 where number="+number, null);
+        if (cursor.moveToFirst()) {
+            final int indexAbeek = cursor.getColumnIndex("abeek");
+            final int indexBefore = cursor.getColumnIndex("before");
+            etc = cursor.getInt(indexAbeek)+"/"+cursor.getString(indexBefore);
+        }
+        cursor.close();
+
+        return etc;
+    }
+
     public ArrayList<String> getSubject()
     {
         ArrayList<String> subjects = new ArrayList<String>();
@@ -125,6 +159,29 @@ public class DB extends SQLiteOpenHelper {
             sb.append("'"+ retake +"' , '"+ mandate +"', '"+ name.trim() +"'");
             sb.append(")");
             db.execSQL(sb.toString());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void insertETC(int number, int abeek, String before) {
+        initStringBuilder();
+
+        try{
+            sb.append("INSERT INTO etc2(number,abeek,before) VALUES( ");
+            sb.append(number +" , "+ abeek +", '"+ before.trim() +"'");
+            sb.append(")");
+            db.execSQL(sb.toString());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void updateETC(int number, int abeek, String before) {
+        initStringBuilder();
+
+        try{
+            db.execSQL("UPDATE etc2 SET abeek="+abeek+", before='"+before.trim()+"' WHERE number="+number);
         }catch(Exception e){
             e.printStackTrace();
         }

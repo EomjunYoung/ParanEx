@@ -16,7 +16,9 @@ import android.widget.TextView;
 import java.util.StringTokenizer;
 
 import kr.ac.ajou.paran.R;
+import kr.ac.ajou.paran.stage.main.dialog.AddETC;
 import kr.ac.ajou.paran.stage.main.dialog.AlertTrans;
+import kr.ac.ajou.paran.stage.main.dialog.CheckETC;
 import kr.ac.ajou.paran.stage.main.dialog.CheckSavedTable;
 import kr.ac.ajou.paran.stage.main.dialog.InitSubject;
 import kr.ac.ajou.paran.stage.main.function.bulltinBoard.BulltinBoard;
@@ -76,23 +78,35 @@ public class Main extends AppCompatActivity implements View.OnClickListener {
 
         /*수강 정보 받아옴*/
         user.setSubjectList(HTTP.printSubject(cookie));
-        checkSubjectFromDB(user);
+        checkSubjectFromDB();
         new InitSubject(this, user.getSubjectList()).showDialog();
         /*수강 정보 받아옴*/
 
         if (user.isNewORtrans() == false)
             new AlertTrans(this).showDialog();
 
-        /*공학인증 여부 조사*/
-        user.setAbeek(HTTP.checkAbeek(cookie, user.getNumber()));
-        /*공학인증 여부 조사*/
-
-        /*초기 전공 조사*/
-        user.setBefore(HTTP.inspectMajor(cookie, user.getNumber()));
-        /*초기 전공 조사*/
+        /*공학인증, 초기 전공 여부 조사*/
+        checkETCFromDB();
+        /*공학인증, 초기 전공 여부 조사*/
     }
 
-    private void checkSubjectFromDB(User user) {
+    public void checkETCFromDB() {
+        DB db = new DB(getApplicationContext(), "mydb2.db", null, 1);
+        boolean checker = db.checkETC(user.getNumber());
+        String etc = db.getETC(user.getNumber());
+        db.close();
+        if(checker == true) {
+            new CheckETC(this, user, etc).showDialog();
+            user.setAbeek(etc.split("/")[0].equals("1")?true:false);
+            user.setBefore(etc.split("/")[1].trim());
+        }
+        else{
+            new AddETC(this,user.getNumber()).showDialog();
+        }
+
+    }
+
+    private void checkSubjectFromDB() {
         DB db = new DB(getApplicationContext(), "mydb2.db", null, 1);
 
         int number_subject;
@@ -169,7 +183,7 @@ public class Main extends AppCompatActivity implements View.OnClickListener {
         imageLogo.setY(height * 0.2f);
     }
 
-    private void sendSubjectToServer() {
+    public void sendSubjectToServer() {
         ip = Raw.readIP(Main.this);
         port = Raw.readPort(Main.this);
         if (!ip.equals("") && !port.equals("")) {
