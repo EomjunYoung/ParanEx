@@ -19,9 +19,10 @@ public class CheckETC extends TwoWays {
         buttonOK = super.getButtonOK();
         buttonCancel = super.getButtonNO();
 
-        super.setContent("등록된 입학전공은\n\""+etc.split("/")[1]+"\"이며\n공학인증을 "+(etc.split("/")[0].equals("0")?"하지 않고":"하고")+" 있습니다");
+        super.setTitle("안내");
+        super.setContent("등록된 입학전공은\n\""+etc.split("/")[1]+"\"이며\n공학인증을 "+(etc.split("/")[0].equals("0")?"하지 않고":"하고")+" 있습니다\n");
         buttonOK.setText("수정");
-        buttonCancel.setText("닫기");
+        buttonCancel.setText("확인");
 
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -150,6 +150,21 @@ public class DB extends SQLiteOpenHelper {
         return subjects;
     }
 
+    public ArrayList<String> getRe()
+    {
+        ArrayList<String> res = new ArrayList<String>();
+        Cursor cursor = db.rawQuery("select * from subjectinfo2 where retake='O'", null);
+        if (cursor.moveToFirst()) {
+            final int indexName = cursor.getColumnIndex("name");
+            do {
+                res.add(cursor.getString(indexName).trim());
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        return res;
+    }
+
     public void insertSubject(String retake, String mandate, String name)
     {
         initStringBuilder();

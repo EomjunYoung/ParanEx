@@ -12,6 +12,11 @@
         android:text="교육 과정 / 입학 전공 선택"
         android:textColor="@color/white"
         android:background="@drawable/gradation_blue"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="\n교육 과정"
+        android:textColor="@color/white" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,7 +37,13 @@
             android:textColor="@color/white"
             android:text="공학 인증"/>
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="\n입학 전공"
+        android:textColor="@color/white" />
     <ListView
+        android:layout_marginBottom="5dp"
         android:id="@+id/listMajor"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"

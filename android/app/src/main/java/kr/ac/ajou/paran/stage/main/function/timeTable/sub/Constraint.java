@@ -192,7 +192,7 @@ public class Constraint extends AppCompatActivity {
         buttonRe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new ReInput(context).showDialog();
+                new ReInput(context,textRe).showDialog();
             }
         });
 

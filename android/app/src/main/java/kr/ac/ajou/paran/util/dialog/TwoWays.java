@@ -38,4 +38,8 @@ public class TwoWays extends DialogType {
     public Button getButtonNO(){
         return buttonCancel;
     }
+
+    public void setTitle(String title){
+        textTitle.setText(title);
+    }
 }
