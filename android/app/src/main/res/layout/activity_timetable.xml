@@ -74,7 +74,6 @@
             android:layout_height="match_parent"
             android:text="넘어가기"
             android:textColor="@color/white"
-            android:backgroundTint="@color/login_button"
-            />
+            android:backgroundTint="@color/login_button"/>
     </LinearLayout>
 </LinearLayout>

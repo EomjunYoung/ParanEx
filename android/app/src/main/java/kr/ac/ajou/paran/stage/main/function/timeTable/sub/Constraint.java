@@ -1,6 +1,7 @@
 package kr.ac.ajou.paran.stage.main.function.timeTable.sub;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
@@ -95,6 +96,9 @@ public class Constraint extends AppCompatActivity {
                     String ip = Raw.readIP(Constraint.this);
                     String port = Raw.readPort(Constraint.this);
                     HTTP.postConstraint(ip+":"+port,studentNumber,columns,rows,score,res,includes,excludes);
+                    startActivity(new Intent(context, Recommend.class).putExtra("number",studentNumber));
+                    finish();
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             }
         });
