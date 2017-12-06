@@ -6,7 +6,8 @@ import sys
 reload(sys)  
 sys.setdefaultencoding('utf-8')
 
-def getMajor(year,semester,major):
+def getMajor(year,semester):
+	major = []
 	h = httplib.HTTPSConnection("haksa.ajou.ac.kr")
 
 	year = str(year)
@@ -39,7 +40,8 @@ def getMajor(year,semester,major):
 	h.close()
 	return major
 	
-def getCulture(year,semester,culture):
+def getCulture(year,semester):
+	culture = []
 	h = httplib.HTTPSConnection("haksa.ajou.ac.kr")
 
 	year = str(year)
@@ -71,7 +73,8 @@ def getCulture(year,semester,culture):
 	h.close()
 	return culture;
 
-def getBase(year,semester,major,base):
+def getBase(year,semester,major):
+	base = []
 	h = httplib.HTTPSConnection("haksa.ajou.ac.kr")
 
 	year = str(year)
@@ -104,7 +107,8 @@ def getBase(year,semester,major,base):
 	h.close()
 	return base;
 
-def getArea(year,semester,area):
+def getArea(year,semester):
+	area = []
 	h = httplib.HTTPSConnection("haksa.ajou.ac.kr")
 
 	year = str(year)

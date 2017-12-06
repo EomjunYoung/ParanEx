@@ -3,9 +3,9 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from models import *
-from lecture.getLectureInfo import *
-from time.parseTime import *
-from websocket.connectHttp import *
+from method.Lecture import *
+from method.Time import *
+from method.Requirement import *
 import base64
 import os
 import httplib
@@ -194,110 +194,38 @@ def getTable(request):
 	return render(request,'server/template/index.html',{'result':result})	
 
 def getRequirement(request):
-	result = User.objects.filter(number=201222702)[0]
-	before = result.before
-	abeek = result.abeek
-	year = result.number/100000
-	code=''
-
-	response = httpRequirement(year, abeek, before)
-	if response.status == 200:
-		root = e.fromstring(response.read())
-		for r in root.find('dataset').findall('record'):
-			if str(r.find('deptKorNm').text) == before:
-				code = str(r.find('deptCd').text)
-				print code
-	name = ''
-	if abeek==1:
-		name ='server\\graduate\\A_'+str(year)+'_'+code+'.txt'
-		f = open(name,'r')
-	else:
-		name ='server\\graduate\\N_'+str(year)+'_'+code+'.txt'
-		f = open(name,'r')
-	print 'file "'+name+'" is open'
-
-	data = []
-	count = []
-	group = []
-	root = e.fromstring(f.read())
-	if result.abeek==1:
-		for r in root.find('dataset').findall('record'):
-			try:
-				if r.find('abeekSustLsnFgNm').text[1]==unicode('ÇÊ','euc-kr').encode('utf-8'):	
-					data.append(r.find('sbjtKorNm').text.replace(' ',''))
-					count.append(str(r.find('abeekChoiceSbjtCnt').text))
-					group.append(str(r.find('abeekGrpChoice').text))
-			except:
-				pass
-	else:
-		for r in root.find('dataset').findall('record'):	
-			try:
-				if r.find('sustLsnFgNm').text[1]==unicode('ÇÊ','euc-kr').encode('utf-8'):	
-					data.append(r.find('sbjtKorNm').text.replace(' ',''))
-					count.append(str(r.find('abeekChoiceSbjtCnt').text))
-					group.append(str(r.find('abeekGrpChoice').text))		
-			except:
-				pass
-	f.close()
-
-	result = Subject.objects.filter(number=201222702).distinct()
-	for r in result:
-		try:
-			index = data.index(r.name.replace(' ',''))
-			if count[index] != 'None':
-				g = group[index]
-				if int(count[index]) == 1:
-					j = []
-					for i in range(0,len(data)):
-						if group[i] == g:
-							j.append(data[i])
-					for k in j:
-						index = data.index(k)
-						del(data[index]) 
-						del(count[index])
-						del(group[index])
-				else:
-					for i in range(0,len(data)):
-						if g == group[i]:
-							count[i]=str(int(count[i])-1)
-				
-			else:
-				del(data[index])
-				del(count[index])
-				del(group[index])
-		except:
-			pass
+	user = User.objects.filter(number=201523485)[0]
+	subject = Subject.objects.filter(number=user.number).distinct()
+	code = getPriorCode(user)
+	data = getRequirementFromTable(user, subject, code)
 	for d in data:
-		print d
+		lecture = Lecture.objects.filter(name=d.replace(' ',''))
+		if lecture and lecture[0].grade<=user.grade:
+		#	req.append((lecture[0].name,lecture[0].grade))
+			print lecture[0].name+' '+str(lecture[0].grade)
 	return render(request,'server/template/index.html')
 
 def getLecture(request):
 	if Lecture.objects.count() > 0 :
 		print 'data is already saved'
 		return render(request,'server/template/index.html')
-	major = []
 	major = getMajor(2017,2,major)
 	for m in major:
 		Lecture(name=m[0],diff=m[1],time=m[2],type=m[3],grade=m[4],score=m[5]).save()
 
-	culture = []
 	culture = getCulture(2017,2,culture)
 	for c in culture:
 		Lecture(name=c[0],diff=c[1],time=c[2],type=c[3],grade=c[4],score=c[5]).save()
 
-	base = []
 	base = getBase(2017,2,'00',base)
 	base = getBase(2017,2,'DS0300202',base)
 	for b in base:
 		Lecture(name=b[0],diff=b[1],time=b[2],type=b[3],grade=b[4],score=b[5]).save()
 
-	area = []
 	area = getArea(2017,2,area)
 	for a in area:
 		Lecture(name=a[0],diff=a[1],time=a[2],type=a[3],grade=a[4],score=a[5]).save()
 	return render(request,'server/template/index.html')
-
-
 
 def getProcessed(request):
 	if Processed.objects.count() > 0 :
