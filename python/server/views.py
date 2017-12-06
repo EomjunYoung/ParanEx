@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from models import *
 from lecture.getLectureInfo import *
 from time.parseTime import *
+from websocket.connectHttp import *
 import base64
 import os
 import httplib
@@ -194,47 +195,24 @@ def getTable(request):
 
 def getRequirement(request):
 	result = User.objects.filter(number=201222702)[0]
-	year = str(result.number/100000)
+	before = result.before
+	abeek = result.abeek
+	year = result.number/100000
 	code=''
 
-	h = httplib.HTTPSConnection("haksa.ajou.ac.kr")
-
-	params='<?xml version="1.0" encoding="utf-8"?>\n'
-	params+='<root>\n'
-	params+='<params>\n'
-	params+='<param id="strDataSet" type="STRING">DS_MJ_CD_SH</param>\n'
-	params+='<param id="strUserNo" type="STRING">000000000</param>\n'
-	params+='<param id="strDeptUseFg" type="STRING">C0040002</param>\n'
-	params+='<param id="strMngtYn1" type="STRING">1</param>\n'
-	params+='<param id="strMngtYn2" type="STRING">0</param>\n'
-	params+='<param id="strModeFg" type="STRING">S</param>\n'
-	params+='<param id="strYy" type="STRING">'+year+'</param>\n'
-	params+='<param id="strPosiGrpCd" type="STRING">31</param>\n'
-	params+='<param id="strUpDeptCd" type="STRING"></param>\n'
-	params+='<param id="strUseFg" type="STRING">1</param>\n'
-	params+='<param id="strCampCd" type="STRING">S</param>\n'
-	params+='<param id="strUserDeptCd" type="STRING">0000000000</param>\n'
-	params+='<param id="strFg" type="STRING">'+str(result.abeek)+'</param>\n'
-	params+='<param id="AUDIT9_ID" type="STRING"></param>\n'
-	params+='</params>\n'
-	params+='</root>\n'
-	headers = {'Content-Type': 'text/xml/SosFlexMobile;charset=utf-8'}
-
-	h.request("POST","/com/com/cmmn/code/findDeptList3.action?",params,headers)
-	response = h.getresponse()
+	response = httpRequirement(year, abeek, before)
 	if response.status == 200:
 		root = e.fromstring(response.read())
 		for r in root.find('dataset').findall('record'):
-			if str(r.find('deptKorNm').text) == result.before:
+			if str(r.find('deptKorNm').text) == before:
 				code = str(r.find('deptCd').text)
 				print code
-	h.close()
 	name = ''
-	if result.abeek==1:
-		name ='server\\graduate\\A_'+year+'_'+code+'.txt'
+	if abeek==1:
+		name ='server\\graduate\\A_'+str(year)+'_'+code+'.txt'
 		f = open(name,'r')
 	else:
-		name ='server\\graduate\\N_'+year+'_'+code+'.txt'
+		name ='server\\graduate\\N_'+str(year)+'_'+code+'.txt'
 		f = open(name,'r')
 	print 'file "'+name+'" is open'
 
@@ -281,7 +259,7 @@ def getRequirement(request):
 				else:
 					for i in range(0,len(data)):
 						if g == group[i]:
-							count[i]=count[i]-1
+							count[i]=str(int(count[i])-1)
 				
 			else:
 				del(data[index])
@@ -332,17 +310,23 @@ def getProcessed(request):
 				for a in getTime(i,r.time):
 					if r.name == unicode('운영체제','euc-kr').encode('utf-8') or r.name == unicode('시스템프로그래밍','euc-kr').encode('utf-8') or r.name == unicode('임베디드소프트웨어','euc-kr').encode('utf-8') or r.name == unicode('분산시스템설계','euc-kr').encode('utf-8'):
 						Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,label=1,week=i,start=a[0],finish=a[1]).save()
-#select * from server_processed where label is NULL and name like '%분산시스템설계%';
-
-#2 : 컴네, 네소(미), 컴통, 무선, 네운사(미)
-#3 : 집교, it영어, 자기주도, 캡스톤
-#4 : 현장실습, 창업론(미), 창업현장실습
-
+					elif r.name == unicode('컴퓨터네트워크','euc-kr').encode('utf-8') or r.name == unicode('네트워크소프트웨어','euc-kr').encode('utf-8') or r.name == unicode('컴퓨터통신','euc-kr').encode('utf-8') or r.name == unicode('무선네트워크','euc-kr').encode('utf-8') or r.name == unicode('네트워크운용사례','euc-kr').encode('utf-8'):
+						Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,label=2,week=i,start=a[0],finish=a[1]).save()
+					elif r.name.find(unicode('IT집중교육','euc-kr').encode('utf-8'))>-1 or r.name == unicode('IT전문영어','euc-kr').encode('utf-8') or r.name == unicode('SW캡스톤디자인','euc-kr').encode('utf-8') or r.name == unicode('자기주도프로젝트','euc-kr').encode('utf-8'):
+						Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,label=3,week=i,start=a[0],finish=a[1]).save()
+					elif r.name.find(unicode('SW현장실습','euc-kr').encode('utf-8'))>-1 or r.name.find(unicode('창업현장실습','euc-kr').encode('utf-8'))>-1 or r.name == unicode('SW창업론','euc-kr').encode('utf-8'):
+						Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,label=4,week=i,start=a[0],finish=a[1]).save()
 					else:
 						Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,week=i,start=a[0],finish=a[1]).save()
 			except:
 				if r.name == unicode('운영체제','euc-kr').encode('utf-8') or r.name == unicode('시스템프로그래밍','euc-kr').encode('utf-8') or r.name == unicode('임베디드소프트웨어','euc-kr').encode('utf-8') or r.name == unicode('분산시스템설계','euc-kr').encode('utf-8'):
 					Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,label=1,week=i,start=0,finish=0).save()
+				elif r.name == unicode('컴퓨터네트워크','euc-kr').encode('utf-8') or r.name == unicode('네트워크소프트웨어','euc-kr').encode('utf-8') or r.name == unicode('컴퓨터통신','euc-kr').encode('utf-8') or r.name == unicode('무선네트워크','euc-kr').encode('utf-8') or r.name == unicode('네트워크운용사례','euc-kr').encode('utf-8'):
+					Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,label=2,week=i,start=0,finish=0).save()
+				elif r.name.find(unicode('IT집중교육','euc-kr').encode('utf-8'))>-1 or r.name == unicode('IT전문영어','euc-kr').encode('utf-8') or r.name == unicode('SW캡스톤디자인','euc-kr').encode('utf-8') or r.name == unicode('자기주도프로젝트','euc-kr').encode('utf-8'):
+					Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,label=3,week=i,start=0,finish=0).save()
+				elif r.name.find(unicode('SW현장실습','euc-kr').encode('utf-8'))>-1 or r.name.find(unicode('창업현장실습','euc-kr').encode('utf-8'))>-1 or r.name == unicode('SW창업론','euc-kr').encode('utf-8'):
+					Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,label=4,week=i,start=0,finish=0).save()	
 				else:
 					Processed(name=r.name,diff=r.diff,type=r.type,score=r.score,grade=r.grade,week=i,start=0,finish=0).save()
 	return render(request,'server/template/index.html')
