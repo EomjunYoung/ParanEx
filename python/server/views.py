@@ -287,12 +287,90 @@ def updateTable(request):
 
 @csrf_exempt
 def postConstraint(request):
-	print request.POST.get('week','')
+	query = Processed.objects.all()
+
 	print request.POST.get('time','')
 	print request.POST.get('score','')
 	print request.POST.get('re','')
 	print request.POST.get('include','')
+
+	result = TimeTable.objects.filter(number=201222702)
+	for r in result:
+		query = query.exclude(name__startswith=r.name.replace(' ',''))
+
+	result = Subject.objects.filter(number=201222702)
+	for r in result:
+		query = query.exclude(name__startswith=r.name.replace(' ',''))
+
+	time = []
+	result = TimeTable.objects.filter(number=201222702)
+	for r in result:
+		i = r.start
+		while True:
+			if i >= r.end:
+				break
+			time.append((r.week,i))
+			i+=0.5	
+
+
+	delete = set()
+	for t in time:
+		for q in query.filter(week=t[0],start__lte=t[1],finish__gt=t[1]):
+			delete.add((q.name,q.diff))
+	for d in delete:
+		query = query.exclude(name = d[0],diff=d[1])
+
+	
+	grade = User.objects.filter(number=201222702)[0].grade
+	query = query.exclude(grade__gte=grade)
+
+	if request.POST.get('week','') != '':
+		week = request.POST.get('week','').split("/")
+		delete = set()
+		for w in week:
+			for q in query.filter(week = w):
+				delete.add((q.name,q.diff))
+		for d in delete:
+			query = query.exclude(name = d[0],diff=d[1])
+
+	subject = set()
+	for q in query:
+		subject.add(q.name)
+	for s in subject:
+		print s
+	print len(subject)
 	return render(request,'server/template/index.html')
 
 def test(request):
+	query = Processed.objects.all()
+	result = TimeTable.objects.filter(number=201222702)
+	for r in result:
+		query = query.exclude(name__startswith=r.name.replace(' ',''))
+
+	result = Subject.objects.filter(number=201222702)
+	for r in result:
+		query = query.exclude(name__startswith=r.name.replace(' ',''))
+
+	time = []
+	result = TimeTable.objects.filter(number=201222702)
+	for r in result:
+		i = r.start
+		while True:
+			if i >= r.end:
+				break
+			time.append((r.week,i))
+			i+=0.5
+	
+	for t in time:
+		query = query.exclude(week=t[0],start__lte=t[1],finish__gt=t[1])
+	
+	grade = User.objects.filter(number=201222702)[0].grade
+	query = query.exclude(grade__gte=grade)
+
+	subject = set()
+	for q in query:
+		subject.add(q.name)
+	for s in subject:
+		print s
+	print len(subject)
 	return render(request,'server/template/index.html')
