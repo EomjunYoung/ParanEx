@@ -112,22 +112,9 @@ def getRequirementFromTable(user, subject, code):
 		except:
 			pass
 	return data
-
-
-def checkTime(timetable,query):
-	time = []
-	for t in timetable:
-		i = t.start
-		while True:
-			if i >= t.end:
-				break
-			time.append((t.week,i))
-			i+=0.5	
-
-	delete = set()
-	for t in time:
-		for q in query.filter(week=t[0],start__lte=t[1],finish__gt=t[1]):
-			delete.add((q.name,q.diff))
-	for d in delete:
-		query = query.exclude(name = d[0],diff=d[1])
-	return query
+#	for d in data:
+#		result = Lecture.objects.filter(name=d.replace(' ','')).distinct()
+#		if result[0]:
+#			req.append((result.name,result.grade))
+#			print result.name+' '+result.grade
+#	return req

@@ -6,6 +6,7 @@ from models import *
 from method.Lecture import *
 from method.Time import *
 from method.Requirement import *
+from method.Constraint import *
 import base64
 import os
 import httplib
@@ -97,6 +98,7 @@ def postTable(request):
 			if j['responses'][0]['textAnnotations']:
 				list = j['responses'][0]['textAnnotations'][0]['description'].split('\n')
 				for l in list:
+					print l
 					if l=='':
 						continue
 					search = Lecture.objects.filter(name__startswith=l)
@@ -287,43 +289,66 @@ def updateTable(request):
 
 @csrf_exempt
 def postConstraint(request):
+	"""
 	query = Processed.objects.all()
+	"""
 
+	studentNumber = request.POST.get('number','')
+	studentNumber = 201523485
 	print request.POST.get('time','')
 	print request.POST.get('score','')
 	print request.POST.get('re','')
 	print request.POST.get('include','')
 
-	result = TimeTable.objects.filter(number=201222702)
+	#graduate requirement
+	user = User.objects.filter(number=studentNumber)[0]
+	subject = Subject.objects.filter(number=user.number)
+	code = getPriorCode(user)
+	data = getRequirementFromTable(user, subject, code)
+	requirement = []
+	for d in data:
+		lecture = Lecture.objects.filter(name=d.replace(' ',''))
+		if lecture and lecture[0].grade<=user.grade:
+			requirement.append(lecture[0].name)
+
+	#check user's timetable
+	"""
+	result = TimeTable.objects.filter(number=studentNumber)
 	for r in result:
 		query = query.exclude(name__startswith=r.name.replace(' ',''))
+	"""
+	result = TimeTable.objects.filter(number=studentNumber)
+	for r in result:
+		if r.name.replace(' ','') in requirement:
+			requirement.remove(r.name)
 
-	result = Subject.objects.filter(number=201222702)
+	#check user's subject
+	"""
+	result = Subject.objects.filter(number=studentNumber)
 	for r in result:
 		query = query.exclude(name__startswith=r.name.replace(' ',''))
-
-	time = []
-	result = TimeTable.objects.filter(number=201222702)
+	"""
+	result = Subject.objects.filter(number=studentNumber)
 	for r in result:
-		i = r.start
-		while True:
-			if i >= r.end:
-				break
-			time.append((r.week,i))
-			i+=0.5	
+		if r.name.replace(' ','') in requirement:
+			requirement.remove(r.name.replace(' ',''))
+
+	#make query
+	query = Processed.objects.none()
+	for r in requirement:
+		query = query | Processed.objects.filter(name=r.replace(' ',''))  
 
 
-	delete = set()
-	for t in time:
-		for q in query.filter(week=t[0],start__lte=t[1],finish__gt=t[1]):
-			delete.add((q.name,q.diff))
-	for d in delete:
-		query = query.exclude(name = d[0],diff=d[1])
-
+	#delete duplicate timetable
+	timetable = TimeTable.objects.filter(number=studentNumber)
+	query = checkTime(timetable,query)
 	
-	grade = User.objects.filter(number=201222702)[0].grade
-	query = query.exclude(grade__gte=grade)
 
+	"""	
+	grade = User.objects.filter(number=studentNumber)[0].grade
+	query = query.exclude(grade__gte=grade)
+	"""
+	
 	if request.POST.get('week','') != '':
 		week = request.POST.get('week','').split("/")
 		delete = set()
@@ -333,44 +358,13 @@ def postConstraint(request):
 		for d in delete:
 			query = query.exclude(name = d[0],diff=d[1])
 
-	subject = set()
 	for q in query:
-		subject.add(q.name)
-	for s in subject:
-		print s
-	print len(subject)
+		print q.name, q.diff
+	print len(query)
+	for r in requirement:
+		print r
+	print len(requirement)
 	return render(request,'server/template/index.html')
 
 def test(request):
-	query = Processed.objects.all()
-	result = TimeTable.objects.filter(number=201222702)
-	for r in result:
-		query = query.exclude(name__startswith=r.name.replace(' ',''))
-
-	result = Subject.objects.filter(number=201222702)
-	for r in result:
-		query = query.exclude(name__startswith=r.name.replace(' ',''))
-
-	time = []
-	result = TimeTable.objects.filter(number=201222702)
-	for r in result:
-		i = r.start
-		while True:
-			if i >= r.end:
-				break
-			time.append((r.week,i))
-			i+=0.5
-	
-	for t in time:
-		query = query.exclude(week=t[0],start__lte=t[1],finish__gt=t[1])
-	
-	grade = User.objects.filter(number=201222702)[0].grade
-	query = query.exclude(grade__gte=grade)
-
-	subject = set()
-	for q in query:
-		subject.add(q.name)
-	for s in subject:
-		print s
-	print len(subject)
 	return render(request,'server/template/index.html')
