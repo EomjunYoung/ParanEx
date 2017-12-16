@@ -83,6 +83,10 @@ public class AddETC extends DialogType {
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+            DB db = new DB(context, "mydb2.db", null, 1);
+            boolean check = db.checkETC(studentNumber);
+            db.close();
+            if(check)
                 dismiss();
             }
         });

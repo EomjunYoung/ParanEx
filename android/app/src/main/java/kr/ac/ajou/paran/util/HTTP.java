@@ -2,12 +2,14 @@ package kr.ac.ajou.paran.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.util.Log;
 
 import com.google.api.client.util.Base64;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -496,7 +498,7 @@ public class HTTP {
                 FileInputStream fileInputStream = new FileInputStream(file);
                 try {
                     fileInputStream.read(bt);
-                    base64 = new String(Base64.encodeBase64(bt));
+                    base64 = new String(Base64.encodeBase64(bitmapToByte(rotate(byteToBitmap(bt)))));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -518,6 +520,32 @@ public class HTTP {
         }
         return result;
     }
+
+    private static byte[] bitmapToByte(Bitmap rotate) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
+        rotate.compress( Bitmap.CompressFormat.JPEG, 100, stream) ;
+        return stream.toByteArray();
+    }
+
+    /* reference : http://thegreedyman.tistory.com/13 */
+    private static Bitmap rotate(Bitmap bitmap) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+
+        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+        bitmap.recycle();
+
+        return resizedBitmap;
+    }
+
+    private static Bitmap byteToBitmap(byte[] bt) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bt, 0, bt.length);
+        return bitmap;
+    }
+    /* reference : http://thegreedyman.tistory.com/13 */
 
     public static String getTable(String server, int number) {
         try {
