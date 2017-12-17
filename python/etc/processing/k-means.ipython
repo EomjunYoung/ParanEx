@@ -1,0 +1,74 @@
+import tensorflow as tf
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+import csv
+
+CLUSTER_COUNT = 3
+
+csv_file = open('attribute.csv','r')
+csv_reader = csv.reader(csv_file)
+
+name = []
+network = []
+system = []
+X = []
+Y = []
+
+matrix = []
+for row in csv_reader:
+	if row:
+		name.append(row[0])
+		network.append(row[1])
+		system.append(row[2])		
+		X.append(int(float(row[1])*100))
+		Y.append(int(float(row[2])*100))
+		
+		matrix.append((int(float(row[1])*100),int(float(row[2])*100)))
+
+
+
+frame = pd.DataFrame({"x": X, "y": Y})
+sns.lmplot("x", "y", data=frame, fit_reg=False, size=6)
+plt.show()
+
+
+
+tensor_data = tf.constant(matrix)
+expanded_vectors = tf.expand_dims(tensor_data, 0)
+
+#center
+centroids = tf.Variable(tf.slice(tf.random_shuffle(tensor_data), [0, 0], [CLUSTER_COUNT, -1]))
+
+expanded_centroids = tf.expand_dims(centroids, 1)
+
+tensor_difference = tf.subtract(expanded_vectors, expanded_centroids)
+tensor_square = tf.square(tensor_difference)
+tensor_distances = tf.reduce_sum(tensor_square, 2)
+assignments = tf.argmin(tensor_distances, 0)
+
+means = tf.concat([tf.reduce_mean(tf.gather(tensor_data, tf.reshape(tf.where(tf.equal(assignments, c)), [1, -1])), reduction_indices=[1]) for c in range(CLUSTER_COUNT)], 0)
+
+update_centroids = tf.assign(centroids, means)
+init_op = tf.global_variables_initializer()
+sess = tf.Session()
+sess.run(init_op)
+for step in range(100):
+	_, centroid_values, assignment_values = sess.run([update_centroids, centroids, assignments])
+print(centroid_values)
+print(assignment_values)
+data = {"x": [], "y": [], "cluster": []}
+for i in range(len(assignment_values)):
+	data["x"].append(matrix[i][0])
+	data["y"].append(matrix[i][1])
+	data["cluster"].append(assignment_values[i])
+df = pd.DataFrame(data)
+sns.lmplot("x", "y", data=df, fit_reg=False, size=6, hue="cluster", legend=False)
+plt.show()
+
+csv_file = open('classficated.csv','w')
+csv_writer = csv.writer(csv_file)
+for i in range(len(name)):
+	csv_writer.writerow([name[i],network[i],system[i],assignment_values[i]])
+csv_file.close()
+print('finished')

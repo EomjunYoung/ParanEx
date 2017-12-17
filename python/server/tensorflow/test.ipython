@@ -1,0 +1,24 @@
+import tensorflow as tf
+import sqlite3
+
+number=201222702
+
+con = sqlite3.connect("../../db.sqlite3")
+cur = con.cursor()
+
+subject = []
+cur.execute("select distinct name, label from server_processed where label is NOT NULL")
+rows = cur.fetchall()
+for row in rows:
+	print(row)
+
+subject = []
+cur.execute("select distinct s.name, p.label from server_subject as s, server_processed as p where s.name = p.name and p.label is NOT NULL and s.number=number")
+rows = cur.fetchall()
+for row in rows:
+    subject.append((row[0],row[1]))
+
+con.close()
+
+hello = tf.constant('Hello, TensorFlow!')
+print(hello)
