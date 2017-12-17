@@ -7,12 +7,14 @@ from method.Lecture import *
 from method.Time import *
 from method.Requirement import *
 from method.Constraint import *
+from operator import itemgetter
 import base64
 import os
 import httplib
 import xml.etree.ElementTree as e
 import json
 import sys  
+import csv
 
 #setting utf-8
 reload(sys)  
@@ -367,4 +369,43 @@ def postConstraint(request):
 	return render(request,'server/template/index.html')
 
 def test(request):
+	result = Subject.objects.filter(number=201222702)
+	count = result.count()
+	network = 0
+	system = 0
+	for r in result:
+		if r.name.replace(' ','') == unicode('운영체제','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('시스템프로그래밍','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('임베디드소프트웨어','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('분산시스템설계','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('임베디드소프트웨어','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('모바일시스템설계','euc-kr').encode('utf-8'):
+			system+=1
+		elif r.name.replace(' ','') == unicode('컴퓨터네트워크','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('네트워크소프트웨어','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('컴퓨터통신','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('무선네트워크','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('네트워크운용사례','euc-kr').encode('utf-8'):
+			network+=1
+	network = float(network)/count 
+	system = float(system)/count
+	classes = []
+	networks = []
+	systems = []
+
+	csv_file = open('server/processing/classficated.csv','r')
+	csv_reader = csv.reader(csv_file)
+
+	k = 3
+	max = 0	
+
+	for row in csv_reader:
+		classes.append(row[3])
+		systems.append(row[2])
+		networks.append(row[1])
+		if max<int(row[3]):
+			max = int(row[3])
+	max = max+1
+	
+	
+	distances = []
+	for i in range(len(classes)):
+		distances.append(((network-float(networks[i]))*(network-float(networks[i]))+(system-float(systems[i]))*(system-float(systems[i])),classes[i]))
+	distances.sort(key=itemgetter(0))
+
+	for d in distances[0:k]:
+		print d
+	
+	csv_file.close()
 	return render(request,'server/template/index.html')
