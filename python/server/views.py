@@ -369,11 +369,15 @@ def postConstraint(request):
 	return render(request,'server/template/index.html')
 
 def test(request):
-	result = Subject.objects.filter(number=201222702)
+	number = request.GET.get('number',0)
+	print number
+	result = Subject.objects.filter(number=number)
 	count = result.count()
+	subjects=[]
 	network = 0
 	system = 0
 	for r in result:
+		subjects.append(r.name.replace(' ',''))
 		if r.name.replace(' ','') == unicode('운영체제','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('시스템프로그래밍','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('임베디드소프트웨어','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('분산시스템설계','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('임베디드소프트웨어','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('모바일시스템설계','euc-kr').encode('utf-8'):
 			system+=1
 		elif r.name.replace(' ','') == unicode('컴퓨터네트워크','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('네트워크소프트웨어','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('컴퓨터통신','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('무선네트워크','euc-kr').encode('utf-8') or r.name.replace(' ','') == unicode('네트워크운용사례','euc-kr').encode('utf-8'):
@@ -396,6 +400,7 @@ def test(request):
 		networks.append(row[1])
 		if max<int(row[3]):
 			max = int(row[3])
+	csv_file.close()
 	max = max+1
 	
 	
@@ -404,8 +409,32 @@ def test(request):
 		distances.append(((network-float(networks[i]))*(network-float(networks[i]))+(system-float(systems[i]))*(system-float(systems[i])),classes[i]))
 	distances.sort(key=itemgetter(0))
 
+	frequency = []
+	for i in range(k):
+		frequency.append(0)
+
 	for d in distances[0:k]:
-		print d
+		frequency[int(d[1])] = frequency[int(d[1])]+1
+
+	max = 0
+	for i in range(k):
+		if max < frequency[i]:
+			max = frequency[i]
+	frequency.sort()
 	
+	csv_file = open('server/processing/rank_'+str(frequency[k-1]-1)+'.csv','r')
+	csv_reader = csv.reader(csv_file)
+	
+	length = 6
+	i=0
+	for row in csv_reader:
+		if i == length:
+			break
+		if row[0].decode('utf-8') in subjects:
+			continue
+		else:
+			print row[0].decode('utf-8')
+			i=i+1
 	csv_file.close()
+	
 	return render(request,'server/template/index.html')
